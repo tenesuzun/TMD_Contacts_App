@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">TMD Contacts App</string>
+    <string name="userEmail">Email</string>
+    <string name="userPassword">Password</string>
+    <string name="emailFieldHint">Email</string>
+    <string name="endIconEmailDescription">Email Address</string>
+    <string name="login">Logın</string>
+    <string name="loginForgotPassword">Forgot Password?</string>
+    <string name="loginOrText">OR</string>
+    <string name="loginSignUpButton">SIGN UP HERE</string>
+    <string name="loginAppLogoDescription">Application Logo</string>
+    <string name="registryPasswordAgain">Password Again</string>
+    <string name="registryEmailAddress">Email Address</string>
+    <string name="registryPhoneNumber">Phone Number</string>
+    <string name="registryWorkPhone">Work Phone</string>
+    <string name="registryHomePhone">Home Phone</string>
+    <string name="registryAddress">Address</string>
+    <string name="registryCompany">Company</string>
+    <string name="registryWorkTitle">Title</string>
+    <string name="registryBirthday">Birthday</string>
+    <string name="registryNotes">Notes</string>
+    <string name="registryFirstName">First Name</string>
+    <string name="registrySurname">Surname</string>
+    <string name="registrySignUpButton">SIGN UP</string>
+    <string name="addContactGroup">Groups</string>
+    <string name="addContactGroupAutoFill">None</string>
+    <string name="addContactAddButton">ADD</string>
+</resources>
