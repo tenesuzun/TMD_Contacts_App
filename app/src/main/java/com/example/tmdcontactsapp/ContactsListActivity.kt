@@ -15,5 +15,11 @@ class ContactsListActivity : AppCompatActivity() {
             val intent = Intent(this, AddNewContactActivity::class.java)
             startActivity(intent)
         }
+
+        val updateBtn = findViewById<Button>(R.id.button2)
+        updateBtn.setOnClickListener{
+            val intent = Intent(this, updatingContactActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
