@@ -25,4 +25,7 @@
     <string name="addContactGroup">Groups</string>
     <string name="addContactGroupAutoFill">None</string>
     <string name="addContactAddButton">ADD</string>
+    <string name="forgottenPasswordText">FORGOT PASSWORD?</string>
+    <string name="requestingEmail">Write your Email so we can send you the link to reset your password</string>
+    <string name="sendLinkText">SEND THE LINK</string>
 </resources>

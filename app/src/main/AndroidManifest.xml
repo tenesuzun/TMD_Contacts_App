@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TMDContactsApp">
-        <activity android:name=".ContactsListActivity"></activity>
+        <activity android:name=".forgottenPasswordActivity" />
+        <activity android:name=".ContactsListActivity" />
         <activity android:name=".AddNewContactActivity" />
         <activity android:name=".UserRegistryActivity" />
         <activity android:name=".MainActivity">

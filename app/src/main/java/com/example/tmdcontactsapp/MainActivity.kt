@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,6 +20,12 @@ class MainActivity : AppCompatActivity() {
         val loginBtn = findViewById<Button>(R.id.loginButton)
         loginBtn.setOnClickListener{
             val intent = Intent(this, ContactsListActivity::class.java)
+            startActivity(intent)
+        }
+
+        val forgotPasswordBtn = findViewById<TextView>(R.id.loginForgotPassword)
+        forgotPasswordBtn.setOnClickListener{
+            val intent = Intent(this, forgottenPasswordActivity::class.java)
             startActivity(intent)
         }
 
