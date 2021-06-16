@@ -53,7 +53,7 @@ class UserRegistryActivity : AppCompatActivity() {
             Toast.makeText(applicationContext,"Please enter a password", Toast.LENGTH_LONG).show()
         }else if(userPasswordAgain.text.isEmpty() || userPasswordAgain.text.isBlank()){
             Toast.makeText(applicationContext,"Please enter the password again", Toast.LENGTH_LONG).show()
-        }else if(userPassword != userPasswordAgain){
+        }else if(!userPassword.text.toString().equals(userPasswordAgain.text.toString())){
             Toast.makeText(applicationContext,"Passwords does not match",Toast.LENGTH_LONG).show()
         }
     }
