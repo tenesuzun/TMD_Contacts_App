@@ -2,9 +2,11 @@ package com.example.tmdcontactsapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 
 class UserRegistryActivity : AppCompatActivity() {
 
@@ -36,5 +38,23 @@ class UserRegistryActivity : AppCompatActivity() {
         userEmail = findViewById(R.id.registryEmailAddress)
         userPassword = findViewById(R.id.registryPassword)
         userPasswordAgain = findViewById(R.id.registryPasswordAgain)
+    }
+
+    fun signUp(view: View){
+        if(userFirstName.text.isEmpty() || userFirstName.text.isBlank()){
+            Toast.makeText(applicationContext, "Please enter first name", Toast.LENGTH_LONG).show()
+        } else if(userSurname.text.isEmpty() || userSurname.text.isBlank()){
+            Toast.makeText(applicationContext, "Please enter surname", Toast.LENGTH_LONG).show()
+        } else if(userPhone.text.isEmpty() || userPhone.text.isBlank()){
+            Toast.makeText(applicationContext,"Please enter a phone number", Toast.LENGTH_LONG).show()
+        }else if(userEmail.text.isEmpty() || userPhone.text.isBlank()){
+            Toast.makeText(applicationContext,"Please enter an email address", Toast.LENGTH_LONG).show()
+        }else if(userPassword.text.isEmpty() || userPassword.text.isBlank()){
+            Toast.makeText(applicationContext,"Please enter a password", Toast.LENGTH_LONG).show()
+        }else if(userPasswordAgain.text.isEmpty() || userPasswordAgain.text.isBlank()){
+            Toast.makeText(applicationContext,"Please enter the password again", Toast.LENGTH_LONG).show()
+        }else if(userPassword != userPasswordAgain){
+            Toast.makeText(applicationContext,"Passwords does not match",Toast.LENGTH_LONG).show()
+        }
     }
 }
