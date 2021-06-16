@@ -7,7 +7,7 @@
     tools:context=".UserRegistryActivity">
 
     <ImageView
-        android:id="@+id/updatingContactPP"
+        android:id="@+id/addContactPP"
         android:layout_width="152dp"
         android:layout_height="103dp"
         android:layout_marginStart="8dp"
@@ -18,7 +18,7 @@
         app:srcCompat="@drawable/ic_round_account_box_24" />
 
     <EditText
-        android:id="@+id/updatingFirstName"
+        android:id="@+id/addFirstName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -28,11 +28,11 @@
         android:importantForAutofill="no"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/updatingContactPP"
+        app:layout_constraintStart_toEndOf="@+id/addContactPP"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/updatingSurname"
+        android:id="@+id/addSurname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -42,11 +42,11 @@
         android:importantForAutofill="no"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/updatingContactPP"
-        app:layout_constraintTop_toBottomOf="@+id/updatingFirstName" />
+        app:layout_constraintStart_toEndOf="@+id/addContactPP"
+        app:layout_constraintTop_toBottomOf="@+id/addFirstName" />
 
     <EditText
-        android:id="@+id/updatingEmail"
+        android:id="@+id/addEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -56,14 +56,13 @@
         android:ems="10"
         android:hint="@string/registryEmailAddress"
         android:importantForAutofill="no"
-
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updatingContactPP" />
+        app:layout_constraintTop_toBottomOf="@+id/addContactPP" />
 
     <EditText
-        android:id="@+id/updatingPhone"
+        android:id="@+id/addPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -75,10 +74,10 @@
         android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updatingEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/addEmail" />
 
     <EditText
-        android:id="@+id/updatingWorkPhone"
+        android:id="@+id/addWorkPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -89,10 +88,10 @@
         android:importantForAutofill="no"
         android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updatingPhone" />
+        app:layout_constraintTop_toBottomOf="@+id/addPhone" />
 
     <EditText
-        android:id="@+id/updatingHomePhone"
+        android:id="@+id/addHomePhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -104,10 +103,10 @@
         android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updatingWorkPhone" />
+        app:layout_constraintTop_toBottomOf="@+id/addWorkPhone" />
 
     <EditText
-        android:id="@+id/updatingAddress"
+        android:id="@+id/addAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -119,10 +118,10 @@
         android:inputType="textPostalAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updatingHomePhone" />
+        app:layout_constraintTop_toBottomOf="@+id/addHomePhone" />
 
     <EditText
-        android:id="@+id/updatingCompany"
+        android:id="@+id/addCompany"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -134,10 +133,10 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updatingAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/addAddress" />
 
     <EditText
-        android:id="@+id/updatingWorkTitle"
+        android:id="@+id/addWorkTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -149,10 +148,10 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updatingCompany" />
+        app:layout_constraintTop_toBottomOf="@+id/addCompany" />
 
     <EditText
-        android:id="@+id/updatingBirthday"
+        android:id="@+id/addBirthday"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -163,10 +162,10 @@
         android:inputType="date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updatingWorkTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/addWorkTitle" />
 
     <EditText
-        android:id="@+id/updatingNotes"
+        android:id="@+id/addNotes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -178,41 +177,42 @@
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updatingBirthday" />
+        app:layout_constraintTop_toBottomOf="@+id/addBirthday" />
 
     <Button
-        android:id="@+id/updateButton"
+        android:id="@+id/addButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        android:onClick="addNewContact"
         android:text="@string/addContactAddButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updateContactGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/addContactGroup" />
 
     <ImageButton
-        android:id="@+id/updateGroupButton"
+        android:id="@+id/addGroupButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:contentDescription="@string/loginAppLogoDescription"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updatingNotes"
+        app:layout_constraintTop_toBottomOf="@+id/addNotes"
         app:srcCompat="@drawable/ic_baseline_add_circle_24" />
 
     <EditText
-        android:id="@+id/updateContactGroup"
+        android:id="@+id/addContactGroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:autofillHints="@string/addContactGroupAutoFill"
         android:hint="@string/addContactGroup"
         android:inputType="text"
-        app:layout_constraintEnd_toStartOf="@id/updateGroupButton"
+        app:layout_constraintEnd_toStartOf="@id/addGroupButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updatingNotes" />
+        app:layout_constraintTop_toBottomOf="@+id/addNotes" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

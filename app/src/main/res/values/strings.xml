@@ -29,4 +29,5 @@
     <string name="requestingEmail">Write your Email so we can send you the link to reset your password</string>
     <string name="sendLinkText">SEND THE LINK</string>
     <string name="updateButton">UPDATE</string>
+    <string name="newGroupButton">Create a new group</string>
 </resources>
