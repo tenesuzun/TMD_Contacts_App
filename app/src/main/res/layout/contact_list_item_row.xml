@@ -3,33 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="@drawable/roundbox_border">
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="46dp"
-        android:layout_height="61dp"
+        android:id="@+id/contactPP"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:contentDescription="@string/loginAppLogoDescription"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_contacts_24" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/contactFirstName"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintBottom_toTopOf="@+id/contactSurname"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/contactPP"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/contactSurname"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintBottom_toBottomOf="@+id/contactPP"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintStart_toEndOf="@+id/contactPP"
+        app:layout_constraintTop_toBottomOf="@+id/contactFirstName" />
 </androidx.constraintlayout.widget.ConstraintLayout>
