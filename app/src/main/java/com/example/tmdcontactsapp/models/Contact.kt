@@ -1,10 +1,14 @@
 package com.example.tmdcontactsapp.models
 
+import android.graphics.drawable.Drawable
+import android.widget.ImageView
+import com.example.tmdcontactsapp.R
+
 data class Contact(
     //region Attributes
-    private var contactPicture: String,
-    private var firstName: String,
-    private var surname: String,
+    var contactPicture: Int,
+    var firstName: String,
+    var surname: String,
     private var emailAddress: String = "",
     private var phoneNumber: String = "",
     private var workNumber: String = "",
