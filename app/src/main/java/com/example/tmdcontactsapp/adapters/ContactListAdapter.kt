@@ -26,7 +26,7 @@ class ContactListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
             is ContactListViewHolder ->{
-                holder.bind(contactsList.get(position))
+                holder.bind(contactsList[position])
             }
         }
     }

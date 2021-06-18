@@ -6,7 +6,7 @@ class DataSource {
 
     companion object {
 
-        fun create_contacts_list(): List<Contact> {
+        fun createContactsList(): List<Contact> {
             return listOf(
                 Contact(R.drawable.ic_baseline_person_24, "Taha Enes", "Uzun"),
                 Contact(R.drawable.ic_baseline_person_24, "Berkay", "Özgen"),

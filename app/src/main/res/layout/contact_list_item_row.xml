@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/roundbox_border">
+    android:background="@drawable/roundbox_border"
+    android:padding="5dp"
+    android:layout_margin="5dp">
 
     <ImageView
         android:id="@+id/contactPP"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:contentDescription="@string/loginAppLogoDescription"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -19,6 +20,7 @@
         android:id="@+id/contactFirstName"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/contactSurname"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/contactPP"
@@ -28,6 +30,7 @@
         android:id="@+id/contactSurname"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/contactPP"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/contactPP"
