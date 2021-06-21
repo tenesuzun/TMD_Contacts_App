@@ -1,5 +1,6 @@
 package com.example.tmdcontactsapp.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,13 +39,12 @@ class ContactListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     class ContactListViewHolder constructor(
         itemView: View
     ): RecyclerView.ViewHolder(itemView){
-        private val contactFirstName: TextView = itemView.findViewById(R.id.contactFirstName)
-        private val contactSurname: TextView = itemView.findViewById(R.id.contactSurname)
+        private val contactFullName: TextView = itemView.findViewById(R.id.contactFullName)
         private val contactPP: ImageView = itemView.findViewById(R.id.contactPP)
 
+        @SuppressLint("SetTextI18n")
         fun bind(contact: Contact){
-            contactFirstName.text = contact.firstName
-            contactSurname.text = contact.surname
+            contactFullName.text = contact.firstName + " " + contact.surname
             contactPP.setImageResource(contact.contactPicture)
         }
     }

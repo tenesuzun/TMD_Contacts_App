@@ -17,22 +17,16 @@
         app:srcCompat="@drawable/ic_baseline_contacts_24" />
 
     <TextView
-        android:id="@+id/contactFirstName"
+        android:id="@+id/contactFullName"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:fontFamily="sans-serif-condensed"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/contactSurname"
+        android:gravity="center_vertical"
+        app:drawableEndCompat="@drawable/ic_baseline_edit_24"
+        app:layout_constraintBottom_toBottomOf="@+id/contactPP"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/contactPP"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/contactSurname"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/contactPP"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/contactPP"
-        app:layout_constraintTop_toBottomOf="@+id/contactFirstName" />
 </androidx.constraintlayout.widget.ConstraintLayout>
