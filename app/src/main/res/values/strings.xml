@@ -24,10 +24,13 @@
     <string name="registrySignUpButton">SIGN UP</string>
     <string name="addContactGroup">Groups</string>
     <string name="addContactGroupAutoFill">None</string>
-    <string name="addContactAddButton">ADD</string>
+    <string name="addContactAddButton">Add</string>
     <string name="forgottenPasswordText">FORGOT PASSWORD?</string>
     <string name="requestingEmail">Write your Email so we can send you the link to reset your password</string>
     <string name="sendLinkText">SEND THE LINK</string>
     <string name="updateButton">UPDATE</string>
     <string name="newGroupButton">Create a new group</string>
+    <string name="profilePage">Profile</string>
+    <string name="removeContact">Remove</string>
+    <string name="contactsPage">Contacts</string>
 </resources>

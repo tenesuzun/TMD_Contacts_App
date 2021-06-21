@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/contactsPage"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_format_list_bulleted_24"
+        android:title="@string/contactsPage" />
+    <item
+        android:id="@+id/groupsPage"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_group_white"
+        android:title="@string/addContactGroup" />
+    <item
+        android:id="@+id/profilePage"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_person_24_white"
+        android:title="@string/profilePage" />
+    <item
+        android:id="@+id/addNewContact"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_person_add_alt_1_24"
+        android:title="@string/addContactAddButton" />
+</menu>
