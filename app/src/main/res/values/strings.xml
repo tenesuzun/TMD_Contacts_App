@@ -33,4 +33,5 @@
     <string name="profilePage">Profile</string>
     <string name="removeContact">Remove</string>
     <string name="contactsPage">Contacts</string>
+    <string name="contactsSearchBar">Search</string>
 </resources>

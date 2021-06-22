@@ -16,6 +16,11 @@
         android:icon="@drawable/ic_baseline_person_24_white"
         android:title="@string/profilePage" />
     <item
+        android:id="@+id/removeContact"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_person_remove_24"
+        android:title="@string/removeContact"/>
+    <item
         android:id="@+id/addNewContact"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_person_add_alt_1_24"

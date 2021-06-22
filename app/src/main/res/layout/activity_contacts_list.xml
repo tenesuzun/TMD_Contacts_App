@@ -41,9 +41,12 @@
         style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:itemIconTint="@android:color/primary_text_dark_nodisable"
+        app:itemTextColor="@android:color/primary_text_dark_nodisable"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_navigation_menu"/>
+        app:menu="@menu/bottom_navigation_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
