@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import com.example.tmdcontactsapp.adapters.ContactListAdapter
 import com.example.tmdcontactsapp.models.DataSource
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -15,9 +14,11 @@ class ContactsListActivity : AppCompatActivity() {
     private val navigationItemSelected = BottomNavigationView.OnNavigationItemSelectedListener {item ->
         when(item.itemId){
             R.id.contactsPage ->{
+                replaceFragment(contact_list_fragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.groupsPage ->{
+                replaceFragment(group_list_fragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.profilePage -> {
@@ -48,14 +49,16 @@ class ContactsListActivity : AppCompatActivity() {
         }
 
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelected)
+        replaceFragment(contact_list_fragment())
 
         //initRecyclerView()
         addDataSet()
     }
 
     private fun replaceFragment(fragment: Fragment){
-        val fragmentTransaction: FragmentTransaction
-        TODO("This will be the place to manage the fragments transitions")
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragmentContainerView, fragment)
+        fragmentTransaction.commit()
     }
 
     private fun addDataSet(){
