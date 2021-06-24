@@ -44,7 +44,6 @@ class ContactsListActivity : AppCompatActivity() {
             val intent = Intent(this, updatingContactActivity::class.java)
             startActivity(intent)
         }
-
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelected)
         replaceFragment(ContactListFragment())
     }

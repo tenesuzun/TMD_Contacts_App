@@ -1,14 +1,14 @@
 package com.example.tmdcontactsapp
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.tmdcontactsapp.adapters.ContactListAdapter
 import com.example.tmdcontactsapp.models.DataSource
-import kotlinx.android.synthetic.main.fragment_contact_list.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,10 +20,12 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ContactListFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
 class ContactListFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var contactsAdapter: ContactListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,24 +40,16 @@ class ContactListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view: View = inflater.inflate(R.layout.fragment_contact_list, container, false)
-        initRecyclerView()
-        addDataSet()
-        return view
-    }
-
-    private lateinit var contactsAdapter: ContactListAdapter
-
-    private fun addDataSet(){
         val data = DataSource.createContactsList()
-        contactsAdapter.submitList(data)
-        contactsAdapter.notifyDataSetChanged()
-    }
-
-    private fun initRecyclerView(){
-        fragmentContactListRecycler?.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
         contactsAdapter = ContactListAdapter()
-        fragmentContactListRecycler?.adapter = contactsAdapter
-        TODO("gotta check the error in LinearLayoutManager context")
+        val recycler = view.findViewById<RecyclerView>(R.id.fragmentContactListRecycler)
+        recycler?.apply {
+            setHasFixedSize(true)
+            layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+            contactsAdapter.submitList(data)
+            adapter = contactsAdapter
+        }
+        return view
     }
 
     companion object {
@@ -76,5 +70,5 @@ class ContactListFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
-    }
+        }
 }

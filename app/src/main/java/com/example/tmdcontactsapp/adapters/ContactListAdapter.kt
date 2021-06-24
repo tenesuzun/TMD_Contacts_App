@@ -12,10 +12,10 @@ import com.example.tmdcontactsapp.models.Contact
 
 class ContactListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var contactsList: MutableList<Contact> = ArrayList()
+    private var contactsList: List<Contact> = ArrayList()
 
     fun submitList(items: List<Contact>){
-        contactsList.addAll(items.toList())
+        contactsList = items
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
