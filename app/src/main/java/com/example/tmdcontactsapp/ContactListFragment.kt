@@ -8,7 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.tmdcontactsapp.adapters.ContactListAdapter
+import com.example.tmdcontactsapp.models.Contact
 import com.example.tmdcontactsapp.models.DataSource
+import com.example.tmdcontactsapp.networks.ApiClient
+import retrofit2.Callback
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -40,13 +46,23 @@ class ContactListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view: View = inflater.inflate(R.layout.fragment_contact_list, container, false)
-        val data = DataSource.createContactsList()
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://60c88166afc88600179f7389.mockapi.io")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val api = retrofit.create(ApiClient::class.java)
+
+//        api.getAllContacts().enqueue(object : Callback<List<Contact>>)
+
+        // TODO val data = DataSource.createContactsList()
         contactsAdapter = ContactListAdapter()
         val recycler = view.findViewById<RecyclerView>(R.id.fragmentContactListRecycler)
         recycler?.apply {
             setHasFixedSize(true)
             layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
-            contactsAdapter.submitList(data)
+            // TODO contactsAdapter.submitList(data)
             adapter = contactsAdapter
         }
         return view

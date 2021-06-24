@@ -1,23 +1,34 @@
 package com.example.tmdcontactsapp.models
 
-import android.graphics.drawable.Drawable
-import android.widget.ImageView
-import com.example.tmdcontactsapp.R
+import com.google.gson.annotations.SerializedName
 
 data class Contact(
     //region Attributes
+    @SerializedName("photo")
     var contactPicture: Int,
+    @SerializedName("name")
     var firstName: String,
+    @SerializedName("surname")
     var surname: String,
-    private var emailAddress: String = "",
-    private var phoneNumber: String = "",
-    private var workNumber: String = "",
-    private var homePhone: String = "",
-    private var address: String = "",
-    private var company: String = "",
-    private var title: String = "",
-    private var birthday: String = "",
-    private var notes: String = "",
-    private var groups: String = "",
+    @SerializedName("email")
+    var emailAddress: String = "",
+    @SerializedName("cellPhone")
+    var phoneNumber: String = "",
+    @SerializedName("workPhone")
+    var workNumber: String = "",
+    @SerializedName("homePhone")
+    var homePhone: String = "",
+    @SerializedName("address")
+    var address: String = "",
+    @SerializedName("company")
+    var company: String = "",
+    @SerializedName("title")
+    var title: String = "",
+    @SerializedName("birthday")
+    var birthday: String = "",
+    @SerializedName("note")
+    var notes: String = "",
+    @SerializedName("group")
+    var groups: String = "",
     //endregion
 )
