@@ -5,6 +5,7 @@ import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -54,23 +55,21 @@ class ContactListFragment : Fragment() {
         api.getAllContacts().enqueue(object : Callback<List<Contact>>{
             override fun onResponse(call: Call<List<Contact>>, response: Response<List<Contact>>) {
                 d("deneme","onResponse: ${response.body()!!}")
-
+                contactsAdapter = ContactListAdapter()
+                val recycler = view.findViewById<RecyclerView>(R.id.fragmentContactListRecycler)
+                recycler?.apply {
+                    setHasFixedSize(true)
+                    layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+                    contactsAdapter.submitList(response.body()!!)
+                    adapter = contactsAdapter
+                }
             }
 
             override fun onFailure(call: Call<List<Contact>>, t: Throwable) {
                 d("fail","onFail: Unsuccessful")
+                Toast.makeText(context,"Could not get the data from API",Toast.LENGTH_LONG).show()
             }
         })
-
-        // TODO val data = DataSource.createContactsList()
-        contactsAdapter = ContactListAdapter()
-        val recycler = view.findViewById<RecyclerView>(R.id.fragmentContactListRecycler)
-        recycler?.apply {
-            setHasFixedSize(true)
-            layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
-            // TODO contactsAdapter.submitList(data)
-            adapter = contactsAdapter
-        }
         return view
     }
 

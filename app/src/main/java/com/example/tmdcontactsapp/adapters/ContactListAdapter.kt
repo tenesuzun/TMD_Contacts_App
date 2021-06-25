@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+//import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdcontactsapp.R
@@ -40,7 +40,7 @@ class ContactListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         itemView: View
     ): RecyclerView.ViewHolder(itemView){
         private val contactFullName: TextView = itemView.findViewById(R.id.contactFullName)
-        private val contactPP: ImageView = itemView.findViewById(R.id.contactPP)
+//        private val contactPP: ImageView = itemView.findViewById(R.id.contactPP)
 
         @SuppressLint("SetTextI18n")
         fun bind(contact: Contact){
