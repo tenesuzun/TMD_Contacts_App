@@ -1,7 +1,6 @@
 package com.example.tmdcontactsapp
 
 import android.os.Bundle
-import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.tmdcontactsapp.adapters.ContactListAdapter
 import com.example.tmdcontactsapp.models.Contact
-// TODO: Don't forget this import com.example.tmdcontactsapp.models.DataSource
 import com.example.tmdcontactsapp.networks.ApiClient
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
@@ -54,7 +51,6 @@ class ContactListFragment : Fragment() {
 
         api.getAllContacts().enqueue(object : Callback<List<Contact>>{
             override fun onResponse(call: Call<List<Contact>>, response: Response<List<Contact>>) {
-                d("deneme","onResponse: ${response.body()!!}")
                 contactsAdapter = ContactListAdapter()
                 val recycler = view.findViewById<RecyclerView>(R.id.fragmentContactListRecycler)
                 recycler?.apply {
@@ -66,7 +62,6 @@ class ContactListFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<Contact>>, t: Throwable) {
-                d("fail","onFail: Unsuccessful")
                 Toast.makeText(context,"Could not get the data from API",Toast.LENGTH_LONG).show()
             }
         })

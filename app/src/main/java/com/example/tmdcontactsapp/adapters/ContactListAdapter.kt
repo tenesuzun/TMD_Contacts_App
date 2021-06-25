@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 //import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdcontactsapp.R
 import com.example.tmdcontactsapp.models.Contact
@@ -36,7 +37,7 @@ class ContactListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return contactsList.size
     }
 
-    class ContactListViewHolder constructor(
+   inner class ContactListViewHolder constructor(
         itemView: View
     ): RecyclerView.ViewHolder(itemView){
         private val contactFullName: TextView = itemView.findViewById(R.id.contactFullName)
@@ -45,8 +46,8 @@ class ContactListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         @SuppressLint("SetTextI18n")
         fun bind(contact: Contact){
             contactFullName.text = contact.firstName + " " + contact.surname
+
 //            contactPP.setImageResource(contact.contactPicture)
         }
     }
-
 }
