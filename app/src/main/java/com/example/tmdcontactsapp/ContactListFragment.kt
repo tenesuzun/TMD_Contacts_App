@@ -1,6 +1,7 @@
 package com.example.tmdcontactsapp
 
 import android.os.Bundle
+import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,14 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.tmdcontactsapp.adapters.ContactListAdapter
 import com.example.tmdcontactsapp.models.Contact
-import com.example.tmdcontactsapp.models.DataSource
+// TODO: Don't forget this import com.example.tmdcontactsapp.models.DataSource
 import com.example.tmdcontactsapp.networks.ApiClient
-import retrofit2.Callback
-import retrofit2.Retrofit
+import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
-// TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -28,7 +26,6 @@ private const val ARG_PARAM2 = "param2"
  */
 
 class ContactListFragment : Fragment() {
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var contactsAdapter: ContactListAdapter
@@ -54,7 +51,16 @@ class ContactListFragment : Fragment() {
 
         val api = retrofit.create(ApiClient::class.java)
 
-//        api.getAllContacts().enqueue(object : Callback<List<Contact>>)
+        api.getAllContacts().enqueue(object : Callback<List<Contact>>{
+            override fun onResponse(call: Call<List<Contact>>, response: Response<List<Contact>>) {
+                d("deneme","onResponse: ${response.body()!!}")
+
+            }
+
+            override fun onFailure(call: Call<List<Contact>>, t: Throwable) {
+                d("fail","onFail: Unsuccessful")
+            }
+        })
 
         // TODO val data = DataSource.createContactsList()
         contactsAdapter = ContactListAdapter()

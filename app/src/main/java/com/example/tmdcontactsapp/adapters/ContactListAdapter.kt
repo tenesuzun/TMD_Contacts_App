@@ -45,7 +45,7 @@ class ContactListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         @SuppressLint("SetTextI18n")
         fun bind(contact: Contact){
             contactFullName.text = contact.firstName + " " + contact.surname
-            contactPP.setImageResource(contact.contactPicture)
+//            contactPP.setImageResource(contact.contactPicture)
         }
     }
 

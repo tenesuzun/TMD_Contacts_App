@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class Contact(
     //region Attributes
     @SerializedName("photo")
-    var contactPicture: Int,
+    var contactPicture: String,
     @SerializedName("name")
     var firstName: String,
     @SerializedName("surname")
