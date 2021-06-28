@@ -41,7 +41,7 @@ class ContactsListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_contacts_list)
 
         button2.setOnClickListener {
-            val intent = Intent(this, updatingContactActivity::class.java)
+            val intent = Intent(this, UpdatingContactActivity::class.java)
             startActivity(intent)
         }
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelected)

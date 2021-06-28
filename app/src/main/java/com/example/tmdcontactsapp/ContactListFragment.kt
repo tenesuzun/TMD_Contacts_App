@@ -1,5 +1,6 @@
 package com.example.tmdcontactsapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,10 +24,11 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 
-class ContactListFragment : Fragment() {
+class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var contactsAdapter: ContactListAdapter
+    private lateinit var contactsList: List<Contact>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,23 +53,22 @@ class ContactListFragment : Fragment() {
 
         api.getAllContacts().enqueue(object : Callback<List<Contact>>{
             override fun onResponse(call: Call<List<Contact>>, response: Response<List<Contact>>) {
-                contactsAdapter = ContactListAdapter()
+                contactsList = response.body()!!
+                contactsAdapter = ContactListAdapter(this@ContactListFragment, contactsList)
                 val recycler = view.findViewById<RecyclerView>(R.id.fragmentContactListRecycler)
                 recycler?.apply {
                     setHasFixedSize(true)
                     layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
-                    contactsAdapter.submitList(response.body()!!)
                     adapter = contactsAdapter
                 }
             }
 
             override fun onFailure(call: Call<List<Contact>>, t: Throwable) {
-                Toast.makeText(context,"Could not get the data from API",Toast.LENGTH_LONG).show()
+                Toast.makeText(context,"Please connect to the Internet",Toast.LENGTH_LONG).show()
             }
         })
         return view
     }
-
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -87,4 +88,15 @@ class ContactListFragment : Fragment() {
                 }
             }
         }
+
+    override fun onItemClick(position: Int) {
+        val clickedItem: Contact = contactsList[position]
+        println(clickedItem)
+        val intent = Intent(context, UpdatingContactActivity::class.java)
+        intent.putExtra("contactFirstName", clickedItem.firstName)
+        intent.putExtra("contactSurname", clickedItem.surname)
+        intent.putExtra("contactPhoneNumber", clickedItem.phoneNumber)
+        startActivity(intent)
+
+    }
 }

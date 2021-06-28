@@ -4,20 +4,17 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-//import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdcontactsapp.R
 import com.example.tmdcontactsapp.models.Contact
 
-class ContactListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ContactListAdapter(private val listener: OnItemClickListener, private var contactsList: List<Contact>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var contactsList: List<Contact> = ArrayList()
-
-    fun submitList(items: List<Contact>){
-        contactsList = items
-    }
+//    private var contactsList: List<Contact> = ArrayList()
+//    fun submitList(items: List<Contact>){
+//        contactsList = items
+//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ContactListViewHolder(
@@ -37,17 +34,26 @@ class ContactListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return contactsList.size
     }
 
-   inner class ContactListViewHolder constructor(
-        itemView: View
-    ): RecyclerView.ViewHolder(itemView){
-        private val contactFullName: TextView = itemView.findViewById(R.id.contactFullName)
-//        private val contactPP: ImageView = itemView.findViewById(R.id.contactPP)
+   inner class ContactListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener{
+       private val contactFullName: TextView = itemView.findViewById(R.id.contactFullName)
 
-        @SuppressLint("SetTextI18n")
-        fun bind(contact: Contact){
-            contactFullName.text = contact.firstName + " " + contact.surname
+       init {
+           itemView.setOnClickListener(this)
+       }
 
-//            contactPP.setImageResource(contact.contactPicture)
-        }
-    }
+       override fun onClick(v: View?) {
+           val position: Int = adapterPosition
+           if(position != RecyclerView.NO_POSITION){
+           listener.onItemClick(position)
+           }
+       }
+
+       @SuppressLint("SetTextI18n")
+       fun bind(contact: Contact){
+           contactFullName.text = contact.firstName + " " + contact.surname
+       }
+   }
+   interface OnItemClickListener{
+       fun onItemClick(position: Int)
+   }
 }
