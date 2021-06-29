@@ -34,6 +34,11 @@ class ContactListAdapter(private val listener: OnItemClickListener, private var 
         return contactsList.size
     }
 
+    fun filterList(filteredList: ArrayList<Contact>){
+        contactsList = filteredList
+        notifyDataSetChanged()
+    }
+
    inner class ContactListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener{
        private val contactFullName: TextView = itemView.findViewById(R.id.contactFullName)
 

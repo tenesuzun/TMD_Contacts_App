@@ -2,6 +2,8 @@ package com.example.tmdcontactsapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.tmdcontactsapp.adapters.ContactListAdapter
 import com.example.tmdcontactsapp.models.Contact
 import com.example.tmdcontactsapp.networks.ApiClient
+import com.google.android.material.textfield.TextInputEditText
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -43,6 +46,21 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         savedInstanceState: Bundle?
     ): View {
         val view: View = inflater.inflate(R.layout.fragment_contact_list, container, false)
+        val searchBar = view.findViewById<TextInputEditText>(R.id.contactsSearchBarField)
+        searchBar.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//                TODO("Not yet implemented")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                TODO("Not yet implemented")
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                filter(s.toString())
+            }
+        })
+
 
         val retrofit = Retrofit.Builder()
             .baseUrl("https://60c88166afc88600179f7389.mockapi.io")
@@ -69,6 +87,17 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         })
         return view
     }
+
+    fun filter(text: String){
+        val filteredList: ArrayList<Contact> = ArrayList()
+        for(item: Contact in contactsList){
+            if(item.firstName.lowercase().contains(text.lowercase()) || item.surname.lowercase().contains(text.lowercase())){
+                filteredList.add(item)
+            }
+        }
+        contactsAdapter.filterList(filteredList)
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -93,6 +122,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         val clickedItem: Contact = contactsList[position]
         println(clickedItem)
         val intent = Intent(context, UpdatingContactActivity::class.java)
+
         //region Intent extras
         intent.putExtra("contactPhoto", clickedItem.contactPicture)
         intent.putExtra("contactFirstName", clickedItem.firstName)
@@ -108,6 +138,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         intent.putExtra("contactNote",clickedItem.notes)
         intent.putExtra("contactGroups", clickedItem.groups)
         //endregion
+
         startActivity(intent)
 
     }
