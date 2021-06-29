@@ -93,9 +93,21 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         val clickedItem: Contact = contactsList[position]
         println(clickedItem)
         val intent = Intent(context, UpdatingContactActivity::class.java)
+        //region Intent extras
+        intent.putExtra("contactPhoto", clickedItem.contactPicture)
         intent.putExtra("contactFirstName", clickedItem.firstName)
         intent.putExtra("contactSurname", clickedItem.surname)
+        intent.putExtra("contactEmail", clickedItem.emailAddress)
         intent.putExtra("contactPhoneNumber", clickedItem.phoneNumber)
+        intent.putExtra("contactWorkNumber", clickedItem.workNumber)
+        intent.putExtra("contactHomeNumber", clickedItem.homePhone)
+        intent.putExtra("contactAddress", clickedItem.address)
+        intent.putExtra("contactCompany", clickedItem.company)
+        intent.putExtra("contactTitle",clickedItem.title)
+        intent.putExtra("contactBirthday", clickedItem.birthday)
+        intent.putExtra("contactNote",clickedItem.notes)
+        intent.putExtra("contactGroups", clickedItem.groups)
+        //endregion
         startActivity(intent)
 
     }

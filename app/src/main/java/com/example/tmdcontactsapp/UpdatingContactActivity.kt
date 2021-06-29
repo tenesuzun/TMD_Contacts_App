@@ -2,9 +2,7 @@ package com.example.tmdcontactsapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log.d
 import android.view.View
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
@@ -24,29 +22,59 @@ class UpdatingContactActivity : AppCompatActivity() {
     private lateinit var contactWorkTitle: EditText
     private lateinit var contactBirthday: EditText
     private lateinit var contactNotes: EditText
-    private lateinit var addButton: Button
-    private lateinit var addGroupButton: Button
     private lateinit var contactGroup: EditText
     //endregion
-    val tempFirstName: Bundle? = intent.getBundleExtra("contactFirstName")
-    val tempSurname: Bundle? = intent.getBundleExtra("contactSurname")
-    val tempPhoneNumber: Bundle? = intent.getBundleExtra("contactPhoneNumber")
-
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_updating_contact)
 
+        //region Intent actions
+        val tempContactPhoto = intent.getStringExtra("contactPhoto").toString()
+        val tempFirstName = intent.getStringExtra("contactFirstName").toString()
+        val tempSurname = intent.getStringExtra("contactSurname").toString()
+        val tempContactEmail = intent.getStringExtra("contactEmail").toString()
+        val tempPhoneNumber = intent.getStringExtra("contactPhoneNumber").toString()
+        val tempContactWorkNumber = intent.getStringExtra("contactWorkNumber").toString()
+        val tempContactHomeNumber = intent.getStringExtra("contactHomeNumber").toString()
+        val tempContactAddress = intent.getStringExtra("contactAddress").toString()
+        val tempContactCompany = intent.getStringExtra("contactCompany").toString()
+        val tempContactTitle = intent.getStringExtra("contactTitle").toString()
+        val tempContactBirthday = intent.getStringExtra("contactBirthday").toString()
+        val tempContactNote = intent.getStringExtra("contactNote").toString()
+        val tempContactGroups = intent.getStringExtra("contactGroups").toString()
+        //endregion
+
+        //region View mapping
         contactFirstName = findViewById(R.id.updatingFirstName)
         contactSurname = findViewById(R.id.updatingSurname)
         contactPhone = findViewById(R.id.updatingPhone)
+        contactWorkPhone = findViewById(R.id.updatingWorkPhone)
+        contactPP = findViewById(R.id.updatingContactPP)
+        contactEmail = findViewById(R.id.updatingEmail)
+        contactHomePhone = findViewById(R.id.updatingHomePhone)
+        contactAddress = findViewById(R.id.updatingAddress)
+        contactCompany = findViewById(R.id.updatingCompany)
+        contactWorkTitle = findViewById(R.id.updatingWorkTitle)
+        contactBirthday = findViewById(R.id.updatingBirthday)
+        contactNotes = findViewById(R.id.updatingNotes)
+        contactGroup = findViewById(R.id.updateContactGroup)
+        //endregion
 
-
-
-
+        //region Carrying Intent data
+        contactFirstName.setText(tempFirstName)
+        contactSurname.setText(tempSurname)
+        contactEmail.setText(tempContactEmail)
+        contactPhone.setText(tempPhoneNumber)
+        contactWorkPhone.setText(tempContactWorkNumber)
+        contactHomePhone.setText(tempContactHomeNumber)
+        contactAddress.setText(tempContactAddress)
+        contactCompany.setText(tempContactCompany)
+        contactWorkTitle.setText(tempContactTitle)
+        contactBirthday.setText(tempContactBirthday)
+        contactNotes.setText(tempContactNote)
+        contactGroup.setText(tempContactGroups)
+        //endregion
     }
 
     fun updateContact(view: View) {

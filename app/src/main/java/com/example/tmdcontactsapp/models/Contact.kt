@@ -11,24 +11,24 @@ data class Contact(
     @SerializedName("surname")
     var surname: String,
     @SerializedName("email")
-    var emailAddress: String = "",
+    var emailAddress: String,
     @SerializedName("cellPhone")
-    var phoneNumber: String = "",
+    var phoneNumber: String,
     @SerializedName("workPhone")
-    var workNumber: String = "",
+    var workNumber: String,
     @SerializedName("homePhone")
-    var homePhone: String = "",
+    var homePhone: String,
     @SerializedName("address")
-    var address: String = "",
+    var address: String,
     @SerializedName("company")
-    var company: String = "",
+    var company: String,
     @SerializedName("title")
-    var title: String = "",
+    var title: String,
     @SerializedName("birthday")
-    var birthday: String = "",
+    var birthday: String,
     @SerializedName("note")
-    var notes: String = "",
+    var notes: String,
     @SerializedName("group")
-    var groups: String = "",
+    var groups: String,
     //endregion
 )
