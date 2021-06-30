@@ -32,7 +32,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
     private var param2: String? = null
     private lateinit var contactsAdapter: ContactListAdapter
     private lateinit var contactsList: List<Contact>
-    private val filteredList: ArrayList<Contact> = ArrayList()
+    private var filteredList: ArrayList<Contact> = ArrayList()
 
     //region onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,7 +92,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
     }
 
     fun filter(text: String){
-// TODO(if it does not work uncomment this) val filteredList: ArrayList<Contact> = ArrayList()
+        filteredList.clear()
         for(item: Contact in contactsList){
             if(item.firstName.lowercase().contains(text.lowercase()) || item.surname.lowercase().contains(text.lowercase())){
                 filteredList.add(item)
