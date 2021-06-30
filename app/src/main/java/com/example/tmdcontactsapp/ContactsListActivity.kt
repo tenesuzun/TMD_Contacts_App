@@ -22,6 +22,7 @@ class ContactsListActivity : AppCompatActivity() {
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.profilePage -> {
+                    replaceFragment(UserProfileFragment())
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.removeContact -> {
@@ -39,11 +40,6 @@ class ContactsListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contacts_list)
-
-        button2.setOnClickListener {
-            val intent = Intent(this, UpdatingContactActivity::class.java)
-            startActivity(intent)
-        }
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelected)
         replaceFragment(ContactListFragment())
     }
