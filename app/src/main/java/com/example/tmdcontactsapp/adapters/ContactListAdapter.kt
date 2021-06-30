@@ -11,11 +11,6 @@ import com.example.tmdcontactsapp.models.Contact
 
 class ContactListAdapter(private val listener: OnItemClickListener, private var contactsList: List<Contact>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-//    private var contactsList: List<Contact> = ArrayList()
-//    fun submitList(items: List<Contact>){
-//        contactsList = items
-//    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ContactListViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.contact_list_item_row, parent, false)

@@ -32,7 +32,9 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
     private var param2: String? = null
     private lateinit var contactsAdapter: ContactListAdapter
     private lateinit var contactsList: List<Contact>
+    private val filteredList: ArrayList<Contact> = ArrayList()
 
+    //region onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -40,6 +42,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
             param2 = it.getString(ARG_PARAM2)
         }
     }
+    //endregion
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,7 +92,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
     }
 
     fun filter(text: String){
-        val filteredList: ArrayList<Contact> = ArrayList()
+// TODO(if it does not work uncomment this) val filteredList: ArrayList<Contact> = ArrayList()
         for(item: Contact in contactsList){
             if(item.firstName.lowercase().contains(text.lowercase()) || item.surname.lowercase().contains(text.lowercase())){
                 filteredList.add(item)
@@ -98,29 +101,8 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         contactsAdapter.filterList(filteredList)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ContactListFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ContactListFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-        }
-
     override fun onItemClick(position: Int) {
-        val clickedItem: Contact = contactsList[position]
-        println(clickedItem)
+        val clickedItem: Contact = filteredList[position]
         val intent = Intent(context, UpdatingContactActivity::class.java)
 
         //region Intent extras
@@ -142,4 +124,24 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         startActivity(intent)
 
     }
+
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment ContactListFragment.
+         */
+        // TODO: Rename and change types and number of parameters
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            ContactListFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
+        }
 }
