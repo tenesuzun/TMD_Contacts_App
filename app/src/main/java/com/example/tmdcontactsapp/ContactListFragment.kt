@@ -102,7 +102,11 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
     }
 
     override fun onItemClick(position: Int) {
-        val clickedItem: Contact = filteredList[position]
+        val clickedItem: Contact = if(filteredList.isNotEmpty()){
+            filteredList[position]
+        } else{
+            contactsList[position]
+        }
         val intent = Intent(context, UpdatingContactActivity::class.java)
 
         //region Intent extras
