@@ -18,7 +18,7 @@ class ContactsListActivity : AppCompatActivity() {
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.groupsPage -> {
-                    replaceFragment(group_list_fragment())
+                    replaceFragment(GroupListFragment())
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.profilePage -> {
