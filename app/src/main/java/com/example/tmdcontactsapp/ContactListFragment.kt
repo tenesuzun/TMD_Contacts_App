@@ -63,10 +63,8 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
                 filter(s.toString())
             }
         })
-
-
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://60c88166afc88600179f7389.mockapi.io")
+            .baseUrl("http://tmdcontacts-api.dev.tmd/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -83,7 +81,6 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
                     adapter = contactsAdapter
                 }
             }
-
             override fun onFailure(call: Call<List<Contact>>, t: Throwable) {
                 Toast.makeText(context,"Please connect to the Internet",Toast.LENGTH_LONG).show()
             }
@@ -109,7 +106,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         }
         val intent = Intent(context, UpdatingContactActivity::class.java)
 
-        //region Intent extras
+        //region Intent extras that is transferred to Detailed Contact Page
         intent.putExtra("contactPhoto", clickedItem.contactPicture)
         intent.putExtra("contactFirstName", clickedItem.firstName)
         intent.putExtra("contactSurname", clickedItem.surname)

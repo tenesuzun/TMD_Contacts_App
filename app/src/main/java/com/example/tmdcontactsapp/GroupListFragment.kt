@@ -41,7 +41,7 @@ class GroupListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view: View = inflater.inflate(R.layout.fragment_group_list, container, false)
-        val retrofit = Retrofit.Builder()
+       /* val retrofit = Retrofit.Builder()
             .baseUrl("http://tmdcontacts-api.dev.tmd/api")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -54,7 +54,7 @@ class GroupListFragment : Fragment() {
             override fun onFailure(call: Call<List<Group>>, t: Throwable) {
 //                TODO("Not yet implemented")
             }
-        })
+        })*/
 
 
         return view

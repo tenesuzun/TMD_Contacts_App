@@ -8,6 +8,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.example.tmdcontactsapp.models.UserResponse
+import com.example.tmdcontactsapp.networks.ApiClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,19 +39,32 @@ class MainActivity : AppCompatActivity() {
 
         emailField = findViewById(R.id.loginEmailField)
         passwordField = findViewById(R.id.loginPasswordField)
-
     }
 
-    fun login(view : View){
-        if(emailField.text.isEmpty().apply { }){
+    fun login(view: View){
+        val Email = emailField.text.toString()
+        val Password = passwordField.text.toString()
+        if(Email.isBlank() || Email.isEmpty().apply { }){
             Toast.makeText(applicationContext,"Please enter your e-mail",Toast.LENGTH_LONG).show()
         }
-        else if(passwordField.text.isEmpty().apply { }){
+        else if(Password.isEmpty() || Password.isBlank().apply { }){
             Toast.makeText(applicationContext,"Please enter your password",Toast.LENGTH_LONG).show()
         }
         else{
-            val intent = Intent(this, ContactsListActivity::class.java)
-            startActivity(intent)
+            authenticate(Email, Password)
+//            val intent = Intent(this, ContactsListActivity::class.java)
+//            startActivity(intent)
         }
     }
-}
+
+    private fun authenticate(m_Email: String, m_Password: String){
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://tmdcontacts-api.dev.tmd/api/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val api = retrofit.create(ApiClient::class.java)
+        val response = api.userLogin(login = UserResponse(m_Email,m_Password))
+
+        }
+    }
