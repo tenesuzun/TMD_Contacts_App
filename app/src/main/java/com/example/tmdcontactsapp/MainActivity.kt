@@ -42,18 +42,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun login(view: View){
-        val Email = emailField.text.toString()
-        val Password = passwordField.text.toString()
-        if(Email.isBlank() || Email.isEmpty().apply { }){
+        val loginEmail = emailField.text.toString()
+        val loginPassword = passwordField.text.toString()
+        if(loginEmail.isBlank() || loginEmail.isEmpty().apply { }){
             Toast.makeText(applicationContext,"Please enter your e-mail",Toast.LENGTH_LONG).show()
         }
-        else if(Password.isEmpty() || Password.isBlank().apply { }){
+        else if(loginPassword.isEmpty() || loginPassword.isBlank().apply { }){
             Toast.makeText(applicationContext,"Please enter your password",Toast.LENGTH_LONG).show()
         }
         else{
-            authenticate(Email, Password)
-//            val intent = Intent(this, ContactsListActivity::class.java)
-//            startActivity(intent)
+            authenticate(loginEmail, loginPassword)
         }
     }
 
@@ -64,7 +62,30 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         val api = retrofit.create(ApiClient::class.java)
-        val response = api.userLogin(login = UserResponse(m_Email,m_Password))
-
-        }
+        Toast.makeText(applicationContext,"Logging in...",Toast.LENGTH_SHORT).show()
+        api.userLogin(UserResponse(m_Email,m_Password)).enqueue(object: Callback<UserResponse>{
+            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>){
+                when(response.code()){
+                    200 -> {startActivity(Intent(applicationContext, ContactsListActivity::class.java).putExtra("Email",m_Email).putExtra("token",response.message()))
+                        println(response.message())
+                        println(response.body())
+                        println(response.raw())
+                    }
+                    400 -> {Toast.makeText(applicationContext,"HTTP 400", Toast.LENGTH_SHORT).show()
+                        startActivity(intent)
+                        finish()
+                    }
+                    else -> {Toast.makeText(applicationContext,"Unexpected problem. Please try again", Toast.LENGTH_SHORT).show()
+                        startActivity(intent)
+                        finish()
+                    }
+                }
+            }
+            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                Toast.makeText(applicationContext,"Login Failed. Try Again", Toast.LENGTH_LONG).show()
+                startActivity(intent)
+                finish()
+            }
+        })
     }
+}
