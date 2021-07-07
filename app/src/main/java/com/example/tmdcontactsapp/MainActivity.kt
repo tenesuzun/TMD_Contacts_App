@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                Toast.makeText(applicationContext,"Login Failed. Try Again", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext,"Either cellular or server is down", Toast.LENGTH_LONG).show()
                 startActivity(intent)
             }
         })
