@@ -8,7 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 
-class forgottenPasswordActivity : AppCompatActivity() {
+class ForgottenPasswordActivity : AppCompatActivity() {
 
     lateinit var userEmail: EditText
 
