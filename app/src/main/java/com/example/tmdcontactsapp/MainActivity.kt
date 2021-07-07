@@ -8,8 +8,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.example.tmdcontactsapp.models.LoginResponse
 import com.example.tmdcontactsapp.models.UserResponse
 import com.example.tmdcontactsapp.networks.ApiClient
+import com.google.gson.Gson
+import com.google.gson.JsonParser
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -63,28 +67,37 @@ class MainActivity : AppCompatActivity() {
 
         val api = retrofit.create(ApiClient::class.java)
         Toast.makeText(applicationContext,"Logging in...",Toast.LENGTH_SHORT).show()
-        api.userLogin(UserResponse(m_Email,m_Password)).enqueue(object: Callback<UserResponse>{
-            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>){
+        api.userLogin(UserResponse(m_Email,m_Password)).enqueue(object: Callback<LoginResponse>{
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>){
                 when(response.code()){
                     200 -> {startActivity(Intent(applicationContext, ContactsListActivity::class.java).putExtra("Email",m_Email).putExtra("token",response.message()))
                         println(response.message())
+                        println(Gson().toJson(response.body()))
                         println(response.body())
                         println(response.raw())
+
+
                     }
                     400 -> {Toast.makeText(applicationContext,"HTTP 400", Toast.LENGTH_SHORT).show()
-                        startActivity(intent)
-                        finish()
+                        println(Gson().toJson(response.body()))
+                        println(response.message())
+                        println(response.body())
+//                        startActivity(intent)
+//                        finish()
                     }
                     else -> {Toast.makeText(applicationContext,"Unexpected problem. Please try again", Toast.LENGTH_SHORT).show()
+                        println(response.message())
+                        println(response.body())
+                        println(response.raw())
                         startActivity(intent)
-                        finish()
+//                        finish()
                     }
                 }
             }
-            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 Toast.makeText(applicationContext,"Login Failed. Try Again", Toast.LENGTH_LONG).show()
                 startActivity(intent)
-                finish()
+//                finish()
             }
         })
     }

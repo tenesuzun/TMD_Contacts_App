@@ -8,3 +8,10 @@ data class UserResponse(
     @SerializedName("Password")
     var Password: String
 )
+
+data class LoginResponse(
+    @SerializedName("token")
+    var token: String,
+    @SerializedName("expiration")
+    var expiration: String
+)
