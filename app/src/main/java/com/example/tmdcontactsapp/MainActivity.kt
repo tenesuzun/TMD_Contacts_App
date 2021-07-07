@@ -12,8 +12,6 @@ import com.example.tmdcontactsapp.models.LoginResponse
 import com.example.tmdcontactsapp.models.UserResponse
 import com.example.tmdcontactsapp.networks.ApiClient
 import com.google.gson.Gson
-import com.google.gson.JsonParser
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,8 +20,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var emailField: EditText
-    lateinit var passwordField: EditText
+    private lateinit var emailField: EditText
+    private lateinit var passwordField: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,34 +68,24 @@ class MainActivity : AppCompatActivity() {
         api.userLogin(UserResponse(m_Email,m_Password)).enqueue(object: Callback<LoginResponse>{
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>){
                 when(response.code()){
-                    200 -> {startActivity(Intent(applicationContext, ContactsListActivity::class.java).putExtra("Email",m_Email).putExtra("token",response.message()))
-                        println(response.message())
-                        println(Gson().toJson(response.body()))
-                        println(response.body())
-                        println(response.raw())
-
-
+                    200 -> {
+                        startActivity(Intent(applicationContext, ContactsListActivity::class.java).putExtra("Email",m_Email).putExtra("token",Gson().toJson(response.body())))
                     }
-                    400 -> {Toast.makeText(applicationContext,"HTTP 400", Toast.LENGTH_SHORT).show()
+                    400 -> {Toast.makeText(applicationContext,"Email or password is wrong. Please try again", Toast.LENGTH_LONG).show()
                         println(Gson().toJson(response.body()))
                         println(response.message())
                         println(response.body())
-//                        startActivity(intent)
-//                        finish()
                     }
                     else -> {Toast.makeText(applicationContext,"Unexpected problem. Please try again", Toast.LENGTH_SHORT).show()
                         println(response.message())
                         println(response.body())
                         println(response.raw())
-                        startActivity(intent)
-//                        finish()
                     }
                 }
             }
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 Toast.makeText(applicationContext,"Login Failed. Try Again", Toast.LENGTH_LONG).show()
                 startActivity(intent)
-//                finish()
             }
         })
     }
