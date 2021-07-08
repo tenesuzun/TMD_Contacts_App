@@ -14,7 +14,8 @@ class ContactsListActivity : AppCompatActivity() {
         BottomNavigationView.OnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.contactsPage -> {
-                    replaceFragment(ContactListFragment())
+                    val bundle = intent.extras
+                    replaceFragment(ContactListFragment().newInstance(bundle!!)!!)
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.groupsPage -> {
@@ -41,7 +42,8 @@ class ContactsListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contacts_list)
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelected)
-        replaceFragment(ContactListFragment())
+        val bundle = intent.extras
+        replaceFragment(ContactListFragment().newInstance(bundle!!)!!)
     }
 
     private fun replaceFragment(fragment: Fragment) {

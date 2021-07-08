@@ -18,8 +18,8 @@ import com.google.android.material.textfield.TextInputEditText
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val userArgEmail = "Email"
+private const val userArgToken = "token"
 
 /**
  * A simple [Fragment] subclass.
@@ -28,18 +28,25 @@ private const val ARG_PARAM2 = "param2"
  */
 
 class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
-    private var param1: String? = null
-    private var param2: String? = null
+    private var userEmail: String? = null
+    private var userToken: String? = null
     private lateinit var contactsAdapter: ContactListAdapter
     private lateinit var contactsList: List<Contact>
     private var filteredList: ArrayList<Contact> = ArrayList()
 
+    fun newInstance(bundle: Bundle): ContactListFragment? {
+        val fragment = ContactListFragment()
+        fragment.arguments = bundle
+        return fragment
+    }
+
     //region onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        val bundle: Bundle = arguments?.getBundle("bundle")!!
+        bundle.let {
+            userEmail = it.getString(userArgEmail)
+            userToken = it.getString(userArgToken)
         }
     }
     //endregion
@@ -63,14 +70,15 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
                 filter(s.toString())
             }
         })
+
         val retrofit = Retrofit.Builder()
             .baseUrl("http://tmdcontacts-api.dev.tmd/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-
         val api = retrofit.create(ApiClient::class.java)
-
-        api.getAllContacts().enqueue(object : Callback<List<Contact>>{
+//        api.getUserByEmail()
+        //TODO do not forget to change the userId
+        api.getUserContacts(userId = 1).enqueue(object : Callback<List<Contact>>{
             override fun onResponse(call: Call<List<Contact>>, response: Response<List<Contact>>) {
                 contactsList = response.body()!!
                 contactsAdapter = ContactListAdapter(this@ContactListFragment, contactsList)
@@ -140,8 +148,8 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         fun newInstance(param1: String, param2: String) =
             ContactListFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString(userArgEmail, param1)
+                    putString(userArgToken, param2)
                 }
             }
         }

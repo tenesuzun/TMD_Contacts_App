@@ -69,7 +69,9 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>){
                 when(response.code()){
                     200 -> {
-                        startActivity(Intent(applicationContext, ContactsListActivity::class.java).putExtra("Email",m_Email).putExtra("token",Gson().toJson(response.body())))
+                        val bundle = Bundle().apply { putString("Email",m_Email)
+                            putString("token",Gson().toJson(response.body()))}
+                        startActivity(Intent(applicationContext, ContactsListActivity::class.java).putExtra("bundle", bundle))
                     }
                     400 -> {Toast.makeText(applicationContext,"Email or password is wrong. Please try again", Toast.LENGTH_LONG).show()
                         println(Gson().toJson(response.body()))

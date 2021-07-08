@@ -105,33 +105,19 @@ class UserRegistryActivity : AppCompatActivity() {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 when(response.code()){
                     200 -> {
-                        println(Gson().toJson(response.body()))
-                        println(response.message())
-                        println(response.body())
-                        println(response.raw())
                         Toast.makeText(applicationContext, "Registry is successful. You can login now", Toast.LENGTH_LONG).show()
-                        finish()
                     }
                     400 -> {
                         Toast.makeText(applicationContext, "HTTP 400", Toast.LENGTH_LONG).show()
-                        println(Gson().toJson(response.body()))
-                        println(response.message())
-                        println(response.body())
-                        println(response.raw())
                     }
                     else -> {
                         Toast.makeText(applicationContext,"Unexpected problem. Please try again", Toast.LENGTH_SHORT).show()
-                        println(Gson().toJson(response.body()))
-                        println(response.message())
-                        println(response.body())
-                        println(response.raw())
                     }
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 Toast.makeText(applicationContext,"Either cellular or server is down", Toast.LENGTH_LONG).show()
-                startActivity(intent)
             }
         })
     }
