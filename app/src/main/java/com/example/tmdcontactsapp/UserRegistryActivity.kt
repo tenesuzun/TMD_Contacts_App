@@ -1,6 +1,5 @@
 package com.example.tmdcontactsapp
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -8,10 +7,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import com.example.tmdcontactsapp.models.LoginResponse
+import com.example.tmdcontactsapp.models.TokenResponse
 import com.example.tmdcontactsapp.models.User
 import com.example.tmdcontactsapp.networks.ApiClient
-import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -101,8 +99,8 @@ class UserRegistryActivity : AppCompatActivity() {
             Title = userWorkTitle.text.toString(),
             BirthDate = userBirthday.text.toString(),
             Note = userNotes.text.toString()
-            )).enqueue(object: Callback<LoginResponse>{
-            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+            )).enqueue(object: Callback<TokenResponse>{
+            override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                 when(response.code()){
                     200 -> {
                         Toast.makeText(applicationContext, "Registry is successful. You can login now", Toast.LENGTH_LONG).show()
@@ -116,7 +114,7 @@ class UserRegistryActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+            override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                 Toast.makeText(applicationContext,"Either cellular or server is down", Toast.LENGTH_LONG).show()
             }
         })

@@ -3,6 +3,7 @@ package com.example.tmdcontactsapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log.d
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_contacts_list.*
@@ -15,7 +16,7 @@ class ContactsListActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.contactsPage -> {
                     val bundle = intent.extras
-                    replaceFragment(ContactListFragment().newInstance(bundle!!)!!)
+                    replaceFragment(ContactListFragment().newInstance(bundle!!))
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.groupsPage -> {
@@ -43,7 +44,7 @@ class ContactsListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_contacts_list)
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelected)
         val bundle = intent.extras
-        replaceFragment(ContactListFragment().newInstance(bundle!!)!!)
+        replaceFragment(ContactListFragment().newInstance(bundle!!))
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -51,5 +52,4 @@ class ContactsListActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.fragmentContainerView, fragment)
         fragmentTransaction.commit()
     }
-
 }

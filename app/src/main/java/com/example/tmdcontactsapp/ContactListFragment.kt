@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.tmdcontactsapp.adapters.ContactListAdapter
 import com.example.tmdcontactsapp.models.Contact
+import com.example.tmdcontactsapp.models.LoggedUserResponse
+import com.example.tmdcontactsapp.models.User
 import com.example.tmdcontactsapp.networks.ApiClient
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.Gson
+import okhttp3.ResponseBody
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -34,13 +39,12 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
     private lateinit var contactsList: List<Contact>
     private var filteredList: ArrayList<Contact> = ArrayList()
 
-    fun newInstance(bundle: Bundle): ContactListFragment? {
+    fun newInstance(bundle: Bundle): ContactListFragment {
         val fragment = ContactListFragment()
         fragment.arguments = bundle
         return fragment
     }
 
-    //region onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle: Bundle = arguments?.getBundle("bundle")!!
@@ -49,7 +53,6 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
             userToken = it.getString(userArgToken)
         }
     }
-    //endregion
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,22 +78,42 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
             .baseUrl("http://tmdcontacts-api.dev.tmd/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+
         val api = retrofit.create(ApiClient::class.java)
-//        api.getUserByEmail()
-        //TODO do not forget to change the userId
-        api.getUserContacts(userId = 1).enqueue(object : Callback<List<Contact>>{
-            override fun onResponse(call: Call<List<Contact>>, response: Response<List<Contact>>) {
-                contactsList = response.body()!!
-                contactsAdapter = ContactListAdapter(this@ContactListFragment, contactsList)
-                val recycler = view.findViewById<RecyclerView>(R.id.fragmentContactListRecycler)
-                recycler?.apply {
-                    setHasFixedSize(true)
-                    layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
-                    adapter = contactsAdapter
+        api.getUserByEmail(email = userEmail!!).enqueue(object: Callback<LoggedUserResponse>{
+            override fun onResponse(call: Call<LoggedUserResponse>, response: Response<LoggedUserResponse>) {
+                when(response.code()){
+                    200 -> {
+                        api.getUserContacts(userId = response.body()!!.id).enqueue(object : Callback<List<Contact>?>{
+                            override fun onResponse(call: Call<List<Contact>?>, response: Response<List<Contact>?>){
+                                when(response.code()){
+                                    200 ->{
+                                        contactsList = response.body()!!
+                                        contactsAdapter = ContactListAdapter(this@ContactListFragment, contactsList)
+                                        val recycler = view.findViewById<RecyclerView>(R.id.fragmentContactListRecycler)
+                                        recycler?.apply {
+                                            setHasFixedSize(true)
+                                            layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+                                            adapter = contactsAdapter
+                                        }
+                                    }400 ->{
+                                        Toast.makeText(context,"There is not any contact to show yet",Toast.LENGTH_LONG).show()
+                                    }else ->{
+                                        Toast.makeText(context,"Unexpected problem", Toast.LENGTH_LONG).show()
+                                    }
+                                }
+                            }
+                            override fun onFailure(call: Call<List<Contact>?>, t: Throwable) {
+                                Toast.makeText(context,"Please connect to the Internet",Toast.LENGTH_LONG).show()
+                            }
+                        })
+                    }else ->{
+                        Toast.makeText(context,"Could not get logged user details", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
-            override fun onFailure(call: Call<List<Contact>>, t: Throwable) {
-                Toast.makeText(context,"Please connect to the Internet",Toast.LENGTH_LONG).show()
+            override fun onFailure(call: Call<LoggedUserResponse>, t: Throwable) {
+                Toast.makeText(context,"Either cellular or server is down",Toast.LENGTH_SHORT).show()
             }
         })
         return view
@@ -124,33 +147,13 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         intent.putExtra("contactHomeNumber", clickedItem.homePhone)
         intent.putExtra("contactAddress", clickedItem.address)
         intent.putExtra("contactCompany", clickedItem.company)
-        intent.putExtra("contactTitle",clickedItem.title)
+        intent.putExtra("contactTitle", clickedItem.title)
         intent.putExtra("contactBirthday", clickedItem.birthday)
-        intent.putExtra("contactNote",clickedItem.notes)
+        intent.putExtra("contactNote", clickedItem.notes)
         intent.putExtra("contactGroups", clickedItem.groups)
         //endregion
 
         startActivity(intent)
 
     }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ContactListFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ContactListFragment().apply {
-                arguments = Bundle().apply {
-                    putString(userArgEmail, param1)
-                    putString(userArgToken, param2)
-                }
-            }
-        }
 }

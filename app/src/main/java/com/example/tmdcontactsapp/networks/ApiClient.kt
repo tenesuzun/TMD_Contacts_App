@@ -1,18 +1,15 @@
 package com.example.tmdcontactsapp.networks
 
-import com.example.tmdcontactsapp.models.Contact
-import com.example.tmdcontactsapp.models.LoginResponse
-import com.example.tmdcontactsapp.models.User
+import com.example.tmdcontactsapp.models.*
 //import com.example.tmdcontactsapp.models.Group
-import com.example.tmdcontactsapp.models.UserResponse
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
 interface ApiClient {
     //region GET methods
     @GET("Users/GetByEmail")
-    fun getUserByEmail(@Query("email")email: String): Call<User>
+    @Headers("accept: */*")
+    fun getUserByEmail(@Query("email")email: String): Call<LoggedUserResponse>
 
     @GET("Contacts/GetListByUserId")
     fun getUserContacts(@Query("userId")userId: Int): Call<List<Contact>>
@@ -21,10 +18,10 @@ interface ApiClient {
     //region POST methods
     @POST("Auths/Login")
     @Headers("accept: application/json-patch+json","Content-Type: application/json-patch+json")
-    fun userLogin(@Body login: UserResponse): Call<LoginResponse>
+    fun userLogin(@Body login: UserRequest): Call<TokenResponse>
 
     @POST("Auths/Register")
     @Headers("accept: */*","Content-Type: application/json-patch+json")
-    fun userRegistry(@Body user: User): Call<LoginResponse>
+    fun userRegistry(@Body user: User): Call<TokenResponse>
     //endregion
 }

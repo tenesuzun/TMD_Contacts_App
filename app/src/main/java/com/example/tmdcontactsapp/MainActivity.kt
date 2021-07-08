@@ -8,8 +8,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.example.tmdcontactsapp.models.LoginResponse
-import com.example.tmdcontactsapp.models.UserResponse
+import com.example.tmdcontactsapp.models.TokenResponse
+import com.example.tmdcontactsapp.models.UserRequest
 import com.example.tmdcontactsapp.networks.ApiClient
 import com.google.gson.Gson
 import retrofit2.Call
@@ -65,8 +65,8 @@ class MainActivity : AppCompatActivity() {
 
         val api = retrofit.create(ApiClient::class.java)
         Toast.makeText(applicationContext,"Logging in...",Toast.LENGTH_SHORT).show()
-        api.userLogin(UserResponse(m_Email,m_Password)).enqueue(object: Callback<LoginResponse>{
-            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>){
+        api.userLogin(UserRequest(m_Email,m_Password)).enqueue(object: Callback<TokenResponse>{
+            override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>){
                 when(response.code()){
                     200 -> {
                         val bundle = Bundle().apply { putString("Email",m_Email)
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+            override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                 Toast.makeText(applicationContext,"Either cellular or server is down", Toast.LENGTH_LONG).show()
                 startActivity(intent)
             }
