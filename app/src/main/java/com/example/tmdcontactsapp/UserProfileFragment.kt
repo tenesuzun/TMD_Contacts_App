@@ -5,56 +5,84 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
+import com.example.tmdcontactsapp.models.LoggedUserResponse
+import com.example.tmdcontactsapp.networks.ApiClient
+import retrofit2.*
+import retrofit2.converter.gson.GsonConverterFactory
 
+private const val userArgEmail = "Email"
+private const val userArgToken = "token"
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [UserProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class UserProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var userEmail: String? = null
+    private var userToken: String? = null
+
+    fun newInstance(bundle: Bundle): UserProfileFragment {
+        val fragment = UserProfileFragment()
+        fragment.arguments = bundle
+        return fragment
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        val bundle: Bundle = arguments?.getBundle("bundle")!!
+        bundle.let {
+            userEmail = it.getString(userArgEmail)
+            userToken = it.getString(userArgToken)
         }
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_user_profile, container, false)
-    }
+        val view =  inflater.inflate(R.layout.fragment_user_profile, container, false)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment UserProfileFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            UserProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        //region View initializers
+        val profileFirstName: TextView = view.findViewById(R.id.userProfileFirstName)
+        val profileSurname: TextView = view.findViewById(R.id.userProfileSurname)
+        val profileEmail: TextView = view.findViewById(R.id.userProfileEmailAddress)
+        val profilePhoneNumber: TextView = view.findViewById(R.id.userProfilePhoneNumber)
+        val profileWorkNumber: TextView = view.findViewById(R.id.userProfileWorkPhone)
+        val profileHomeNumber: TextView = view.findViewById(R.id.userProfileHomePhone)
+        val profileAddress: TextView = view.findViewById(R.id.userProfileAddress)
+        val profileCompany: TextView = view.findViewById(R.id.userProfileCompany)
+        val profileTitle: TextView = view.findViewById(R.id.userProfileWorkTitle)
+        val profileBirthday: TextView = view.findViewById(R.id.userProfileBirthday)
+        val profileNotes: TextView = view.findViewById(R.id.userProfileNotes)
+        //endregion
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://tmdcontacts-api.dev.tmd/api/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val api = retrofit.create(ApiClient::class.java)
+        api.getUserByEmail(email = userEmail!!).enqueue(object: Callback<LoggedUserResponse>{
+            override fun onResponse(call: Call<LoggedUserResponse>, response: Response<LoggedUserResponse>){
+                when(response.code()){
+                    200 ->{
+                        profileFirstName.text = response.body()!!.name
+                        profileSurname.text = response.body()!!.surname
+                        profileEmail.text = response.body()!!.email
+                        profilePhoneNumber.text = response.body()!!.tel
+                        profileWorkNumber.text = response.body()!!.telBusiness
+                        profileHomeNumber.text = response.body()!!.telHome
+                        profileAddress.text = response.body()!!.address
+                        profileCompany.text = response.body()!!.company
+                        profileTitle.text = response.body()!!.title
+                        profileBirthday.text = response.body()!!.birthDate
+                        profileNotes.text = response.body()!!.note
+                    }else -> {Toast.makeText(context,"Internal Server error", Toast.LENGTH_SHORT).show()}
                 }
             }
+            override fun onFailure(call: Call<LoggedUserResponse>, t: Throwable) {
+                Toast.makeText(context,"Unexpected Problem", Toast.LENGTH_LONG).show()
+            }
+        })
+        return view
     }
 }
