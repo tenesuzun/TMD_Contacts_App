@@ -19,7 +19,8 @@ class ContactsListActivity : AppCompatActivity() {
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.groupsPage -> {
-                    replaceFragment(GroupListFragment())
+                    val bundle = intent.extras
+                    replaceFragment(GroupListFragment().newInstance(bundle!!))
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.profilePage -> {

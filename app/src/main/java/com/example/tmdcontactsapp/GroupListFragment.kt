@@ -5,7 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.tmdcontactsapp.models.Group
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.tmdcontactsapp.adapters.ContactListAdapter
+import com.example.tmdcontactsapp.models.GroupResponse
+import com.example.tmdcontactsapp.models.LoggedUserResponse
 import com.example.tmdcontactsapp.networks.ApiClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -13,26 +17,27 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val userArgEmail = "Email"
+private const val userArgToken = "token"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [GroupListFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class GroupListFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var userEmail: String? = null
+    private var userToken: String? = null
+    private lateinit var groupsAdapter: ContactListAdapter
+    private lateinit var groupsList: List<GroupResponse>
+
+    fun newInstance(bundle: Bundle): GroupListFragment{
+        val fragment = GroupListFragment()
+        fragment.arguments = bundle
+        return fragment
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        val bundle: Bundle = arguments?.getBundle("bundle")!!
+        bundle.let {
+            userEmail = it.getString(userArgEmail)
+            userToken = it.getString(userArgToken)
         }
     }
 
@@ -41,42 +46,48 @@ class GroupListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view: View = inflater.inflate(R.layout.fragment_group_list, container, false)
-       /* val retrofit = Retrofit.Builder()
-            .baseUrl("http://tmdcontacts-api.dev.tmd/api")
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://tmdcontacts-api.dev.tmd/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+
         val api = retrofit.create(ApiClient::class.java)
-        api.getAllGroups().enqueue(object: Callback<List<Group>>{
-            override fun onResponse(call: Call<List<Group>>, response: Response<List<Group>>) {
-//                TODO("Not yet implemented")
+        api.getUserByEmail(email = userEmail!!).enqueue(object: Callback<LoggedUserResponse>{
+            override fun onResponse(call: Call<LoggedUserResponse>, response: Response<LoggedUserResponse>){
+                when(response.code()){
+                    200 -> {
+                        api.getUserGroups(userId = response.body()!!.id).enqueue(object: Callback<List<GroupResponse>>{
+                            override fun onResponse(call: Call<List<GroupResponse>>, response: Response<List<GroupResponse>>){
+                                when(response.code()){
+                                    200 ->{
+                                        groupsList = response.body()!!
+//                                        TODO(You will continue from here to make adapter for groups and respective item on click listener)
+                                        groupsAdapter = ContactListAdapter(this@GroupListFragment, groupsList)
+                                        val recycler = view.findViewById<RecyclerView>(R.id.fragmentGroupListRecycler)
+                                        recycler?.apply {
+                                            setHasFixedSize(true)
+                                            layoutManager = StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL)
+                                            adapter = groupsAdapter
+                                        }
+                                    }
+                                }
+                            }
+
+                            override fun onFailure(call: Call<List<GroupResponse>>, t: Throwable) {
+//                                TODO("Not yet implemented")
+                            }
+                        })
+                    }
+                }
             }
 
-            override fun onFailure(call: Call<List<Group>>, t: Throwable) {
-//                TODO("Not yet implemented")
+            override fun onFailure(call: Call<LoggedUserResponse>, t: Throwable) {
+                TODO("Not yet implemented")
             }
-        })*/
+        })
 
 
         return view
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment GroupListFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            GroupListFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

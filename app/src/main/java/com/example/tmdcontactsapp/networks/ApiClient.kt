@@ -1,7 +1,7 @@
 package com.example.tmdcontactsapp.networks
 
 import com.example.tmdcontactsapp.models.*
-//import com.example.tmdcontactsapp.models.Group
+//import com.example.tmdcontactsapp.models.GroupResponse
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -13,6 +13,11 @@ interface ApiClient {
 
     @GET("Contacts/GetListByUserId")
     fun getUserContacts(@Query("userId")userId: Int): Call<List<Contact>>
+
+    @GET("/api/Groups/GetUserGroups")
+    @Headers("accept: */*")
+    fun getUserGroups(@Query("userId")userId: Int): Call<List<GroupResponse>>
+
     //endregion
 
     //region POST methods
