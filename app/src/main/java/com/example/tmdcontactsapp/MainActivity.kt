@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ForgottenPasswordActivity::class.java)
             startActivity(intent)
         }
-
         emailField = findViewById(R.id.loginEmailField)
         passwordField = findViewById(R.id.loginPasswordField)
     }
