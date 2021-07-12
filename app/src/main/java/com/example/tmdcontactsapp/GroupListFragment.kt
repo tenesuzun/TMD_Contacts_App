@@ -1,16 +1,21 @@
 package com.example.tmdcontactsapp
 
+import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.tmdcontactsapp.adapters.ContactListAdapter
+import com.example.tmdcontactsapp.adapters.GroupListAdapter
 import com.example.tmdcontactsapp.models.GroupResponse
 import com.example.tmdcontactsapp.models.LoggedUserResponse
 import com.example.tmdcontactsapp.networks.ApiClient
+import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,11 +25,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 private const val userArgEmail = "Email"
 private const val userArgToken = "token"
 
-class GroupListFragment : Fragment() {
+class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
     private var userEmail: String? = null
     private var userToken: String? = null
-    private lateinit var groupsAdapter: ContactListAdapter
+    private lateinit var groupsAdapter: GroupListAdapter
     private lateinit var groupsList: List<GroupResponse>
+    private var filteredList: ArrayList<GroupResponse> = ArrayList()
 
     fun newInstance(bundle: Bundle): GroupListFragment{
         val fragment = GroupListFragment()
@@ -46,6 +52,20 @@ class GroupListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view: View = inflater.inflate(R.layout.fragment_group_list, container, false)
+        val searchBar = view.findViewById<TextInputEditText>(R.id.groupsSearchBarField)
+        searchBar.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//                TODO("Not yet implemented")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                TODO("Not yet implemented")
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                filter(s.toString())
+            }
+        })
 
         val retrofit = Retrofit.Builder()
             .baseUrl("http://tmdcontacts-api.dev.tmd/api/")
@@ -62,8 +82,7 @@ class GroupListFragment : Fragment() {
                                 when(response.code()){
                                     200 ->{
                                         groupsList = response.body()!!
-//                                        TODO(You will continue from here to make adapter for groups and respective item on click listener)
-                                        groupsAdapter = ContactListAdapter(this@GroupListFragment, groupsList)
+                                        groupsAdapter = GroupListAdapter(this@GroupListFragment, groupsList)
                                         val recycler = view.findViewById<RecyclerView>(R.id.fragmentGroupListRecycler)
                                         recycler?.apply {
                                             setHasFixedSize(true)
@@ -71,23 +90,48 @@ class GroupListFragment : Fragment() {
                                             adapter = groupsAdapter
                                         }
                                     }
+                                    400 -> {
+                                        Toast.makeText(context,"This user does not have groups",Toast.LENGTH_SHORT).show()
+                                    } else -> {
+                                        Toast.makeText(context,"Unexpected problem", Toast.LENGTH_SHORT).show()
+                                    }
                                 }
                             }
-
                             override fun onFailure(call: Call<List<GroupResponse>>, t: Throwable) {
-//                                TODO("Not yet implemented")
+                                Toast.makeText(context,"Either cellular or server is down", Toast.LENGTH_SHORT).show()
                             }
                         })
+                    } else ->{
+                    Toast.makeText(context,"Could not get logged user details", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
-
             override fun onFailure(call: Call<LoggedUserResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                Toast.makeText(context,"Either cellular or server is down",Toast.LENGTH_SHORT).show()
             }
         })
-
-
         return view
+    }
+
+    fun filter(text: String){
+        filteredList.clear()
+        for(item: GroupResponse in groupsList){
+            if(item.groupName.lowercase().contains(text.lowercase())){
+                filteredList.add(item)
+            }
+        }
+        // TODO("Gotta correct the adapter accordingly to the Groups")
+        groupsAdapter.filterList(filteredList)
+    }
+
+    override fun onItemClick(position: Int) {
+        val clickedItem: GroupResponse = if(filteredList.isNotEmpty()){
+            filteredList[position]
+        } else{
+            groupsList[position]
+        }
+        // TODO("Gotta create activity accordingly")
+        val intent = Intent(context, DetailedGroupListActivity::class.java)
+        startActivity(intent)
     }
 }
