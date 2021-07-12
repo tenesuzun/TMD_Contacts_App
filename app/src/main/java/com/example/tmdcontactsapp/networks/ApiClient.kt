@@ -28,5 +28,9 @@ interface ApiClient {
     @POST("Auths/Register")
     @Headers("accept: */*","Content-Type: application/json-patch+json")
     fun userRegistry(@Body user: User): Call<TokenResponse>
+
+    @POST("Contacts/Add")
+    @Headers("accept: */*", "Content-Type: application/json-patch+json")
+    fun addNewContact(@Body contact: ContactRequest): Call<String>
     //endregion
 }

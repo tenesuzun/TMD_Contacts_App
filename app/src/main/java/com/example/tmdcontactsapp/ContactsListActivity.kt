@@ -32,7 +32,8 @@ class ContactsListActivity : AppCompatActivity() {
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.addNewContact -> {
-                    val intent = Intent(this, AddNewContactActivity::class.java)
+//                    val bundle = intent.getBundleExtra("bundle")
+                    val intent = Intent(this, AddNewContactActivity::class.java).putExtra("bundle", intent.extras)
                     startActivity(intent)
                     return@OnNavigationItemSelectedListener true
                 }

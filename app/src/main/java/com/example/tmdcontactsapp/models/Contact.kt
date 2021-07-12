@@ -12,11 +12,11 @@ data class Contact(
     var surname: String,
     @SerializedName("email")
     var emailAddress: String,
-    @SerializedName("cellPhone")
+    @SerializedName("tel")
     var phoneNumber: String,
-    @SerializedName("workPhone")
+    @SerializedName("telBusiness")
     var workNumber: String,
-    @SerializedName("homePhone")
+    @SerializedName("telHome")
     var homePhone: String,
     @SerializedName("address")
     var address: String,
@@ -24,11 +24,11 @@ data class Contact(
     var company: String,
     @SerializedName("title")
     var title: String,
-    @SerializedName("birthday")
+    @SerializedName("birthDate")
     var birthday: String,
     @SerializedName("note")
     var notes: String,
     @SerializedName("group")
-    var groups: String,
+    var groups: String
     //endregion
 )
