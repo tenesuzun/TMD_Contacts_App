@@ -1,6 +1,5 @@
 package com.example.tmdcontactsapp
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -10,7 +9,7 @@ import android.widget.Toast
 
 class ForgottenPasswordActivity : AppCompatActivity() {
 
-    lateinit var userEmail: EditText
+    private lateinit var userEmail: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,8 +17,7 @@ class ForgottenPasswordActivity : AppCompatActivity() {
 
         val loginBtn = findViewById<Button>(R.id.forgottenLoginBtn)
         loginBtn.setOnClickListener{
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            finish()
         }
         userEmail = findViewById(R.id.forgottenEmailField)
     }
