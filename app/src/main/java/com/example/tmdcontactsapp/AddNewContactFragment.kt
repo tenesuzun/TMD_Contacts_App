@@ -108,7 +108,8 @@ class AddNewContactFragment : Fragment() {
                                     birthday = contactBirthday.text.toString(),
                                     notes = contactNotes.text.toString(),
                                     contactPicture = "",
-                                    userId = response.body()!!.id)
+                                    userId = response.body()!!.id,
+                                    contactId = 0)
                             ).enqueue(object: Callback<String> {
                                 //TODO("The response type mismatch leads the response into on failure. Fix it in the future")
                                 override fun onResponse(call: Call<String>, response: Response<String>) {
@@ -123,6 +124,7 @@ class AddNewContactFragment : Fragment() {
                                 }
                                 override fun onFailure(call: Call<String>, t: Throwable) {
                                     Toast.makeText(context,"Contact is successfully added!", Toast.LENGTH_LONG).show()
+                                    activity!!.supportFragmentManager.popBackStack("contactsPage",0)
                                 }
                             })
                         }

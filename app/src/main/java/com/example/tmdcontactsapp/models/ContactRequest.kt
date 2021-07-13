@@ -3,7 +3,9 @@ package com.example.tmdcontactsapp.models
 import com.google.gson.annotations.SerializedName
 
 data class ContactRequest(
-    /** This class will be used to add new contacts in POST method */
+    /** This class will be used to upgrade or add new contacts in POST method */
+    @SerializedName("Id")
+    var contactId: Int,
     @SerializedName("Photo")
     var contactPicture: String,
     @SerializedName("Name")

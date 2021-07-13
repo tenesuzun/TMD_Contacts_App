@@ -55,11 +55,11 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
         val searchBar = view.findViewById<TextInputEditText>(R.id.groupsSearchBarField)
         searchBar.addTextChangedListener(object: TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                Toast.makeText(context, "BeforeTextChanged",Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "BeforeTextChanged",Toast.LENGTH_SHORT).show()
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                Toast.makeText(context, "OnTextChanged",Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "OnTextChanged",Toast.LENGTH_SHORT).show()
             }
 
             override fun afterTextChanged(s: Editable?) {

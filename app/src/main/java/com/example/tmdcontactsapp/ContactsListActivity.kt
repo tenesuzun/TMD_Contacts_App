@@ -1,6 +1,5 @@
 package com.example.tmdcontactsapp
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -15,17 +14,17 @@ class ContactsListActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.contactsPage -> {
                     val bundle = intent.extras
-                    replaceFragment(ContactListFragment().newInstance(bundle!!))
+                    replaceFragment(ContactListFragment().newInstance(bundle!!),"contactsPage")
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.groupsPage -> {
                     val bundle = intent.extras
-                    replaceFragment(GroupListFragment().newInstance(bundle!!))
+                    replaceFragment(GroupListFragment().newInstance(bundle!!),"groupsPage")
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.profilePage -> {
                     val bundle = intent.extras
-                    replaceFragment(UserProfileFragment().newInstance(bundle!!))
+                    replaceFragment(UserProfileFragment().newInstance(bundle!!),"profilePage")
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.removeContact -> {
@@ -33,7 +32,7 @@ class ContactsListActivity : AppCompatActivity() {
                 }
                 R.id.addNewContact -> {
                     val bundle = intent.extras
-                    replaceFragment(AddNewContactFragment().newInstance(bundle!!))
+                    replaceFragment(AddNewContactFragment().newInstance(bundle!!),"addNewContact")
                     return@OnNavigationItemSelectedListener true
                 }
             }
@@ -45,12 +44,12 @@ class ContactsListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_contacts_list)
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelected)
         val bundle = intent.extras
-        replaceFragment(ContactListFragment().newInstance(bundle!!))
+        replaceFragment(ContactListFragment().newInstance(bundle!!),"contactsPage")
     }
 
-    private fun replaceFragment(fragment: Fragment) {
+    private fun replaceFragment(fragment: Fragment, backstack: String) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.fragmentContainerView, fragment)
+        fragmentTransaction.addToBackStack(backstack).replace(R.id.fragmentContainerView, fragment)
         fragmentTransaction.commit()
     }
 }

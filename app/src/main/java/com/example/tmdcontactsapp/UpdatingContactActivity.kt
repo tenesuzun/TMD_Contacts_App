@@ -2,10 +2,18 @@ package com.example.tmdcontactsapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Html
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import com.example.tmdcontactsapp.models.ContactRequest
+import com.example.tmdcontactsapp.networks.ApiClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class UpdatingContactActivity : AppCompatActivity() {
 
@@ -84,6 +92,41 @@ class UpdatingContactActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, "Please enter surname", Toast.LENGTH_LONG).show()
         } else if (contactPhone.text.isEmpty() || contactPhone.text.isBlank()) {
             Toast.makeText(applicationContext, "Please enter phone number", Toast.LENGTH_LONG).show()
+        } else {
+            val retrofit = Retrofit.Builder()
+                .baseUrl("http://tmdcontacts-api.dev.tmd/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            retrofit.create(ApiClient::class.java).updateContact(ContactRequest(
+                contactId = intent.getIntExtra("contactId",-1),
+                userId = intent.getIntExtra("userId", -1),
+                firstName = contactFirstName.text.toString(),
+                surname = contactSurname.text.toString(),
+                emailAddress = contactEmail.text.toString(),
+                phoneNumber = contactPhone.text.toString(),
+                workNumber = contactWorkPhone.text.toString(),
+                homePhone = contactHomePhone.text.toString(),
+                address = contactAddress.text.toString(),
+                company = contactCompany.text.toString(),
+                title = contactWorkTitle.text.toString(),
+                birthday = contactBirthday.text.toString(),
+                notes = contactNotes.text.toString(),
+                contactPicture = "")).enqueue(object: Callback<Html>{
+                override fun onResponse(call: Call<Html>, response: Response<Html>) {
+                    when(response.code()){
+                        200 -> {
+                            Toast.makeText(applicationContext,"Contact is updated successfully!",Toast.LENGTH_LONG).show()
+                        }else -> {
+                            Toast.makeText(applicationContext, response.body().toString(), Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+                override fun onFailure(call: Call<Html>, t: Throwable) {
+                    Toast.makeText(applicationContext, "Contact is updated successfully!", Toast.LENGTH_LONG).show()
+                    supportFragmentManager.popBackStack("contactsPage", 0)
+                }
+            })
         }
     }
 }

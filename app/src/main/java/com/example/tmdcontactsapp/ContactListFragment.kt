@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,22 +14,13 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.tmdcontactsapp.adapters.ContactListAdapter
 import com.example.tmdcontactsapp.models.Contact
 import com.example.tmdcontactsapp.models.LoggedUserResponse
-import com.example.tmdcontactsapp.models.User
 import com.example.tmdcontactsapp.networks.ApiClient
 import com.google.android.material.textfield.TextInputEditText
-import com.google.gson.Gson
-import okhttp3.ResponseBody
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
 private const val userArgEmail = "Email"
 private const val userArgToken = "token"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ContactListFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 
 class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
     private var userEmail: String? = null
@@ -62,11 +52,11 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         val searchBar = view.findViewById<TextInputEditText>(R.id.contactsSearchBarField)
         searchBar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                Toast.makeText(context,"BeforeTextChanged",Toast.LENGTH_SHORT).show()
+                //
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                Toast.makeText(context,"OnTextChanged",Toast.LENGTH_SHORT).show()
+                //
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -138,6 +128,8 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         val intent = Intent(context, UpdatingContactActivity::class.java)
 
         //region Intent extras that is transferred to Detailed Contact Page
+        intent.putExtra("userId", clickedItem.userId)
+        intent.putExtra("contactId", clickedItem.contactId)
         intent.putExtra("contactPhoto", clickedItem.contactPicture)
         intent.putExtra("contactFirstName", clickedItem.firstName)
         intent.putExtra("contactSurname", clickedItem.surname)

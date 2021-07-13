@@ -1,5 +1,6 @@
 package com.example.tmdcontactsapp.networks
 
+import android.text.Html
 import com.example.tmdcontactsapp.models.*
 //import com.example.tmdcontactsapp.models.GroupResponse
 import retrofit2.Call
@@ -14,7 +15,7 @@ interface ApiClient {
     @GET("Contacts/GetListByUserId")
     fun getUserContacts(@Query("userId")userId: Int): Call<List<Contact>>
 
-    @GET("/api/Groups/GetUserGroups")
+    @GET("/api/Groups/GetListByUserId")
     @Headers("accept: */*")
     fun getUserGroups(@Query("userId")userId: Int): Call<List<GroupResponse>>
 
@@ -32,5 +33,9 @@ interface ApiClient {
     @POST("Contacts/Add")
     @Headers("accept: */*", "Content-Type: application/json-patch+json")
     fun addNewContact(@Body contact: ContactRequest): Call<String>
+
+    @POST("Contacts/Update")
+    @Headers("accept: */*", "Content-Type: application/json-patch+json")
+    fun updateContact(@Body contact: ContactRequest): Call<Html>
     //endregion
 }
