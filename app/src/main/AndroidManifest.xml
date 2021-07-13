@@ -11,11 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TMDContactsApp">
-        <activity android:name=".DetailedGroupListActivity"></activity>
+        <activity android:name=".DetailedGroupListActivity" />
         <activity android:name=".UpdatingContactActivity" />
         <activity android:name=".ForgottenPasswordActivity" />
         <activity android:name=".ContactsListActivity" />
-        <activity android:name=".AddNewContactActivity" />
         <activity android:name=".UserRegistryActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

@@ -62,11 +62,11 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         val searchBar = view.findViewById<TextInputEditText>(R.id.contactsSearchBarField)
         searchBar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//                TODO("Not yet implemented")
+                Toast.makeText(context,"BeforeTextChanged",Toast.LENGTH_SHORT).show()
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                TODO("Not yet implemented")
+                Toast.makeText(context,"OnTextChanged",Toast.LENGTH_SHORT).show()
             }
 
             override fun afterTextChanged(s: Editable?) {

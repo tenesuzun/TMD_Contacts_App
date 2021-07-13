@@ -55,11 +55,11 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
         val searchBar = view.findViewById<TextInputEditText>(R.id.groupsSearchBarField)
         searchBar.addTextChangedListener(object: TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//                TODO("Not yet implemented")
+                Toast.makeText(context, "BeforeTextChanged",Toast.LENGTH_SHORT).show()
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                TODO("Not yet implemented")
+                Toast.makeText(context, "OnTextChanged",Toast.LENGTH_SHORT).show()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -120,7 +120,6 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
                 filteredList.add(item)
             }
         }
-        // TODO("Gotta correct the adapter accordingly to the Groups")
         groupsAdapter.filterList(filteredList)
     }
 
@@ -130,7 +129,6 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
         } else{
             groupsList[position]
         }
-        // TODO("Gotta create activity accordingly")
         val intent = Intent(context, DetailedGroupListActivity::class.java)
         startActivity(intent)
     }
