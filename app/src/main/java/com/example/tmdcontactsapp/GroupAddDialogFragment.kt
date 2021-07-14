@@ -16,7 +16,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class GroupAddDialogFragment(val tempTitle: String, private val tempHint: String, val userId: Int) : DialogFragment() {
+class GroupAddDialogFragment(private val tempTitle: String, private val tempHint: String, private val userId: Int) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         val view = requireActivity().layoutInflater.inflate(R.layout.fragment_group_add_dialog, null)
