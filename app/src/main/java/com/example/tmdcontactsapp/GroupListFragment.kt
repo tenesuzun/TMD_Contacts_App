@@ -15,6 +15,7 @@ import com.example.tmdcontactsapp.adapters.GroupListAdapter
 import com.example.tmdcontactsapp.models.GroupResponse
 import com.example.tmdcontactsapp.models.LoggedUserResponse
 import com.example.tmdcontactsapp.networks.ApiClient
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,6 +32,7 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
     private lateinit var groupsAdapter: GroupListAdapter
     private lateinit var groupsList: List<GroupResponse>
     private var filteredList: ArrayList<GroupResponse> = ArrayList()
+    private var userId: Int = 0
 
     fun newInstance(bundle: Bundle): GroupListFragment{
         val fragment = GroupListFragment()
@@ -77,7 +79,8 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
             override fun onResponse(call: Call<LoggedUserResponse>, response: Response<LoggedUserResponse>){
                 when(response.code()){
                     200 -> {
-                        api.getUserGroups(userId = response.body()!!.id).enqueue(object: Callback<List<GroupResponse>>{
+                        userId = response.body()!!.id
+                        api.getUserGroups(userId = userId).enqueue(object: Callback<List<GroupResponse>>{
                             override fun onResponse(call: Call<List<GroupResponse>>, response: Response<List<GroupResponse>>){
                                 when(response.code()){
                                     200 ->{
@@ -110,6 +113,15 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
                 Toast.makeText(context,"Either cellular or server is down",Toast.LENGTH_SHORT).show()
             }
         })
+
+        view.findViewById<FloatingActionButton>(R.id.groupListFAB).setOnClickListener {
+            activity?.let { it1 ->
+                GroupAddDialogFragment("Create a new group?", "Write group name here", userId).show(
+                    it1.supportFragmentManager, "GroupAddDialogFragment"
+                )
+            }
+        }
+
         return view
     }
 

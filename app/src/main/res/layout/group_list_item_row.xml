@@ -21,6 +21,7 @@
         android:id="@+id/groupName"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="8dp"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center_vertical"
         android:textSize="20sp"

@@ -4,7 +4,7 @@
     <string name="userPassword">Password</string>
     <string name="emailFieldHint">Email</string>
     <string name="endIconEmailDescription">Email Address</string>
-    <string name="login">Logın</string>
+    <string name="login">Login</string>
     <string name="loginForgotPassword">Forgot Password?</string>
     <string name="loginOrText">OR</string>
     <string name="loginSignUpButton">SIGN UP HERE</string>
@@ -35,6 +35,7 @@
     <string name="contactsPage">Contacts</string>
     <string name="contactsSearchBar">Search</string>
     <string name="userProfileLogout">Logout</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dialogHint">Write group name here</string>
+    <string name="dialogPositive">ADD</string>
+    <string name="dialogNegative">Cancel</string>
 </resources>

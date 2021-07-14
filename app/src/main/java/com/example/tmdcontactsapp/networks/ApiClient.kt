@@ -2,8 +2,9 @@ package com.example.tmdcontactsapp.networks
 
 import android.text.Html
 import com.example.tmdcontactsapp.models.*
-//import com.example.tmdcontactsapp.models.GroupResponse
+import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiClient {
@@ -32,10 +33,14 @@ interface ApiClient {
 
     @POST("Contacts/Add")
     @Headers("accept: */*", "Content-Type: application/json-patch+json")
-    fun addNewContact(@Body contact: ContactRequest): Call<String>
+    fun addNewContact(@Body contact: ContactRequest): Call<ResponseBody>
 
     @POST("Contacts/Update")
     @Headers("accept: */*", "Content-Type: application/json-patch+json")
-    fun updateContact(@Body contact: ContactRequest): Call<Html>
+    fun updateContact(@Body contact: ContactRequest): Call<ResponseBody>
+
+    @POST("Groups/Add")
+    @Headers("accept: */*","Content-Type: application/json-patch+json")
+    fun addNewGroup(@Body group: GroupResponse): Call<ResponseBody>
     //endregion
 }

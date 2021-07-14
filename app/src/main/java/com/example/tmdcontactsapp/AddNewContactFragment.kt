@@ -12,6 +12,7 @@ import android.widget.Toast
 import com.example.tmdcontactsapp.models.ContactRequest
 import com.example.tmdcontactsapp.models.LoggedUserResponse
 import com.example.tmdcontactsapp.networks.ApiClient
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -110,9 +111,9 @@ class AddNewContactFragment : Fragment() {
                                     contactPicture = "",
                                     userId = response.body()!!.id,
                                     contactId = 0)
-                            ).enqueue(object: Callback<String> {
+                            ).enqueue(object: Callback<ResponseBody> {
                                 //TODO("The response type mismatch leads the response into on failure. Fix it in the future")
-                                override fun onResponse(call: Call<String>, response: Response<String>) {
+                                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                                     when(response.code()){
                                         200 -> {
                                             Toast.makeText(context,"Contact is successfully added!", Toast.LENGTH_LONG).show()
@@ -122,7 +123,7 @@ class AddNewContactFragment : Fragment() {
                                         }
                                     }
                                 }
-                                override fun onFailure(call: Call<String>, t: Throwable) {
+                                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                                     Toast.makeText(context,"Contact is successfully added!", Toast.LENGTH_LONG).show()
                                     activity!!.supportFragmentManager.popBackStack("contactsPage",0)
                                 }

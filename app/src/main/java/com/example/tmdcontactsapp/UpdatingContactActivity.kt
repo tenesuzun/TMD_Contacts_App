@@ -2,13 +2,13 @@ package com.example.tmdcontactsapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Html
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import com.example.tmdcontactsapp.models.ContactRequest
 import com.example.tmdcontactsapp.networks.ApiClient
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -112,8 +112,8 @@ class UpdatingContactActivity : AppCompatActivity() {
                 title = contactWorkTitle.text.toString(),
                 birthday = contactBirthday.text.toString(),
                 notes = contactNotes.text.toString(),
-                contactPicture = "")).enqueue(object: Callback<Html>{
-                override fun onResponse(call: Call<Html>, response: Response<Html>) {
+                contactPicture = "")).enqueue(object: Callback<ResponseBody>{
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     when(response.code()){
                         200 -> {
                             Toast.makeText(applicationContext,"Contact is updated successfully!",Toast.LENGTH_LONG).show()
@@ -122,7 +122,7 @@ class UpdatingContactActivity : AppCompatActivity() {
                         }
                     }
                 }
-                override fun onFailure(call: Call<Html>, t: Throwable) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Toast.makeText(applicationContext, "Contact is updated successfully!", Toast.LENGTH_LONG).show()
                     supportFragmentManager.popBackStack("contactsPage", 0)
                 }
