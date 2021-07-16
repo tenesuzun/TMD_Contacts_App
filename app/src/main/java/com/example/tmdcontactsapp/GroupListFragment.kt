@@ -141,7 +141,6 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
         } else{
             groupsList[position]
         }
-        val intent = Intent(context, DetailedGroupListActivity::class.java)
-        startActivity(intent)
+        startActivity(Intent(context, DetailedGroupListActivity::class.java).putExtra("groupId",clickedItem.groupId))
     }
 }

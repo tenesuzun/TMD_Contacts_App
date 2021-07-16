@@ -20,6 +20,10 @@ interface ApiClient {
     @Headers("accept: */*")
     fun getUserGroups(@Query("userId")userId: Int): Call<List<GroupResponse>>
 
+    @GET("GroupsContacts/GetListByGroupId")
+    @Headers("accept: */*")
+    fun getGroupContacts(@Query("groupId")groupId: Int): Call<List<Contact>>
+
     //endregion
 
     //region POST methods
