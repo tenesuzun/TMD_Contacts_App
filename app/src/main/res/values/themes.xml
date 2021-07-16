@@ -20,6 +20,7 @@
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowSoftInputMode">stateHidden</item>
 
     </style>
 
