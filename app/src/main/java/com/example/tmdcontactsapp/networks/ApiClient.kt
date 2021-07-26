@@ -18,7 +18,7 @@ interface ApiClient {
 
     @GET("/api/Groups/GetListByUserId")
     @Headers("accept: */*")
-    fun getUserGroups(@Query("userId")userId: Int): Call<List<GroupResponse>>
+    fun getUserGroups(@Query("userId")userId: Int): Call<MutableList<GroupResponse>>
 
     @GET("GroupsContacts/GetListByGroupId")
     @Headers("accept: */*")
@@ -50,5 +50,9 @@ interface ApiClient {
     @POST("Contacts/Delete")
     @Headers("accept: */*")
     fun deleteContact(@Query("id") contactId: Int): Call<ResponseBody>
+
+    @POST("Groups/Delete")
+    @Headers("accept: */*")
+    fun deleteGroup(@Query("id") groupId: Int): Call<ResponseBody>
     //endregion
 }

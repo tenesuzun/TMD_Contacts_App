@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.tmdcontactsapp.adapters.GroupListAdapter
@@ -17,6 +18,7 @@ import com.example.tmdcontactsapp.models.LoggedUserResponse
 import com.example.tmdcontactsapp.networks.ApiClient
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,7 +32,7 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
     private var userEmail: String? = null
     private var userToken: String? = null
     private lateinit var groupsAdapter: GroupListAdapter
-    private lateinit var groupsList: List<GroupResponse>
+    private lateinit var groupsList: MutableList<GroupResponse>
     private var filteredList: ArrayList<GroupResponse> = ArrayList()
     private var userId: Int = 0
 
@@ -69,6 +71,40 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
             }
         })
 
+        val swipeAction = object: ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
+                    .create(ApiClient::class.java).deleteGroup(groupId = groupsList[viewHolder.adapterPosition].groupId)
+                    .enqueue(object: Callback<ResponseBody>{
+                        override fun onResponse(
+                            call: Call<ResponseBody>,
+                            response: Response<ResponseBody>
+                        ) {
+                            when(response.code()){
+                                200 -> {
+                                    Toast.makeText(context,"Group has been removed!", Toast.LENGTH_SHORT).show()
+                                    groupsList.removeAt(viewHolder.adapterPosition)
+                                    groupsAdapter.notifyDataSetChanged()
+                                }else -> {
+                                    Toast.makeText(context,"Removing group has been failed", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                            Toast.makeText(context,"Could not get response from the server", Toast.LENGTH_SHORT).show()
+                        }
+                    })
+            }
+        }
+
         val retrofit = Retrofit.Builder()
             .baseUrl("http://tmdcontacts-api.dev.tmd/api/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -80,8 +116,8 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
                 when(response.code()){
                     200 -> {
                         userId = response.body()!!.id
-                        api.getUserGroups(userId = userId).enqueue(object: Callback<List<GroupResponse>>{
-                            override fun onResponse(call: Call<List<GroupResponse>>, response: Response<List<GroupResponse>>){
+                        api.getUserGroups(userId = userId).enqueue(object: Callback<MutableList<GroupResponse>>{
+                            override fun onResponse(call: Call<MutableList<GroupResponse>>, response: Response<MutableList<GroupResponse>>){
                                 when(response.code()){
                                     200 ->{
                                         groupsList = response.body()!!
@@ -91,6 +127,7 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
                                             setHasFixedSize(true)
                                             layoutManager = StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL)
                                             adapter = groupsAdapter
+                                            ItemTouchHelper(swipeAction).attachToRecyclerView(recycler)
                                         }
                                     }
                                     400 -> {
@@ -100,7 +137,7 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
                                     }
                                 }
                             }
-                            override fun onFailure(call: Call<List<GroupResponse>>, t: Throwable) {
+                            override fun onFailure(call: Call<MutableList<GroupResponse>>, t: Throwable) {
                                 Toast.makeText(context,"Either cellular or server is down", Toast.LENGTH_SHORT).show()
                             }
                         })
