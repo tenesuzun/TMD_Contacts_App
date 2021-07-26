@@ -86,9 +86,9 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
                         ) {
                             when(response.code()){
                                 200 -> {
+                                    Toast.makeText(context,"Contact has been removed!", Toast.LENGTH_SHORT).show()
                                     contactsList.removeAt(viewHolder.adapterPosition)
                                     contactsAdapter.notifyDataSetChanged()
-                                    Toast.makeText(context,"Contact has been removed!", Toast.LENGTH_SHORT).show()
                                 }else -> {
                                 Toast.makeText(context,"Removing contact has been failed", Toast.LENGTH_LONG).show()
                             }

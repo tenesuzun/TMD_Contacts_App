@@ -117,14 +117,14 @@ class UpdatingContactActivity : AppCompatActivity() {
                     when(response.code()){
                         200 -> {
                             Toast.makeText(applicationContext,"Contact is updated successfully!",Toast.LENGTH_LONG).show()
+                            supportFragmentManager.popBackStack("contactsPage", 0)
                         }else -> {
                             Toast.makeText(applicationContext, response.body().toString(), Toast.LENGTH_LONG).show()
                         }
                     }
                 }
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Toast.makeText(applicationContext, "Contact is updated successfully!", Toast.LENGTH_LONG).show()
-                    supportFragmentManager.popBackStack("contactsPage", 0)
+                    Toast.makeText(applicationContext, "Could not connect to the Server", Toast.LENGTH_LONG).show()
                 }
             })
         }

@@ -117,6 +117,7 @@ class AddNewContactFragment : Fragment() {
                                     when(response.code()){
                                         200 -> {
                                             Toast.makeText(context,"Contact is successfully added!", Toast.LENGTH_LONG).show()
+                                            activity!!.supportFragmentManager.popBackStack("contactsPage",0)
                                         }
                                         else ->{
                                             Toast.makeText(context, "Unexpected problem. Try again!", Toast.LENGTH_LONG).show()
@@ -124,8 +125,7 @@ class AddNewContactFragment : Fragment() {
                                     }
                                 }
                                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                                    Toast.makeText(context,"Contact is successfully added!", Toast.LENGTH_LONG).show()
-                                    activity!!.supportFragmentManager.popBackStack("contactsPage",0)
+                                    Toast.makeText(context,"Could not connect to the Server", Toast.LENGTH_LONG).show()
                                 }
                             })
                         }
