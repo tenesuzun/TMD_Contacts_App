@@ -7,8 +7,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.RecyclerView
+import com.example.tmdcontactsapp.adapters.GroupListAdapter
 import com.example.tmdcontactsapp.models.GroupResponse
 import com.example.tmdcontactsapp.networks.ApiClient
+import kotlinx.android.synthetic.main.fragment_group_list.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,6 +20,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class GroupAddDialogFragment(private val tempTitle: String, private val tempHint: String, private val userId: Int) : DialogFragment() {
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         val view = requireActivity().layoutInflater.inflate(R.layout.fragment_group_add_dialog, null)
@@ -44,10 +48,8 @@ class GroupAddDialogFragment(private val tempTitle: String, private val tempHint
                 override fun onResponse(call: Call<ResponseBody>,response: Response<ResponseBody>) {
                     when(response.code()){
                         200 -> {
-                            Toast.makeText(context,"Group is created successfully", Toast.LENGTH_LONG).show()
                             dismiss()
                         }else -> {
-                            Toast.makeText(context,"Unexpected problem",Toast.LENGTH_LONG).show()
                             dismiss()
                         }
                     }

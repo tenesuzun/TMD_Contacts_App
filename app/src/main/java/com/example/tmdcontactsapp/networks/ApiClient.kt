@@ -54,5 +54,13 @@ interface ApiClient {
     @POST("Groups/Delete")
     @Headers("accept: */*")
     fun deleteGroup(@Query("id") groupId: Int): Call<ResponseBody>
+
+    @POST("Auths/ForgotPassword")
+    @Headers("accept: */*")
+    fun forgotPassword(@Query("email") email: String): Call<ResponseBody>
+
+    @POST("Auths/ResetPassword")
+    @Headers("accept: */*", "Content-Type: application/json-patch+json")
+    fun resetPassword(@Body email_password: UserRequest): Call<ResponseBody>
     //endregion
 }

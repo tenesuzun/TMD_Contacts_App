@@ -38,4 +38,8 @@
     <string name="dialogHint">Write group name here</string>
     <string name="dialogPositive">ADD</string>
     <string name="dialogNegative">Cancel</string>
+    <string name="resetPasswordLabel">Reset your password</string>
+    <string name="resetPasswordDescription">Enter The New Password That You Want To Set</string>
+    <string name="resetPasswordBtn">Reset Password</string>
+    <string name="resetPasswordCodeHint">Enter The 4 Digit Code</string>
 </resources>
