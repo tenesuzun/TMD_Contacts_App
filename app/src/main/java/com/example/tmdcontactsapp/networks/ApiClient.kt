@@ -14,7 +14,7 @@ interface ApiClient {
     fun getUserByEmail(@Query("email")email: String): Call<LoggedUserResponse>
 
     @GET("Contacts/GetListByUserId")
-    fun getUserContacts(@Query("userId")userId: Int): Call<List<Contact>>
+    fun getUserContacts(@Query("userId")userId: Int): Call<MutableList<Contact>>
 
     @GET("/api/Groups/GetListByUserId")
     @Headers("accept: */*")
@@ -46,5 +46,9 @@ interface ApiClient {
     @POST("Groups/Add")
     @Headers("accept: */*","Content-Type: application/json-patch+json")
     fun addNewGroup(@Body group: GroupResponse): Call<ResponseBody>
+
+    @POST("Contacts/Delete")
+    @Headers("accept: */*")
+    fun deleteContact(@Query("id") contactId: Int): Call<ResponseBody>
     //endregion
 }

@@ -18,6 +18,7 @@ import com.example.tmdcontactsapp.models.Contact
 import com.example.tmdcontactsapp.models.LoggedUserResponse
 import com.example.tmdcontactsapp.networks.ApiClient
 import com.google.android.material.textfield.TextInputEditText
+import okhttp3.ResponseBody
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -28,7 +29,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
     private var userEmail: String? = null
     private var userToken: String? = null
     private lateinit var contactsAdapter: ContactListAdapter
-    private lateinit var contactsList: List<Contact>
+    private lateinit var contactsList: MutableList<Contact>
     private var filteredList: ArrayList<Contact> = ArrayList()
 
     fun newInstance(bundle: Bundle): ContactListFragment {
@@ -66,6 +67,47 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
             }
         })
 
+        val swipe = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
+                    .create(ApiClient::class.java).deleteContact(contactId = contactsList[viewHolder.adapterPosition].contactId)
+                    .enqueue(object : Callback<ResponseBody>{
+                        override fun onResponse(
+                            call: Call<ResponseBody>,
+                            response: Response<ResponseBody>
+                        ) {
+                            when(response.code()){
+                                200 -> {
+                                    contactsList.removeAt(viewHolder.adapterPosition)
+                                    contactsAdapter.notifyDataSetChanged()
+                                    Toast.makeText(context,"Contact has been removed!", Toast.LENGTH_SHORT).show()
+                                }else -> {
+                                Toast.makeText(context,"Removing contact has been failed", Toast.LENGTH_LONG).show()
+                            }
+                            }
+                        }
+                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                            Toast.makeText(context,"Could not get response from the server", Toast.LENGTH_LONG).show()
+                        }
+                    })
+            }
+
+            override fun onChildDraw(c: Canvas,recyclerView: RecyclerView,viewHolder: RecyclerView.ViewHolder,dX: Float,dY: Float,actionState: Int,isCurrentlyActive: Boolean) {
+                val itemView = viewHolder.itemView
+                val itemHeight = itemView.bottom - itemView.top
+                //TODO("Drawing red background with trash icon to delete single item")
+                super.onChildDraw(c,recyclerView,viewHolder,dX,dY,actionState,isCurrentlyActive)
+            }
+        }
+
         val retrofit = Retrofit.Builder()
             .baseUrl("http://tmdcontacts-api.dev.tmd/api/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -76,8 +118,8 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
             override fun onResponse(call: Call<LoggedUserResponse>, response: Response<LoggedUserResponse>) {
                 when(response.code()){
                     200 -> {
-                        api.getUserContacts(userId = response.body()!!.id).enqueue(object : Callback<List<Contact>?>{
-                            override fun onResponse(call: Call<List<Contact>?>, response: Response<List<Contact>?>){
+                        api.getUserContacts(userId = response.body()!!.id).enqueue(object : Callback<MutableList<Contact>?>{
+                            override fun onResponse(call: Call<MutableList<Contact>?>, response: Response<MutableList<Contact>?>){
                                 when(response.code()){
                                     200 ->{
                                         contactsList = response.body()!!
@@ -87,6 +129,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
                                             setHasFixedSize(true)
                                             layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
                                             adapter = contactsAdapter
+                                            ItemTouchHelper(swipe).attachToRecyclerView(recycler)
                                         }
                                     }400 ->{
                                         Toast.makeText(context,"There is not any contact to show yet",Toast.LENGTH_LONG).show()
@@ -95,7 +138,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
                                     }
                                 }
                             }
-                            override fun onFailure(call: Call<List<Contact>?>, t: Throwable) {
+                            override fun onFailure(call: Call<MutableList<Contact>?>, t: Throwable) {
                                 Toast.makeText(context,"Please connect to the Internet",Toast.LENGTH_LONG).show()
                             }
                         })
@@ -108,27 +151,6 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
                 Toast.makeText(context,"Either cellular or server is down",Toast.LENGTH_SHORT).show()
             }
         })
-
-        val swipe = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT){
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-
-            }
-
-            override fun onChildDraw(c: Canvas,recyclerView: RecyclerView,viewHolder: RecyclerView.ViewHolder,dX: Float,dY: Float,actionState: Int,isCurrentlyActive: Boolean) {
-                val itemView = viewHolder.itemView
-                val itemHeight = itemView.bottom - itemView.top
-                //TODO("Drawing red background with trash icon to delete single item")
-                super.onChildDraw(c,recyclerView,viewHolder,dX,dY,actionState,isCurrentlyActive)
-            }
-        }
 
         return view
     }
