@@ -1,7 +1,6 @@
 package com.example.tmdcontactsapp
 
 import android.content.Intent
-import android.graphics.Canvas
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -100,12 +99,12 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
                     })
             }
 
-            override fun onChildDraw(c: Canvas,recyclerView: RecyclerView,viewHolder: RecyclerView.ViewHolder,dX: Float,dY: Float,actionState: Int,isCurrentlyActive: Boolean) {
-                val itemView = viewHolder.itemView
-                val itemHeight = itemView.bottom - itemView.top
-                //TODO("Drawing red background with trash icon to delete single item")
-                super.onChildDraw(c,recyclerView,viewHolder,dX,dY,actionState,isCurrentlyActive)
-            }
+//            override fun onChildDraw(c: Canvas,recyclerView: RecyclerView,viewHolder: RecyclerView.ViewHolder,dX: Float,dY: Float,actionState: Int,isCurrentlyActive: Boolean) {
+//                val itemView = viewHolder.itemView
+//                val itemHeight = itemView.bottom - itemView.top
+//                TODO("Drawing red background with trash icon to delete single item")
+//                super.onChildDraw(c,recyclerView,viewHolder,dX,dY,actionState,isCurrentlyActive)
+//            }
         }
 
         val retrofit = Retrofit.Builder()

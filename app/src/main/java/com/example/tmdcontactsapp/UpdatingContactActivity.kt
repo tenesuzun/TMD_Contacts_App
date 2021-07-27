@@ -118,6 +118,7 @@ class UpdatingContactActivity : AppCompatActivity() {
                         200 -> {
                             Toast.makeText(applicationContext,"Contact is updated successfully!",Toast.LENGTH_LONG).show()
                             supportFragmentManager.popBackStack("contactsPage", 0)
+                            finish()
                         }else -> {
                             Toast.makeText(applicationContext, response.body().toString(), Toast.LENGTH_LONG).show()
                         }

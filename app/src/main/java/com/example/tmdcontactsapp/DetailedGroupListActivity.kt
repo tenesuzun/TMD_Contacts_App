@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.tmdcontactsapp.adapters.ContactListAdapter
 import com.example.tmdcontactsapp.models.Contact
 import com.example.tmdcontactsapp.networks.ApiClient
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,11 +24,12 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
     private lateinit var contactsAdapter: ContactListAdapter
     private lateinit var contactsList: List<Contact>
     private var filteredList: ArrayList<Contact> = ArrayList()
+    private var groupId: Int=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detailed_group_list)
-        val groupId = intent.getIntExtra("groupId", -1)
+        groupId = intent.getIntExtra("groupId", -1)
 
         val retrofit = Retrofit.Builder()
             .baseUrl("http://tmdcontacts-api.dev.tmd/api/")
@@ -75,6 +77,13 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
                 filter(s.toString())
             }
         })
+        findViewById<FloatingActionButton>(R.id.addContactToGroupFAB).setOnClickListener{
+            startActivity(Intent(applicationContext, AddContactToGroupActivity::class.java)
+                .putExtra("groupId",groupId)
+                .putExtra("userId", intent.getIntExtra("userId",-1)))
+//            TODO("gotta correct the flow logic")
+            finish()
+        }
     }
 
     fun filter(text: String){

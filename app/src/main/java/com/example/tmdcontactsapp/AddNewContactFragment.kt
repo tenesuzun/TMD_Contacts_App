@@ -112,7 +112,6 @@ class AddNewContactFragment : Fragment() {
                                     userId = response.body()!!.id,
                                     contactId = 0)
                             ).enqueue(object: Callback<ResponseBody> {
-                                //TODO("The response type mismatch leads the response into on failure. Fix it in the future")
                                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                                     when(response.code()){
                                         200 -> {

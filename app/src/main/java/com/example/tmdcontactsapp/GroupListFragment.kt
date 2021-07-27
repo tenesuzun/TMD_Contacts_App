@@ -178,6 +178,8 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
         } else{
             groupsList[position]
         }
-        startActivity(Intent(context, DetailedGroupListActivity::class.java).putExtra("groupId",clickedItem.groupId))
+        startActivity(Intent(context, DetailedGroupListActivity::class.java)
+            .putExtra("groupId",clickedItem.groupId)
+            .putExtra("userId",userId))
     }
 }
