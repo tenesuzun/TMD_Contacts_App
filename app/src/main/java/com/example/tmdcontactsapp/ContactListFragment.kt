@@ -1,5 +1,6 @@
 package com.example.tmdcontactsapp
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -79,6 +80,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
                 Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
                     .create(ApiClient::class.java).deleteContact(contactId = contactsList[viewHolder.adapterPosition].contactId)
                     .enqueue(object : Callback<ResponseBody>{
+                        @SuppressLint("NotifyDataSetChanged")
                         override fun onResponse(
                             call: Call<ResponseBody>,
                             response: Response<ResponseBody>

@@ -7,11 +7,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.recyclerview.widget.RecyclerView
-import com.example.tmdcontactsapp.adapters.GroupListAdapter
 import com.example.tmdcontactsapp.models.GroupResponse
 import com.example.tmdcontactsapp.networks.ApiClient
-import kotlinx.android.synthetic.main.fragment_group_list.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback

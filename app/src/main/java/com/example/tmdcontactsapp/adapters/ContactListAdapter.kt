@@ -29,6 +29,7 @@ class ContactListAdapter(private val listener: OnItemClickListener, private var 
         return contactsList.size
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun filterList(filteredList: ArrayList<Contact>){
         contactsList = filteredList
         notifyDataSetChanged()

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserRegistryActivity">
+    tools:context=".UserRegistryActivity"
+    android:id="@+id/updateLayout">
 
     <ImageView
         android:id="@+id/userRegistryPP"
@@ -13,6 +14,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/loginAppLogoDescription"
+        android:onClick="openGallery"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_round_account_box_24" />
@@ -29,6 +31,7 @@
         android:hint="@string/registryFirstName"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/userRegistryPP"
         app:layout_constraintTop_toTopOf="parent" />
@@ -45,9 +48,11 @@
         android:hint="@string/registrySurname"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/userRegistryPP"
-        app:layout_constraintTop_toBottomOf="@+id/registryFirstName" />
+        app:layout_constraintTop_toBottomOf="@+id/registryFirstName"
+        tools:ignore="TextContrastCheck" />
 
     <EditText
         android:id="@+id/registryPassword"
@@ -59,9 +64,11 @@
         android:hint="@string/userPassword"
         android:importantForAutofill="no"
         android:inputType="textPassword"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toStartOf="@+id/registryPasswordAgain"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registryEmailAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/registryEmailAddress"
+        tools:ignore="TextContrastCheck" />
 
     <EditText
         android:id="@+id/registryPasswordAgain"
@@ -73,6 +80,7 @@
         android:hint="@string/registryPasswordAgain"
         android:importantForAutofill="no"
         android:inputType="textPassword"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/registryPassword"
         app:layout_constraintTop_toBottomOf="@+id/registryEmailAddress" />
@@ -90,9 +98,11 @@
         android:importantForAutofill="no"
 
         android:inputType="textEmailAddress"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userRegistryPP" />
+        app:layout_constraintTop_toBottomOf="@+id/userRegistryPP"
+        tools:ignore="TextContrastCheck" />
 
     <EditText
         android:id="@+id/registryPhoneNumber"
@@ -106,21 +116,23 @@
         android:hint="@string/registryPhoneNumber"
         android:importantForAutofill="no"
         android:inputType="phone"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registryPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/registryPassword"
+        tools:ignore="TextContrastCheck" />
 
     <EditText
         android:id="@+id/registryWorkPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:drawableEnd="@drawable/ic_baseline_local_phone_24"
         android:ems="10"
         android:hint="@string/registryWorkPhone"
         android:importantForAutofill="no"
         android:inputType="phone"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/registryPhoneNumber" />
 
@@ -135,6 +147,7 @@
         android:hint="@string/registryHomePhone"
         android:importantForAutofill="no"
         android:inputType="phone"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/registryWorkPhone" />
@@ -150,6 +163,7 @@
         android:hint="@string/registryAddress"
         android:importantForAutofill="no"
         android:inputType="textPostalAddress"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/registryHomePhone" />
@@ -165,9 +179,11 @@
         android:hint="@string/registryCompany"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registryAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/registryAddress"
+        tools:ignore="TextContrastCheck" />
 
     <EditText
         android:id="@+id/registryWorkTitle"
@@ -180,6 +196,7 @@
         android:hint="@string/registryWorkTitle"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/registryCompany" />
@@ -194,6 +211,7 @@
         android:hint="@string/registryBirthday"
         android:importantForAutofill="no"
         android:inputType="date"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/registryWorkTitle" />
@@ -209,6 +227,7 @@
         android:hint="@string/registryNotes"
         android:importantForAutofill="no"
         android:inputType="textMultiLine"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/registryBirthday" />
@@ -225,6 +244,7 @@
         android:text="@string/registrySignUpButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registryNotes" />
+        app:layout_constraintTop_toBottomOf="@+id/registryNotes"
+        tools:ignore="TextContrastCheck,TextContrastCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
