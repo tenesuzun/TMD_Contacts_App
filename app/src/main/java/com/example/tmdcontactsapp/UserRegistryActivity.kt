@@ -9,6 +9,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Base64
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -25,6 +26,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
 class UserRegistryActivity : AppCompatActivity() {
@@ -96,6 +98,11 @@ class UserRegistryActivity : AppCompatActivity() {
     }
 
     private fun register() {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        selectedBitmap?.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+        val byteArray: ByteArray = byteArrayOutputStream.toByteArray()
+        val encoded: String = Base64.encodeToString(byteArray, Base64.DEFAULT)
+
         val retrofit = Retrofit.Builder()
             .baseUrl("http://tmdcontacts-api.dev.tmd/api/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -105,6 +112,7 @@ class UserRegistryActivity : AppCompatActivity() {
         Toast.makeText(applicationContext, "Registration in progress...", Toast.LENGTH_LONG).show()
         api.userRegistry(
             User(
+                Photo = encoded,
                 Email = userEmail.text.toString(),
                 Password = userPassword.text.toString(),
                 Name = userFirstName.text.toString(),
@@ -127,6 +135,7 @@ class UserRegistryActivity : AppCompatActivity() {
                             "Registry is successful. You can login now",
                             Toast.LENGTH_LONG
                         ).show()
+                        finish()
                     }
                     400 -> {
                         Toast.makeText(applicationContext, "HTTP 400", Toast.LENGTH_LONG).show()
@@ -192,8 +201,7 @@ class UserRegistryActivity : AppCompatActivity() {
         permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){
             result ->
             if(result){
-                val intentToGallery = Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                activityResultLauncher.launch(intentToGallery)
+                activityResultLauncher.launch(Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
             }else{
                 Toast.makeText(this,"Permission needed to upload Image!", Toast.LENGTH_LONG).show()
             }
