@@ -1,10 +1,13 @@
 package com.example.tmdcontactsapp
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.example.tmdcontactsapp.models.LoggedUserResponse
@@ -53,7 +56,10 @@ class UserProfileFragment : Fragment() {
         val profileTitle: TextView = view.findViewById(R.id.userProfileWorkTitle)
         val profileBirthday: TextView = view.findViewById(R.id.userProfileBirthday)
         val profileNotes: TextView = view.findViewById(R.id.userProfileNotes)
+        val profilePicture: ImageView = view.findViewById(R.id.userProfilePP)
         //endregion
+
+        var tempString = ""
 
         val retrofit = Retrofit.Builder()
             .baseUrl("http://tmdcontacts-api.dev.tmd/api/")
@@ -76,6 +82,17 @@ class UserProfileFragment : Fragment() {
                         profileTitle.text = response.body()!!.title
                         profileBirthday.text = response.body()!!.birthDate
                         profileNotes.text = response.body()!!.note
+                        tempString = response.body()!!.photo
+                        if(tempString == ""){
+                            requireView().findViewById<ImageView>(R.id.userProfilePP)!!.setImageResource(R.drawable.ic_round_account_box_24)
+                        }else{
+                            val imageBytes = Base64.decode(tempString,0)
+                            requireView().findViewById<ImageView>(R.id.userProfilePP)!!.setImageBitmap(BitmapFactory.decodeByteArray(
+                                imageBytes,
+                                0,
+                                imageBytes.size
+                            ))
+                        }
                     }else -> {Toast.makeText(context,"Internal Server error", Toast.LENGTH_SHORT).show()}
                 }
             }
@@ -83,10 +100,7 @@ class UserProfileFragment : Fragment() {
                 Toast.makeText(context,"Unexpected Problem", Toast.LENGTH_LONG).show()
             }
         })
+
         return view
     }
-
-
-
-
 }

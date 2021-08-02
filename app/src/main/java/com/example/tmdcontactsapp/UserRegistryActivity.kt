@@ -138,7 +138,7 @@ class UserRegistryActivity : AppCompatActivity() {
                         finish()
                     }
                     400 -> {
-                        Toast.makeText(applicationContext, "HTTP 400", Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, response.message(), Toast.LENGTH_LONG).show()
                     }
                     else -> {
                         Toast.makeText(
