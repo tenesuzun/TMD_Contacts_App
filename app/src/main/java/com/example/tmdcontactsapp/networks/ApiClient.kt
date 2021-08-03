@@ -9,34 +9,47 @@ interface ApiClient {
     //region GET methods
 
     //region User methods
+
     @GET("Users/GetByEmail")
     @Headers("accept: */*")
     fun getUserByEmail(
         @Header("Authorization") Bearer: String,
         @Query("email")email: String): Call<LoggedUserResponse>
+
     //endregion
 
     //region Contacts Methods
+
     @GET("Contacts/GetListByUserId")
     fun getUserContacts(
         @Header("Authorization") Bearer: String,
         @Query("userId")userId: Int): Call<MutableList<Contact>>
+
+    @GET("Contacts/Get")
+    fun getContactInformation(
+        @Header("Authorization") Bearer: String,
+        @Query("id") contactId: Int): Call<Contact>
+
     //endregion
 
     //region Groups Methods
+
     @GET("/api/Groups/GetListByUserId")
     @Headers("accept: */*")
     fun getUserGroups(
         @Header("Authorization") Bearer: String,
         @Query("userId")userId: Int): Call<MutableList<GroupResponse>>
+
     //endregion
 
     //region GroupsContacts Methods
+
     @GET("GroupsContacts/GetListByGroupId")
     @Headers("accept: */*")
     fun getGroupContacts(
         @Header("Authorization") Bearer: String,
         @Query("groupId")groupId: Int): Call<MutableList<Contact>>
+
     //endregion
 
     //endregion
@@ -44,6 +57,7 @@ interface ApiClient {
     //region POST methods
 
     //region Authentication Methods
+
     @POST("Auths/Login")
     @Headers("accept: application/json-patch+json","Content-Type: application/json-patch+json")
     fun userLogin(@Body login: UserRequest): Call<TokenResponse>
@@ -59,9 +73,11 @@ interface ApiClient {
     @POST("Auths/ResetPassword")
     @Headers("accept: */*", "Content-Type: application/json-patch+json")
     fun resetPassword(@Body email_password: UserRequest): Call<ResponseBody>
+
     //endregion
 
     //region Contacts Methods
+
     @POST("Contacts/Add")
     @Headers("accept: */*", "Content-Type: application/json-patch+json")
     fun addNewContact(
@@ -79,9 +95,11 @@ interface ApiClient {
     fun deleteContact(
         @Header("Authorization") Bearer: String,
         @Query("id") contactId: Int): Call<ResponseContent>
+
     //endregion
 
     //region Groups Methods
+
     @POST("Groups/Add")
     @Headers("accept: */*","Content-Type: application/json-patch+json")
     fun addNewGroup(
@@ -93,9 +111,11 @@ interface ApiClient {
     fun deleteGroup(
         @Header("Authorization") Bearer: String,
         @Query("id") groupId: Int): Call<ResponseContent>
+
     //endregion
 
     //region GroupsContacts Methods
+
     @POST("GroupsContacts/Add")
     @Headers("accept: */*", "Content-Type: application/json-patch+json")
     fun addContactToGroup(
@@ -107,6 +127,7 @@ interface ApiClient {
     fun deleteContactFromGroup(
         @Header("Authorization") Bearer: String,
         @Body deletedContact: GroupsContacts): Call<ResponseContent>
+
     //endregion
 
     //endregion

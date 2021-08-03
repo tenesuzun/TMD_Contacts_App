@@ -175,22 +175,24 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         val intent = Intent(context, UpdatingContactActivity::class.java)
 
         //region Intent extras that is transferred to Detailed Contact Page
+
         intent.putExtra("token", userToken)
         intent.putExtra("userId", clickedItem.userId)
         intent.putExtra("contactId", clickedItem.contactId)
 //        intent.putExtra("contactPhoto", clickedItem.contactPicture)
-        intent.putExtra("contactFirstName", clickedItem.firstName)
-        intent.putExtra("contactSurname", clickedItem.surname)
-        intent.putExtra("contactEmail", clickedItem.emailAddress)
-        intent.putExtra("contactPhoneNumber", clickedItem.phoneNumber)
-        intent.putExtra("contactWorkNumber", clickedItem.workNumber)
-        intent.putExtra("contactHomeNumber", clickedItem.homePhone)
-        intent.putExtra("contactAddress", clickedItem.address)
-        intent.putExtra("contactCompany", clickedItem.company)
-        intent.putExtra("contactTitle", clickedItem.title)
-        intent.putExtra("contactBirthday", clickedItem.birthday)
-        intent.putExtra("contactNote", clickedItem.notes)
-        intent.putExtra("contactGroups", clickedItem.groups)
+//        intent.putExtra("contactFirstName", clickedItem.firstName)
+//        intent.putExtra("contactSurname", clickedItem.surname)
+//        intent.putExtra("contactEmail", clickedItem.emailAddress)
+//        intent.putExtra("contactPhoneNumber", clickedItem.phoneNumber)
+//        intent.putExtra("contactWorkNumber", clickedItem.workNumber)
+//        intent.putExtra("contactHomeNumber", clickedItem.homePhone)
+//        intent.putExtra("contactAddress", clickedItem.address)
+//        intent.putExtra("contactCompany", clickedItem.company)
+//        intent.putExtra("contactTitle", clickedItem.title)
+//        intent.putExtra("contactBirthday", clickedItem.birthday)
+//        intent.putExtra("contactNote", clickedItem.notes)
+//        intent.putExtra("contactGroups", clickedItem.groups)
+
         //endregion
 
         startActivity(intent)

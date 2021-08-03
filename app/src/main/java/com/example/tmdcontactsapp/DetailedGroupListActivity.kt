@@ -35,7 +35,7 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detailed_group_list)
         groupId = intent.getIntExtra("groupId", -1)
-        token = intent.getStringExtra("token")!!
+        token = intent.getStringExtra("token").toString()
 
         val swipe = object: ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT){
             override fun onMove(
@@ -123,12 +123,11 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
             }
         })
         findViewById<FloatingActionButton>(R.id.addContactToGroupFAB).setOnClickListener{
-            startActivity(Intent(applicationContext, AddContactToGroupActivity::class.java)
+            startActivity(Intent(this, AddContactToGroupActivity::class.java)
                 .putExtra("groupId",groupId)
                 .putExtra("token", token)
                 .putExtra("userId", intent.getIntExtra("userId",-1)))
 //            TODO("gotta correct the flow logic")
-            finish()
         }
     }
 

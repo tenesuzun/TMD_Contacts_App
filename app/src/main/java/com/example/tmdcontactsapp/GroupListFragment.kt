@@ -185,6 +185,6 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
         startActivity(Intent(context, DetailedGroupListActivity::class.java)
             .putExtra("groupId",clickedItem.groupId)
             .putExtra("userId",userId)
-            .putExtra("token", userToken))
+            .putExtra("token", userToken.toString()))
     }
 }

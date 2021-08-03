@@ -105,12 +105,11 @@ class AddContactToGroupActivity : AppCompatActivity(), ContactListAdapter.OnItem
                 ) {
                     //            TODO("gotta correct the flow logic finish and startActivity")
                     Toast.makeText(applicationContext, response.body()!!.message, Toast.LENGTH_LONG).show()
-                    startActivity(Intent(applicationContext, DetailedGroupListActivity::class.java))
                     finish()
                 }
 
                 override fun onFailure(call: Call<ResponseContent>, t: Throwable) {
-                    TODO("Not yet implemented")
+                    Toast.makeText(applicationContext, "onFailure", Toast.LENGTH_SHORT).show()
                 }
             })
     }

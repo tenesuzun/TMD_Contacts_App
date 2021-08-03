@@ -18,11 +18,11 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import com.example.tmdcontactsapp.models.Contact
 import com.example.tmdcontactsapp.models.ContactRequest
 import com.example.tmdcontactsapp.models.ResponseContent
 import com.example.tmdcontactsapp.networks.ApiClient
 import com.google.android.material.snackbar.Snackbar
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -50,30 +50,18 @@ class UpdatingContactActivity : AppCompatActivity() {
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private var selectedBitmap: Bitmap? = null
+    private var contactId: Int = 0
     //endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_updating_contact)
 
-        //region Intent actions
-        val tempContactPhoto = intent.getStringExtra("contactPhoto").toString()
-        val tempFirstName = intent.getStringExtra("contactFirstName").toString()
-        val tempSurname = intent.getStringExtra("contactSurname").toString()
-        val tempContactEmail = intent.getStringExtra("contactEmail").toString()
-        val tempPhoneNumber = intent.getStringExtra("contactPhoneNumber").toString()
-        val tempContactWorkNumber = intent.getStringExtra("contactWorkNumber").toString()
-        val tempContactHomeNumber = intent.getStringExtra("contactHomeNumber").toString()
-        val tempContactAddress = intent.getStringExtra("contactAddress").toString()
-        val tempContactCompany = intent.getStringExtra("contactCompany").toString()
-        val tempContactTitle = intent.getStringExtra("contactTitle").toString()
-        val tempContactBirthday = intent.getStringExtra("contactBirthday").toString()
-        val tempContactNote = intent.getStringExtra("contactNote").toString()
-        val tempContactGroups = intent.getStringExtra("contactGroups").toString()
         token = intent.getStringExtra("token").toString()
-        //endregion
+        contactId = intent.getIntExtra("contactId",-1)
 
         //region View mapping
+
         contactFirstName = findViewById(R.id.updatingFirstName)
         contactSurname = findViewById(R.id.updatingSurname)
         contactPhone = findViewById(R.id.updatingPhone)
@@ -87,38 +75,65 @@ class UpdatingContactActivity : AppCompatActivity() {
         contactBirthday = findViewById(R.id.updatingBirthday)
         contactNotes = findViewById(R.id.updatingNotes)
         contactGroup = findViewById(R.id.updateContactGroup)
+
         //endregion
 
-        //region Carrying Intent data
-        contactFirstName.setText(tempFirstName)
-        contactSurname.setText(tempSurname)
-        contactEmail.setText(tempContactEmail)
-        contactPhone.setText(tempPhoneNumber)
-        contactWorkPhone.setText(tempContactWorkNumber)
-        contactHomePhone.setText(tempContactHomeNumber)
-        contactAddress.setText(tempContactAddress)
-        contactCompany.setText(tempContactCompany)
-        contactWorkTitle.setText(tempContactTitle)
-        contactBirthday.setText(tempContactBirthday)
-        contactNotes.setText(tempContactNote)
-        contactGroup.setText(tempContactGroups)
-        if(tempContactPhoto == ""){
-            contactPP.setImageResource(R.drawable.ic_round_account_box_24)
-        }else{
-            val imageBytes = Base64.decode(tempContactPhoto, 0)
-            contactPP.setImageBitmap(
-                BitmapFactory.decodeByteArray(
-                imageBytes,
-                0,
-                imageBytes.size
-            ))
-        }
+        //region GET Contact Information
+        /*
+        Retrofit.Builder()
+            .baseUrl("http://tmdcontacts-api.dev.tm/api/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ApiClient::class.java)
+            .getContactInformation(
+                Bearer = "Bearer $token",
+                contactId = contactId)
+            .enqueue(object : Callback<Contact>{
+                override fun onResponse(call: Call<Contact>, response: Response<Contact>) {
+                    when(response.code()){
+                        200 -> {
+                            contactFirstName.setText(response.body()!!.firstName)
+                            contactSurname.setText(response.body()!!.surname)
+                            contactEmail.setText(response.body()!!.emailAddress)
+                            contactPhone.setText(response.body()!!.phoneNumber)
+                            contactWorkPhone.setText(response.body()!!.workNumber)
+                            contactHomePhone.setText(response.body()!!.homePhone)
+                            contactAddress.setText(response.body()!!.address)
+                            contactCompany.setText(response.body()!!.company)
+                            contactWorkTitle.setText(response.body()!!.title)
+                            contactBirthday.setText(response.body()!!.birthday)
+                            contactNotes.setText(response.body()!!.notes)
+                            contactGroup.setText(response.body()!!.groups)
+
+                            if(response.body()!!.contactPicture == ""){
+                                contactPP.setImageResource(R.drawable.ic_round_account_box_24)
+                            }else{
+                                val imageBytes = Base64.decode(response.body()!!.contactPicture, 0)
+                                contactPP.setImageBitmap(
+                                    BitmapFactory.decodeByteArray(
+                                        imageBytes,
+                                        0,
+                                        imageBytes.size
+                                    ))
+                            }
+                        }else -> {
+                        Toast.makeText(applicationContext, response.message(), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                override fun onFailure(call: Call<Contact>, t: Throwable) {
+                    Toast.makeText(applicationContext, "onFailure", Toast.LENGTH_SHORT).show()
+                }
+            })
+
+         */
         //endregion
 
-        registerLauncher()
         contactPP.setOnClickListener{
             openGallery(view = View(this))
         }
+
+        registerLauncher()
     }
 
     fun updateContact(view: View) {
