@@ -1,21 +1,33 @@
 package com.example.tmdcontactsapp
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Base64
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import com.example.tmdcontactsapp.models.ContactRequest
 import com.example.tmdcontactsapp.networks.ApiClient
+import com.google.android.material.snackbar.Snackbar
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Exception
 
 class UpdatingContactActivity : AppCompatActivity() {
 
@@ -34,6 +46,9 @@ class UpdatingContactActivity : AppCompatActivity() {
     private lateinit var contactNotes: EditText
     private lateinit var contactGroup: EditText
     private lateinit var token: String
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var permissionLauncher: ActivityResultLauncher<String>
+    private var selectedBitmap: Bitmap? = null
     //endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,6 +113,11 @@ class UpdatingContactActivity : AppCompatActivity() {
             ))
         }
         //endregion
+
+        registerLauncher()
+        contactPP.setOnClickListener{
+            openGallery(view = View(this))
+        }
     }
 
     fun updateContact(view: View) {
@@ -143,6 +163,54 @@ class UpdatingContactActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, "Could not connect to the Server", Toast.LENGTH_LONG).show()
                 }
             })
+        }
+    }
+
+    private fun openGallery(view: View){
+        if (ContextCompat.checkSelfPermission(
+                this, Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+        ){
+            Toast.makeText(this, "Please select an image to upload", Toast.LENGTH_LONG).show()
+            permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+        } else {
+            Snackbar.make(view,"Permission needed to select profile picture from gallery", Snackbar.LENGTH_INDEFINITE).setAction("Give Permission"
+            ) {
+                permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }.show()
+        }
+    }
+
+    private fun registerLauncher() {
+        activityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    val intentFromResult = result.data
+                    if (intentFromResult != null) {
+                        val imageData = intentFromResult.data
+                        try {
+                            if (Build.VERSION.SDK_INT >= 28) {
+                                val source = ImageDecoder.createSource(contentResolver, imageData!!)
+                                selectedBitmap = ImageDecoder.decodeBitmap(source)
+                                contactPP.setImageBitmap(selectedBitmap)
+                            } else {
+                                selectedBitmap =
+                                    MediaStore.Images.Media.getBitmap(contentResolver, imageData)
+                                contactPP.setImageBitmap(selectedBitmap)
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+            }
+        permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){
+                result ->
+            if(result){
+                activityResultLauncher.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
+            }else{
+                Toast.makeText(this,"Permission needed to upload Image!", Toast.LENGTH_LONG).show()
+            }
         }
     }
 }
