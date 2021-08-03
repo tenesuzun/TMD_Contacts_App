@@ -1,7 +1,9 @@
 package com.example.tmdcontactsapp
 
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -82,6 +84,17 @@ class UpdatingContactActivity : AppCompatActivity() {
         contactBirthday.setText(tempContactBirthday)
         contactNotes.setText(tempContactNote)
         contactGroup.setText(tempContactGroups)
+        if(tempContactPhoto == ""){
+            contactPP.setImageResource(R.drawable.ic_round_account_box_24)
+        }else{
+            val imageBytes = Base64.decode(tempContactPhoto, 0)
+            contactPP.setImageBitmap(
+                BitmapFactory.decodeByteArray(
+                imageBytes,
+                0,
+                imageBytes.size
+            ))
+        }
         //endregion
     }
 

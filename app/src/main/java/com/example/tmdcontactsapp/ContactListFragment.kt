@@ -104,7 +104,6 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
 //            override fun onChildDraw(c: Canvas,recyclerView: RecyclerView,viewHolder: RecyclerView.ViewHolder,dX: Float,dY: Float,actionState: Int,isCurrentlyActive: Boolean) {
 //                val itemView = viewHolder.itemView
 //                val itemHeight = itemView.bottom - itemView.top
-//                TODO("Drawing red background with trash icon to delete single item")
 //                super.onChildDraw(c,recyclerView,viewHolder,dX,dY,actionState,isCurrentlyActive)
 //            }
         }
@@ -177,7 +176,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         //region Intent extras that is transferred to Detailed Contact Page
         intent.putExtra("userId", clickedItem.userId)
         intent.putExtra("contactId", clickedItem.contactId)
-        intent.putExtra("contactPhoto", clickedItem.contactPicture)
+//        intent.putExtra("contactPhoto", clickedItem.contactPicture)
         intent.putExtra("contactFirstName", clickedItem.firstName)
         intent.putExtra("contactSurname", clickedItem.surname)
         intent.putExtra("contactEmail", clickedItem.emailAddress)

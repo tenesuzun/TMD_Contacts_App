@@ -1,9 +1,12 @@
 package com.example.tmdcontactsapp.adapters
 
 import android.annotation.SuppressLint
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdcontactsapp.R
@@ -37,6 +40,7 @@ class ContactListAdapter(private val listener: OnItemClickListener, private var 
 
    inner class ContactListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener{
        private val contactFullName: TextView = itemView.findViewById(R.id.contactFullName)
+//       private val contactPicture: ImageView = itemView.findViewById(R.id.contactPP)
 
        init {
            itemView.setOnClickListener(this)
@@ -52,6 +56,16 @@ class ContactListAdapter(private val listener: OnItemClickListener, private var 
        @SuppressLint("SetTextI18n")
        fun bind(contact: Contact){
            contactFullName.text = contact.firstName + " " + contact.surname
+//           if(contact.contactPicture == ""){
+//               contactPicture.setImageResource(R.drawable.ic_round_account_box_24)
+//           }else{
+//               val imageBytes = Base64.decode(contact.contactPicture,0)
+//               contactPicture.setImageBitmap(BitmapFactory.decodeByteArray(
+//                   imageBytes,
+//                   0,
+//                   imageBytes.size
+//               ))
+//           }
        }
    }
    interface OnItemClickListener{

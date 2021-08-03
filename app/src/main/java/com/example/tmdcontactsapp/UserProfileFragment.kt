@@ -59,7 +59,7 @@ class UserProfileFragment : Fragment() {
         val profilePicture: ImageView = view.findViewById(R.id.userProfilePP)
         //endregion
 
-        var tempString = ""
+        var tempString: String
 
         val retrofit = Retrofit.Builder()
             .baseUrl("http://tmdcontacts-api.dev.tmd/api/")
@@ -84,10 +84,10 @@ class UserProfileFragment : Fragment() {
                         profileNotes.text = response.body()!!.note
                         tempString = response.body()!!.photo
                         if(tempString == ""){
-                            requireView().findViewById<ImageView>(R.id.userProfilePP)!!.setImageResource(R.drawable.ic_round_account_box_24)
+                            profilePicture.setImageResource(R.drawable.ic_round_account_box_24)
                         }else{
                             val imageBytes = Base64.decode(tempString,0)
-                            requireView().findViewById<ImageView>(R.id.userProfilePP)!!.setImageBitmap(BitmapFactory.decodeByteArray(
+                            profilePicture.setImageBitmap(BitmapFactory.decodeByteArray(
                                 imageBytes,
                                 0,
                                 imageBytes.size

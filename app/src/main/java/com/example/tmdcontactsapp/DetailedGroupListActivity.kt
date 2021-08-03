@@ -1,15 +1,19 @@
 package com.example.tmdcontactsapp
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.tmdcontactsapp.adapters.ContactListAdapter
 import com.example.tmdcontactsapp.models.Contact
+import com.example.tmdcontactsapp.models.GroupsContacts
+import com.example.tmdcontactsapp.models.ResponseContent
 import com.example.tmdcontactsapp.networks.ApiClient
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
@@ -22,7 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItemClickListener{
 
     private lateinit var contactsAdapter: ContactListAdapter
-    private lateinit var contactsList: List<Contact>
+    private lateinit var contactsList: MutableList<Contact>
     private var filteredList: ArrayList<Contact> = ArrayList()
     private var groupId: Int=0
 
@@ -31,13 +35,51 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
         setContentView(R.layout.activity_detailed_group_list)
         groupId = intent.getIntExtra("groupId", -1)
 
+        val swipe = object: ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/")
+                    .addConverterFactory(GsonConverterFactory.create()).build()
+                    .create(ApiClient::class.java).deleteContactFromGroup(GroupsContacts(
+                        groupId = groupId,
+                        contactId = contactsList[viewHolder.adapterPosition].contactId))
+                    .enqueue(object: Callback<ResponseContent>{
+                        @SuppressLint("NotifyDataSetChanged")
+                        override fun onResponse(
+                            call: Call<ResponseContent>,
+                            response: Response<ResponseContent>
+                        ) {
+                            when(response.code()){
+                                200 -> {
+                                    Toast.makeText(applicationContext, response.body()!!.message, Toast.LENGTH_SHORT).show()
+                                    contactsList.removeAt(viewHolder.adapterPosition)
+                                    contactsAdapter.notifyDataSetChanged()
+                                }else -> {
+                                    Toast.makeText(applicationContext, response.body()!!.message, Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                        override fun onFailure(call: Call<ResponseContent>, t: Throwable) {
+                            Toast.makeText(applicationContext, "onFailure", Toast.LENGTH_SHORT).show()
+                        }
+                    })
+            }
+        }
+
         val retrofit = Retrofit.Builder()
             .baseUrl("http://tmdcontacts-api.dev.tmd/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        retrofit.create(ApiClient::class.java).getGroupContacts(groupId = groupId).enqueue(object: Callback<List<Contact>>{
-            override fun onResponse(call: Call<List<Contact>>, response: Response<List<Contact>>) {
+        retrofit.create(ApiClient::class.java).getGroupContacts(groupId = groupId).enqueue(object: Callback<MutableList<Contact>>{
+            override fun onResponse(call: Call<MutableList<Contact>>, response: Response<MutableList<Contact>>) {
                 when(response.code()){
                     200 -> {
                         contactsList = response.body()!!
@@ -47,6 +89,7 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
                             setHasFixedSize(true)
                             layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
                             adapter = contactsAdapter
+                            ItemTouchHelper(swipe).attachToRecyclerView(recycler)
                         }
                     } 400 -> {
                         Toast.makeText(applicationContext, "There is not any contact in this group", Toast.LENGTH_LONG).show()
@@ -55,7 +98,7 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
                     }
                 }
             }
-            override fun onFailure(call: Call<List<Contact>>, t: Throwable) {
+            override fun onFailure(call: Call<MutableList<Contact>>, t: Throwable) {
                 Toast.makeText(applicationContext,"Either cellular or server is down", Toast.LENGTH_LONG).show()
             }
         })

@@ -1,5 +1,6 @@
 package com.example.tmdcontactsapp
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -84,6 +85,7 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
                 Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
                     .create(ApiClient::class.java).deleteGroup(groupId = groupsList[viewHolder.adapterPosition].groupId)
                     .enqueue(object: Callback<ResponseBody>{
+                        @SuppressLint("NotifyDataSetChanged")
                         override fun onResponse(
                             call: Call<ResponseBody>,
                             response: Response<ResponseBody>

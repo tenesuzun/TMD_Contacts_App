@@ -28,7 +28,7 @@ interface ApiClient {
     //region GroupsContacts Methods
     @GET("GroupsContacts/GetListByGroupId")
     @Headers("accept: */*")
-    fun getGroupContacts(@Query("groupId")groupId: Int): Call<List<Contact>>
+    fun getGroupContacts(@Query("groupId")groupId: Int): Call<MutableList<Contact>>
     //endregion
 
     //endregion
