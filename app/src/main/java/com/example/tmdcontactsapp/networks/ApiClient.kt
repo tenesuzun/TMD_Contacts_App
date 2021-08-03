@@ -66,19 +66,19 @@ interface ApiClient {
     @Headers("accept: */*", "Content-Type: application/json-patch+json")
     fun addNewContact(
         @Header("Authorization") Bearer: String,
-        @Body contact: ContactRequest): Call<ResponseBody>
+        @Body contact: ContactRequest): Call<ResponseContent>
 
     @POST("Contacts/Update")
     @Headers("accept: */*", "Content-Type: application/json-patch+json")
     fun updateContact(
         @Header("Authorization") Bearer: String,
-        @Body contact: ContactRequest): Call<ResponseBody>
+        @Body contact: ContactRequest): Call<ResponseContent>
 
     @POST("Contacts/Delete")
     @Headers("accept: */*")
     fun deleteContact(
         @Header("Authorization") Bearer: String,
-        @Query("id") contactId: Int): Call<ResponseBody>
+        @Query("id") contactId: Int): Call<ResponseContent>
     //endregion
 
     //region Groups Methods
@@ -86,13 +86,13 @@ interface ApiClient {
     @Headers("accept: */*","Content-Type: application/json-patch+json")
     fun addNewGroup(
         @Header("Authorization") Bearer: String,
-        @Body group: GroupResponse): Call<ResponseBody>
+        @Body group: GroupResponse): Call<ResponseContent>
 
     @POST("Groups/Delete")
     @Headers("accept: */*")
     fun deleteGroup(
         @Header("Authorization") Bearer: String,
-        @Query("id") groupId: Int): Call<ResponseBody>
+        @Query("id") groupId: Int): Call<ResponseContent>
     //endregion
 
     //region GroupsContacts Methods

@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.tmdcontactsapp.models.ContactRequest
 import com.example.tmdcontactsapp.models.LoggedUserResponse
+import com.example.tmdcontactsapp.models.ResponseContent
 import com.example.tmdcontactsapp.networks.ApiClient
 import com.google.android.material.snackbar.Snackbar
 import okhttp3.ResponseBody
@@ -135,25 +136,25 @@ class AddNewContactFragment : Fragment() {
                                     contactPicture = encoded,
                                     userId = response.body()!!.id,
                                     contactId = 0)
-                            ).enqueue(object: Callback<ResponseBody> {
-                                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                            ).enqueue(object: Callback<ResponseContent> {
+                                override fun onResponse(call: Call<ResponseContent>, response: Response<ResponseContent>) {
                                     when(response.code()){
                                         200 -> {
-                                            Toast.makeText(context,"Contact is successfully added!", Toast.LENGTH_LONG).show()
+                                            Toast.makeText(context,response.body()!!.message, Toast.LENGTH_LONG).show()
                                             activity!!.supportFragmentManager.popBackStack("contactsPage",0)
                                         }
                                         else ->{
-                                            Toast.makeText(context, "Unexpected problem. Try again!", Toast.LENGTH_LONG).show()
+                                            Toast.makeText(context, response.body()!!.message, Toast.LENGTH_LONG).show()
                                         }
                                     }
                                 }
-                                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                                    Toast.makeText(context,"Could not connect to the Server", Toast.LENGTH_LONG).show()
+                                override fun onFailure(call: Call<ResponseContent>, t: Throwable) {
+                                    Toast.makeText(context,"onFailure", Toast.LENGTH_LONG).show()
                                 }
                             })
                         }
                         override fun onFailure(call: Call<LoggedUserResponse>, t: Throwable) {
-                            Toast.makeText(context,"Either cellular or server is down", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context,"onFailure", Toast.LENGTH_LONG).show()
                         }
                     })
                 }

@@ -19,6 +19,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.example.tmdcontactsapp.models.ContactRequest
+import com.example.tmdcontactsapp.models.ResponseContent
 import com.example.tmdcontactsapp.networks.ApiClient
 import com.google.android.material.snackbar.Snackbar
 import okhttp3.ResponseBody
@@ -147,20 +148,20 @@ class UpdatingContactActivity : AppCompatActivity() {
                 title = contactWorkTitle.text.toString(),
                 birthday = contactBirthday.text.toString(),
                 notes = contactNotes.text.toString(),
-                contactPicture = "")).enqueue(object: Callback<ResponseBody>{
-                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                contactPicture = "")).enqueue(object: Callback<ResponseContent>{
+                override fun onResponse(call: Call<ResponseContent>, response: Response<ResponseContent>) {
                     when(response.code()){
                         200 -> {
-                            Toast.makeText(applicationContext,"Contact is updated successfully!",Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext,response.body()!!.message,Toast.LENGTH_LONG).show()
                             supportFragmentManager.popBackStack("contactsPage", 0)
                             finish()
                         }else -> {
-                            Toast.makeText(applicationContext, response.body().toString(), Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, response.body()!!.message, Toast.LENGTH_LONG).show()
                         }
                     }
                 }
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Toast.makeText(applicationContext, "Could not connect to the Server", Toast.LENGTH_LONG).show()
+                override fun onFailure(call: Call<ResponseContent>, t: Throwable) {
+                    Toast.makeText(applicationContext, "onFailure", Toast.LENGTH_LONG).show()
                 }
             })
         }

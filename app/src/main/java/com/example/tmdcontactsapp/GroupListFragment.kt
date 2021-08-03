@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.tmdcontactsapp.adapters.GroupListAdapter
 import com.example.tmdcontactsapp.models.GroupResponse
 import com.example.tmdcontactsapp.models.LoggedUserResponse
+import com.example.tmdcontactsapp.models.ResponseContent
 import com.example.tmdcontactsapp.networks.ApiClient
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
@@ -84,24 +85,24 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
                     .create(ApiClient::class.java).deleteGroup(groupId = groupsList[viewHolder.adapterPosition].groupId, Bearer = "Bearer $userToken")
-                    .enqueue(object: Callback<ResponseBody>{
+                    .enqueue(object: Callback<ResponseContent>{
                         @SuppressLint("NotifyDataSetChanged")
                         override fun onResponse(
-                            call: Call<ResponseBody>,
-                            response: Response<ResponseBody>
+                            call: Call<ResponseContent>,
+                            response: Response<ResponseContent>
                         ) {
                             when(response.code()){
                                 200 -> {
-                                    Toast.makeText(context,"Group has been removed!", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context,response.body()!!.message, Toast.LENGTH_SHORT).show()
                                     groupsList.removeAt(viewHolder.adapterPosition)
                                     groupsAdapter.notifyDataSetChanged()
                                 }else -> {
-                                    Toast.makeText(context,"Removing group has been failed", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context,response.body()!!.message, Toast.LENGTH_SHORT).show()
                                 }
                             }
                         }
-                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                            Toast.makeText(context,"Could not get response from the server", Toast.LENGTH_SHORT).show()
+                        override fun onFailure(call: Call<ResponseContent>, t: Throwable) {
+                            Toast.makeText(context,"onFailure", Toast.LENGTH_SHORT).show()
                         }
                     })
             }

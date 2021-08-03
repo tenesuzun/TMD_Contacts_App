@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.tmdcontactsapp.adapters.ContactListAdapter
 import com.example.tmdcontactsapp.models.Contact
 import com.example.tmdcontactsapp.models.LoggedUserResponse
+import com.example.tmdcontactsapp.models.ResponseContent
 import com.example.tmdcontactsapp.networks.ApiClient
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.ResponseBody
@@ -79,24 +80,24 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
                     .create(ApiClient::class.java).deleteContact(contactId = contactsList[viewHolder.adapterPosition].contactId, Bearer = "Bearer $userToken")
-                    .enqueue(object : Callback<ResponseBody>{
+                    .enqueue(object : Callback<ResponseContent>{
                         @SuppressLint("NotifyDataSetChanged")
                         override fun onResponse(
-                            call: Call<ResponseBody>,
-                            response: Response<ResponseBody>
+                            call: Call<ResponseContent>,
+                            response: Response<ResponseContent>
                         ) {
                             when(response.code()){
                                 200 -> {
-                                    Toast.makeText(context,"Contact has been removed!", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context,response.body()!!.message, Toast.LENGTH_SHORT).show()
                                     contactsList.removeAt(viewHolder.adapterPosition)
                                     contactsAdapter.notifyDataSetChanged()
                                 }else -> {
-                                Toast.makeText(context,"Removing contact has been failed", Toast.LENGTH_LONG).show()
+                                Toast.makeText(context,response.body()!!.message, Toast.LENGTH_LONG).show()
                             }
                             }
                         }
-                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                            Toast.makeText(context,"Could not get response from the server", Toast.LENGTH_LONG).show()
+                        override fun onFailure(call: Call<ResponseContent>, t: Throwable) {
+                            Toast.makeText(context,"onFailure", Toast.LENGTH_LONG).show()
                         }
                     })
             }

@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.example.tmdcontactsapp.models.GroupResponse
+import com.example.tmdcontactsapp.models.ResponseContent
 import com.example.tmdcontactsapp.networks.ApiClient
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -41,8 +42,8 @@ class GroupAddDialogFragment(private val tempTitle: String, private val tempHint
             .build()
 
         retrofit.create(ApiClient::class.java).addNewGroup(Bearer = "Bearer $userToken",GroupResponse(groupId = 0,groupName = tempName,userId = userId))
-            .enqueue(object : Callback<ResponseBody>{
-                override fun onResponse(call: Call<ResponseBody>,response: Response<ResponseBody>) {
+            .enqueue(object : Callback<ResponseContent>{
+                override fun onResponse(call: Call<ResponseContent>,response: Response<ResponseContent>) {
                     when(response.code()){
                         200 -> {
                             dismiss()
@@ -51,7 +52,7 @@ class GroupAddDialogFragment(private val tempTitle: String, private val tempHint
                         }
                     }
                 }
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                override fun onFailure(call: Call<ResponseContent>, t: Throwable) {
                     Toast.makeText(context,"onFailure?",Toast.LENGTH_SHORT).show()
                     dismiss()
                 }
