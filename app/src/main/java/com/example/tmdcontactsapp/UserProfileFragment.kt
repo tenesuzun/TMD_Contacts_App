@@ -67,7 +67,7 @@ class UserProfileFragment : Fragment() {
             .build()
 
         val api = retrofit.create(ApiClient::class.java)
-        api.getUserByEmail(email = userEmail!!).enqueue(object: Callback<LoggedUserResponse>{
+        api.getUserByEmail(email = userEmail!!, Bearer = "Bearer $userToken").enqueue(object: Callback<LoggedUserResponse>{
             override fun onResponse(call: Call<LoggedUserResponse>, response: Response<LoggedUserResponse>){
                 when(response.code()){
                     200 ->{

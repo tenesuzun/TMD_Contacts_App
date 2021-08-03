@@ -24,10 +24,13 @@ class AddContactToGroupActivity : AppCompatActivity(), ContactListAdapter.OnItem
     private lateinit var contactsList: MutableList<Contact>
     private lateinit var contactsAdapter: ContactListAdapter
     private var filteredList: ArrayList<Contact> = ArrayList()
+    private lateinit var token: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_contact_to_group)
+
+        token = intent.getStringExtra("token").toString()
 
         val retrofit = Retrofit.Builder()
             .baseUrl("http://tmdcontacts-api.dev.tmd/api/")
@@ -49,7 +52,7 @@ class AddContactToGroupActivity : AppCompatActivity(), ContactListAdapter.OnItem
             }
         })
 
-        retrofit.getUserContacts(userId = intent.getIntExtra("userId",-1)).enqueue(object: Callback<MutableList<Contact>?>{
+        retrofit.getUserContacts(userId = intent.getIntExtra("userId",-1), Bearer = "Bearer $token").enqueue(object: Callback<MutableList<Contact>?>{
             override fun onResponse(
                 call: Call<MutableList<Contact>?>,
                 response: Response<MutableList<Contact>?>
@@ -95,7 +98,7 @@ class AddContactToGroupActivity : AppCompatActivity(), ContactListAdapter.OnItem
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(ApiClient::class.java).addContactToGroup(addedContact = GroupsContacts(
                 groupId = intent.getIntExtra("groupId",-1),
-                contactId = clickedItem.contactId)).enqueue(object: Callback<ResponseContent>{
+                contactId = clickedItem.contactId), Bearer = "Bearer $token").enqueue(object: Callback<ResponseContent>{
                 override fun onResponse(
                     call: Call<ResponseContent>,
                     response: Response<ResponseContent>

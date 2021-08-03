@@ -116,10 +116,10 @@ class AddNewContactFragment : Fragment() {
                         .addConverterFactory(GsonConverterFactory.create())
                         .build()
 
-                    retrofit.create(ApiClient::class.java).getUserByEmail(email = userEmail!!).enqueue(object:
+                    retrofit.create(ApiClient::class.java).getUserByEmail(email = userEmail!!, Bearer = "Bearer $userToken").enqueue(object:
                         Callback<LoggedUserResponse> {
                         override fun onResponse(call: Call<LoggedUserResponse>, response: Response<LoggedUserResponse>){
-                            retrofit.create(ApiClient::class.java).addNewContact(
+                            retrofit.create(ApiClient::class.java).addNewContact(Bearer = "Bearer $userToken",
                                 ContactRequest(
                                     firstName = contactFirstName.text.toString(),
                                     surname = contactSurname.text.toString(),

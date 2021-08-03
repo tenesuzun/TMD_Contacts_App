@@ -33,6 +33,7 @@ class UpdatingContactActivity : AppCompatActivity() {
     private lateinit var contactBirthday: EditText
     private lateinit var contactNotes: EditText
     private lateinit var contactGroup: EditText
+    private lateinit var token: String
     //endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +54,7 @@ class UpdatingContactActivity : AppCompatActivity() {
         val tempContactBirthday = intent.getStringExtra("contactBirthday").toString()
         val tempContactNote = intent.getStringExtra("contactNote").toString()
         val tempContactGroups = intent.getStringExtra("contactGroups").toString()
+        token = intent.getStringExtra("token").toString()
         //endregion
 
         //region View mapping
@@ -111,7 +113,7 @@ class UpdatingContactActivity : AppCompatActivity() {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
-            retrofit.create(ApiClient::class.java).updateContact(ContactRequest(
+            retrofit.create(ApiClient::class.java).updateContact(Bearer = "Bearer $token",ContactRequest(
                 contactId = intent.getIntExtra("contactId",-1),
                 userId = intent.getIntExtra("userId", -1),
                 firstName = contactFirstName.text.toString(),

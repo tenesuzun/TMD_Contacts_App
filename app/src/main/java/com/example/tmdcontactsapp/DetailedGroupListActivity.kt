@@ -29,11 +29,13 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
     private lateinit var contactsList: MutableList<Contact>
     private var filteredList: ArrayList<Contact> = ArrayList()
     private var groupId: Int=0
+    private lateinit var token: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detailed_group_list)
         groupId = intent.getIntExtra("groupId", -1)
+        token = intent.getStringExtra("token")!!
 
         val swipe = object: ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT){
             override fun onMove(
@@ -47,7 +49,7 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/")
                     .addConverterFactory(GsonConverterFactory.create()).build()
-                    .create(ApiClient::class.java).deleteContactFromGroup(GroupsContacts(
+                    .create(ApiClient::class.java).deleteContactFromGroup(Bearer = "Bearer $token", GroupsContacts(
                         groupId = groupId,
                         contactId = contactsList[viewHolder.adapterPosition].contactId))
                     .enqueue(object: Callback<ResponseContent>{
@@ -78,7 +80,7 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        retrofit.create(ApiClient::class.java).getGroupContacts(groupId = groupId).enqueue(object: Callback<MutableList<Contact>>{
+        retrofit.create(ApiClient::class.java).getGroupContacts(groupId = groupId,Bearer = "Bearer $token").enqueue(object: Callback<MutableList<Contact>>{
             override fun onResponse(call: Call<MutableList<Contact>>, response: Response<MutableList<Contact>>) {
                 when(response.code()){
                     200 -> {
@@ -123,6 +125,7 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
         findViewById<FloatingActionButton>(R.id.addContactToGroupFAB).setOnClickListener{
             startActivity(Intent(applicationContext, AddContactToGroupActivity::class.java)
                 .putExtra("groupId",groupId)
+                .putExtra("token", token)
                 .putExtra("userId", intent.getIntExtra("userId",-1)))
 //            TODO("gotta correct the flow logic")
             finish()
@@ -148,6 +151,7 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
         val intent = Intent(applicationContext, UpdatingContactActivity::class.java)
 
         //region Intent extras that is transferred to Detailed Contact Page
+        intent.putExtra("token", token)
         intent.putExtra("userId", clickedItem.userId)
         intent.putExtra("contactId", clickedItem.contactId)
         intent.putExtra("contactPhoto", clickedItem.contactPicture)

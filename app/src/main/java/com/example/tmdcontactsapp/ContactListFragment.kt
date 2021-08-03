@@ -78,7 +78,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
-                    .create(ApiClient::class.java).deleteContact(contactId = contactsList[viewHolder.adapterPosition].contactId)
+                    .create(ApiClient::class.java).deleteContact(contactId = contactsList[viewHolder.adapterPosition].contactId, Bearer = "Bearer $userToken")
                     .enqueue(object : Callback<ResponseBody>{
                         @SuppressLint("NotifyDataSetChanged")
                         override fun onResponse(
@@ -114,11 +114,11 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
             .build()
 
         val api = retrofit.create(ApiClient::class.java)
-        api.getUserByEmail(email = userEmail!!).enqueue(object: Callback<LoggedUserResponse>{
+        api.getUserByEmail(email = userEmail!!, Bearer = "Bearer $userToken").enqueue(object: Callback<LoggedUserResponse>{
             override fun onResponse(call: Call<LoggedUserResponse>, response: Response<LoggedUserResponse>) {
                 when(response.code()){
                     200 -> {
-                        api.getUserContacts(userId = response.body()!!.id).enqueue(object : Callback<MutableList<Contact>?>{
+                        api.getUserContacts(userId = response.body()!!.id, Bearer = "Bearer $userToken").enqueue(object : Callback<MutableList<Contact>?>{
                             override fun onResponse(call: Call<MutableList<Contact>?>, response: Response<MutableList<Contact>?>){
                                 when(response.code()){
                                     200 ->{
@@ -174,6 +174,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         val intent = Intent(context, UpdatingContactActivity::class.java)
 
         //region Intent extras that is transferred to Detailed Contact Page
+        intent.putExtra("token", userToken)
         intent.putExtra("userId", clickedItem.userId)
         intent.putExtra("contactId", clickedItem.contactId)
 //        intent.putExtra("contactPhoto", clickedItem.contactPicture)

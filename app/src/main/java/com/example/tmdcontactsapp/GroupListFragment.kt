@@ -83,7 +83,7 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
-                    .create(ApiClient::class.java).deleteGroup(groupId = groupsList[viewHolder.adapterPosition].groupId)
+                    .create(ApiClient::class.java).deleteGroup(groupId = groupsList[viewHolder.adapterPosition].groupId, Bearer = "Bearer $userToken")
                     .enqueue(object: Callback<ResponseBody>{
                         @SuppressLint("NotifyDataSetChanged")
                         override fun onResponse(
@@ -113,12 +113,12 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
             .build()
 
         val api = retrofit.create(ApiClient::class.java)
-        api.getUserByEmail(email = userEmail!!).enqueue(object: Callback<LoggedUserResponse>{
+        api.getUserByEmail(email = userEmail!!, Bearer = "Bearer $userToken").enqueue(object: Callback<LoggedUserResponse>{
             override fun onResponse(call: Call<LoggedUserResponse>, response: Response<LoggedUserResponse>){
                 when(response.code()){
                     200 -> {
                         userId = response.body()!!.id
-                        api.getUserGroups(userId = userId).enqueue(object: Callback<MutableList<GroupResponse>>{
+                        api.getUserGroups(userId = userId, Bearer = "Bearer $userToken").enqueue(object: Callback<MutableList<GroupResponse>>{
                             override fun onResponse(call: Call<MutableList<GroupResponse>>, response: Response<MutableList<GroupResponse>>){
                                 when(response.code()){
                                     200 ->{
@@ -135,7 +135,8 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
                                     400 -> {
                                         Toast.makeText(context,"This user does not have groups",Toast.LENGTH_SHORT).show()
                                     } else -> {
-                                        Toast.makeText(context,"Unexpected problem", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context,response.code().toString(), Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context,response.message().toString(), Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             }
@@ -155,7 +156,7 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
 
         view.findViewById<FloatingActionButton>(R.id.groupListFAB).setOnClickListener {
             activity?.let { it1 ->
-                GroupAddDialogFragment("Create a new group?", "Write group name here", userId).show(
+                GroupAddDialogFragment("Create a new group?", "Write group name here", userId, userToken!!).show(
                     it1.supportFragmentManager, "GroupAddDialogFragment"
                 )
             }
@@ -182,6 +183,7 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
         }
         startActivity(Intent(context, DetailedGroupListActivity::class.java)
             .putExtra("groupId",clickedItem.groupId)
-            .putExtra("userId",userId))
+            .putExtra("userId",userId)
+            .putExtra("token", userToken))
     }
 }

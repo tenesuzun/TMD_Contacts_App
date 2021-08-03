@@ -11,24 +11,32 @@ interface ApiClient {
     //region User methods
     @GET("Users/GetByEmail")
     @Headers("accept: */*")
-    fun getUserByEmail(@Query("email")email: String): Call<LoggedUserResponse>
+    fun getUserByEmail(
+        @Header("Authorization") Bearer: String,
+        @Query("email")email: String): Call<LoggedUserResponse>
     //endregion
 
     //region Contacts Methods
     @GET("Contacts/GetListByUserId")
-    fun getUserContacts(@Query("userId")userId: Int): Call<MutableList<Contact>>
+    fun getUserContacts(
+        @Header("Authorization") Bearer: String,
+        @Query("userId")userId: Int): Call<MutableList<Contact>>
     //endregion
 
     //region Groups Methods
     @GET("/api/Groups/GetListByUserId")
     @Headers("accept: */*")
-    fun getUserGroups(@Query("userId")userId: Int): Call<MutableList<GroupResponse>>
+    fun getUserGroups(
+        @Header("Authorization") Bearer: String,
+        @Query("userId")userId: Int): Call<MutableList<GroupResponse>>
     //endregion
 
     //region GroupsContacts Methods
     @GET("GroupsContacts/GetListByGroupId")
     @Headers("accept: */*")
-    fun getGroupContacts(@Query("groupId")groupId: Int): Call<MutableList<Contact>>
+    fun getGroupContacts(
+        @Header("Authorization") Bearer: String,
+        @Query("groupId")groupId: Int): Call<MutableList<Contact>>
     //endregion
 
     //endregion
@@ -54,38 +62,51 @@ interface ApiClient {
     //endregion
 
     //region Contacts Methods
-    //TODO("Gotta correct the response models according to new Response created by Faruk")
     @POST("Contacts/Add")
     @Headers("accept: */*", "Content-Type: application/json-patch+json")
-    fun addNewContact(@Body contact: ContactRequest): Call<ResponseBody>
+    fun addNewContact(
+        @Header("Authorization") Bearer: String,
+        @Body contact: ContactRequest): Call<ResponseBody>
 
     @POST("Contacts/Update")
     @Headers("accept: */*", "Content-Type: application/json-patch+json")
-    fun updateContact(@Body contact: ContactRequest): Call<ResponseBody>
+    fun updateContact(
+        @Header("Authorization") Bearer: String,
+        @Body contact: ContactRequest): Call<ResponseBody>
 
     @POST("Contacts/Delete")
     @Headers("accept: */*")
-    fun deleteContact(@Query("id") contactId: Int): Call<ResponseBody>
+    fun deleteContact(
+        @Header("Authorization") Bearer: String,
+        @Query("id") contactId: Int): Call<ResponseBody>
     //endregion
 
     //region Groups Methods
     @POST("Groups/Add")
     @Headers("accept: */*","Content-Type: application/json-patch+json")
-    fun addNewGroup(@Body group: GroupResponse): Call<ResponseBody>
+    fun addNewGroup(
+        @Header("Authorization") Bearer: String,
+        @Body group: GroupResponse): Call<ResponseBody>
 
     @POST("Groups/Delete")
     @Headers("accept: */*")
-    fun deleteGroup(@Query("id") groupId: Int): Call<ResponseBody>
+    fun deleteGroup(
+        @Header("Authorization") Bearer: String,
+        @Query("id") groupId: Int): Call<ResponseBody>
     //endregion
 
     //region GroupsContacts Methods
     @POST("GroupsContacts/Add")
     @Headers("accept: */*", "Content-Type: application/json-patch+json")
-    fun addContactToGroup(@Body addedContact: GroupsContacts): Call<ResponseContent>
+    fun addContactToGroup(
+        @Header("Authorization") Bearer: String,
+        @Body addedContact: GroupsContacts): Call<ResponseContent>
 
     @POST("GroupsContacts/Delete")
     @Headers("accept: */*", "Content-Type: application/json-patch+json")
-    fun deleteContactFromGroup(@Body deletedContact: GroupsContacts): Call<ResponseContent>
+    fun deleteContactFromGroup(
+        @Header("Authorization") Bearer: String,
+        @Body deletedContact: GroupsContacts): Call<ResponseContent>
     //endregion
 
     //endregion

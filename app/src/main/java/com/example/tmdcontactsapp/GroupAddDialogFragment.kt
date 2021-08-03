@@ -16,7 +16,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class GroupAddDialogFragment(private val tempTitle: String, private val tempHint: String, private val userId: Int) : DialogFragment() {
+class GroupAddDialogFragment(private val tempTitle: String, private val tempHint: String, private val userId: Int, private val userToken: String) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
@@ -40,7 +40,7 @@ class GroupAddDialogFragment(private val tempTitle: String, private val tempHint
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        retrofit.create(ApiClient::class.java).addNewGroup(GroupResponse(groupId = 0,groupName = tempName,userId = userId))
+        retrofit.create(ApiClient::class.java).addNewGroup(Bearer = "Bearer $userToken",GroupResponse(groupId = 0,groupName = tempName,userId = userId))
             .enqueue(object : Callback<ResponseBody>{
                 override fun onResponse(call: Call<ResponseBody>,response: Response<ResponseBody>) {
                     when(response.code()){
