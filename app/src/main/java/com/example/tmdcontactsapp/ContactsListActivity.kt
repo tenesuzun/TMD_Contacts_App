@@ -27,9 +27,6 @@ class ContactsListActivity : AppCompatActivity() {
                     replaceFragment(UserProfileFragment().newInstance(bundle!!),"profilePage")
                     return@OnNavigationItemSelectedListener true
                 }
-                R.id.removeContact -> {
-                    return@OnNavigationItemSelectedListener true
-                }
                 R.id.addNewContact -> {
                     val bundle = intent.extras
                     replaceFragment(AddNewContactFragment().newInstance(bundle!!),"addNewContact")

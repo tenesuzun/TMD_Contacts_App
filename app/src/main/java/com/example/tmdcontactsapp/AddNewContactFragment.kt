@@ -1,6 +1,8 @@
 package com.example.tmdcontactsapp
 
 import android.Manifest
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -170,7 +172,8 @@ class AddNewContactFragment : Fragment() {
     }
 
     private fun openGallery(view: View) {
-        if (ContextCompat.checkSelfPermission(
+        AlertDialog.Builder(requireContext()).setTitle("Delete or Add?").setMessage("What do you want to do with the picture?").setNegativeButton("Delete", DialogInterface.OnClickListener
+        { _, _ -> contactPP.setImageResource(R.drawable.ic_round_account_box_24) }).setPositiveButton("Add", DialogInterface.OnClickListener{ _, _ -> if (ContextCompat.checkSelfPermission(
                 requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE
             ) == PackageManager.PERMISSION_GRANTED
         ){
@@ -181,7 +184,7 @@ class AddNewContactFragment : Fragment() {
             ) {
                 permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             }.show()
-        }
+        } }).create().show()
     }
 
     private fun registerLauncher() {

@@ -165,7 +165,6 @@ class UserRegistryActivity : AppCompatActivity() {
     }
 
     fun openGallery(view: View) {
-
         AlertDialog.Builder(this).setTitle("Delete or Add?").setMessage("What do you want to do with the picture?").setNegativeButton("Delete", DialogInterface.OnClickListener
         { _, _ -> userPP.setImageResource(R.drawable.ic_round_account_box_24) }).setPositiveButton("Add", DialogInterface.OnClickListener{_, _ -> if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.READ_EXTERNAL_STORAGE
@@ -179,24 +178,6 @@ class UserRegistryActivity : AppCompatActivity() {
                 permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             }.show()
         } }).create().show()
-
-        //region Previous Format
-
-        /*
-            if (ContextCompat.checkSelfPermission(
-                    this, Manifest.permission.READ_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED
-            ){
-                Toast.makeText(this, "Please select an image to upload", Toast.LENGTH_LONG).show()
-                permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            } else {
-                Snackbar.make(view,"Permission needed to select profile picture from gallery", Snackbar.LENGTH_INDEFINITE).setAction("Give Permission"
-                ) {
-                    permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-                }.show()
-            }*/
-
-        //endregion
     }
 
     private fun registerLauncher() {
