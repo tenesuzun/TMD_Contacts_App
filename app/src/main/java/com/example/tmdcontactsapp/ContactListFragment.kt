@@ -88,12 +88,12 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
                         ) {
                             when(response.code()){
                                 200 -> {
-                                    Toast.makeText(context,response.body()!!.message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context,contactsList[viewHolder.adapterPosition].firstName + ", " + response.body()!!.message, Toast.LENGTH_SHORT).show()
                                     contactsList.removeAt(viewHolder.adapterPosition)
                                     contactsAdapter.notifyDataSetChanged()
                                 }else -> {
-                                Toast.makeText(context,response.body()!!.message, Toast.LENGTH_LONG).show()
-                            }
+                                    Toast.makeText(context,response.body()!!.message, Toast.LENGTH_LONG).show()
+                                }
                             }
                         }
                         override fun onFailure(call: Call<ResponseContent>, t: Throwable) {
@@ -101,12 +101,6 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
                         }
                     })
             }
-
-//            override fun onChildDraw(c: Canvas,recyclerView: RecyclerView,viewHolder: RecyclerView.ViewHolder,dX: Float,dY: Float,actionState: Int,isCurrentlyActive: Boolean) {
-//                val itemView = viewHolder.itemView
-//                val itemHeight = itemView.bottom - itemView.top
-//                super.onChildDraw(c,recyclerView,viewHolder,dX,dY,actionState,isCurrentlyActive)
-//            }
         }
 
         val retrofit = Retrofit.Builder()
@@ -180,18 +174,18 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         intent.putExtra("userId", clickedItem.userId)
         intent.putExtra("contactId", clickedItem.contactId)
 //        intent.putExtra("contactPhoto", clickedItem.contactPicture)
-//        intent.putExtra("contactFirstName", clickedItem.firstName)
-//        intent.putExtra("contactSurname", clickedItem.surname)
-//        intent.putExtra("contactEmail", clickedItem.emailAddress)
-//        intent.putExtra("contactPhoneNumber", clickedItem.phoneNumber)
-//        intent.putExtra("contactWorkNumber", clickedItem.workNumber)
-//        intent.putExtra("contactHomeNumber", clickedItem.homePhone)
-//        intent.putExtra("contactAddress", clickedItem.address)
-//        intent.putExtra("contactCompany", clickedItem.company)
-//        intent.putExtra("contactTitle", clickedItem.title)
-//        intent.putExtra("contactBirthday", clickedItem.birthday)
-//        intent.putExtra("contactNote", clickedItem.notes)
-//        intent.putExtra("contactGroups", clickedItem.groups)
+        intent.putExtra("contactFirstName", clickedItem.firstName)
+        intent.putExtra("contactSurname", clickedItem.surname)
+        intent.putExtra("contactEmail", clickedItem.emailAddress)
+        intent.putExtra("contactPhoneNumber", clickedItem.phoneNumber)
+        intent.putExtra("contactWorkNumber", clickedItem.workNumber)
+        intent.putExtra("contactHomeNumber", clickedItem.homePhone)
+        intent.putExtra("contactAddress", clickedItem.address)
+        intent.putExtra("contactCompany", clickedItem.company)
+        intent.putExtra("contactTitle", clickedItem.title)
+        intent.putExtra("contactBirthday", clickedItem.birthday)
+        intent.putExtra("contactNote", clickedItem.notes)
+        intent.putExtra("contactGroups", clickedItem.groups)
 
         //endregion
 

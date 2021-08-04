@@ -28,7 +28,7 @@ interface ApiClient {
     @GET("Contacts/Get")
     fun getContactInformation(
         @Header("Authorization") Bearer: String,
-        @Query("id") contactId: Int): Call<Contact>
+        @Query("id")contactId: Int): Call<Contact>
 
     //endregion
 

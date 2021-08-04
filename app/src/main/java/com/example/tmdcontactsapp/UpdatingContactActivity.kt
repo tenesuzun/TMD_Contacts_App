@@ -17,6 +17,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.example.tmdcontactsapp.models.Contact
 import com.example.tmdcontactsapp.models.ContactRequest
@@ -28,6 +29,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
 class UpdatingContactActivity : AppCompatActivity() {
@@ -78,10 +80,9 @@ class UpdatingContactActivity : AppCompatActivity() {
 
         //endregion
 
-        //region GET Contact Information
-        /*
+        //region GET Contact Information to request Photo
         Retrofit.Builder()
-            .baseUrl("http://tmdcontacts-api.dev.tm/api/")
+            .baseUrl("http://tmdcontacts-api.dev.tmd/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiClient::class.java)
@@ -92,20 +93,7 @@ class UpdatingContactActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<Contact>, response: Response<Contact>) {
                     when(response.code()){
                         200 -> {
-                            contactFirstName.setText(response.body()!!.firstName)
-                            contactSurname.setText(response.body()!!.surname)
-                            contactEmail.setText(response.body()!!.emailAddress)
-                            contactPhone.setText(response.body()!!.phoneNumber)
-                            contactWorkPhone.setText(response.body()!!.workNumber)
-                            contactHomePhone.setText(response.body()!!.homePhone)
-                            contactAddress.setText(response.body()!!.address)
-                            contactCompany.setText(response.body()!!.company)
-                            contactWorkTitle.setText(response.body()!!.title)
-                            contactBirthday.setText(response.body()!!.birthday)
-                            contactNotes.setText(response.body()!!.notes)
-                            contactGroup.setText(response.body()!!.groups)
-
-                            if(response.body()!!.contactPicture == ""){
+                            if(response.body()?.contactPicture.isNullOrBlank() || response.body()?.contactPicture.isNullOrEmpty()){
                                 contactPP.setImageResource(R.drawable.ic_round_account_box_24)
                             }else{
                                 val imageBytes = Base64.decode(response.body()!!.contactPicture, 0)
@@ -117,16 +105,15 @@ class UpdatingContactActivity : AppCompatActivity() {
                                     ))
                             }
                         }else -> {
-                        Toast.makeText(applicationContext, response.message(), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(applicationContext, response.message(), Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
                 override fun onFailure(call: Call<Contact>, t: Throwable) {
-                    Toast.makeText(applicationContext, "onFailure", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Picture loading is failed!", Toast.LENGTH_SHORT).show()
                 }
             })
 
-         */
         //endregion
 
         contactPP.setOnClickListener{
@@ -134,9 +121,38 @@ class UpdatingContactActivity : AppCompatActivity() {
         }
 
         registerLauncher()
+
+        contactFirstName.setText(intent.getStringExtra("contactFirstName"))
+        contactSurname.setText(intent.getStringExtra("contactSurname"))
+        contactPhone.setText(intent.getStringExtra("contactPhoneNumber"))
+        contactWorkPhone.setText(intent.getStringExtra("contactWorkNumber"))
+        contactEmail.setText(intent.getStringExtra("contactEmail"))
+        contactHomePhone.setText(intent.getStringExtra("contactHomeNumber"))
+        contactAddress.setText(intent.getStringExtra("contactAddress"))
+        contactCompany.setText(intent.getStringExtra("contactCompany"))
+        contactWorkTitle.setText(intent.getStringExtra("contactTitle"))
+        contactBirthday.setText(intent.getStringExtra("contactBirthday"))
+        contactNotes.setText(intent.getStringExtra("contactNote"))
+        contactGroup.setText(intent.getStringExtra("contactGroups"))
+        /*if(intent.getStringExtra("contactPhoto") == ""){
+            contactPP.setImageResource(R.drawable.ic_round_account_box_24)
+        }
+        else{
+            val imageBytes = Base64.decode(intent.getStringExtra("contactPhoto"), 0)
+            contactPP.setImageBitmap(BitmapFactory.decodeByteArray(
+                imageBytes,
+                0,
+                imageBytes.size
+            ))
+        }*/
     }
 
     fun updateContact(view: View) {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        selectedBitmap?.compress(Bitmap.CompressFormat.PNG, 75, byteArrayOutputStream)
+        val byteArray: ByteArray = byteArrayOutputStream.toByteArray()
+        val encoded: String = Base64.encodeToString(byteArray, Base64.DEFAULT)
+
         if (contactFirstName.text.isEmpty() || contactFirstName.text.isBlank()) {
             Toast.makeText(applicationContext, "Please enter first name", Toast.LENGTH_LONG).show()
         } else if (contactSurname.text.isEmpty() || contactSurname.text.isBlank()) {
@@ -163,7 +179,7 @@ class UpdatingContactActivity : AppCompatActivity() {
                 title = contactWorkTitle.text.toString(),
                 birthday = contactBirthday.text.toString(),
                 notes = contactNotes.text.toString(),
-                contactPicture = "")).enqueue(object: Callback<ResponseContent>{
+                contactPicture = encoded)).enqueue(object: Callback<ResponseContent>{
                 override fun onResponse(call: Call<ResponseContent>, response: Response<ResponseContent>) {
                     when(response.code()){
                         200 -> {
@@ -183,18 +199,25 @@ class UpdatingContactActivity : AppCompatActivity() {
     }
 
     private fun openGallery(view: View){
-        if (ContextCompat.checkSelfPermission(
-                this, Manifest.permission.READ_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED
-        ){
-            Toast.makeText(this, "Please select an image to upload", Toast.LENGTH_LONG).show()
-            permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-        } else {
-            Snackbar.make(view,"Permission needed to select profile picture from gallery", Snackbar.LENGTH_INDEFINITE).setAction("Give Permission"
-            ) {
-                permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            }.show()
-        }
+        AlertDialog.Builder(this).setTitle("Delete or Add?")
+            .setMessage("What do you want to do with the picture?")
+            .setNegativeButton("Delete"){
+                _, _ -> contactPP.setImageResource(R.drawable.ic_round_account_box_24)
+            }.setPositiveButton("Add"){
+                _, _ ->
+                if (ContextCompat.checkSelfPermission(
+                        this, Manifest.permission.READ_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED
+                ){
+                    Toast.makeText(this, "Please select an image to upload", Toast.LENGTH_LONG).show()
+                    permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                } else {
+                    Snackbar.make(view,"Permission needed to select profile picture from gallery", Snackbar.LENGTH_INDEFINITE).setAction("Give Permission"
+                    ) {
+                        permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    }.show()
+                }
+            }.create().show()
     }
 
     private fun registerLauncher() {
