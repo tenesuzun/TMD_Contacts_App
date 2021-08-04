@@ -1,6 +1,7 @@
 package com.example.tmdcontactsapp
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -19,9 +20,10 @@ import com.example.tmdcontactsapp.models.LoggedUserResponse
 import com.example.tmdcontactsapp.models.ResponseContent
 import com.example.tmdcontactsapp.networks.ApiClient
 import com.google.android.material.textfield.TextInputEditText
-import okhttp3.ResponseBody
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
+import kotlin.collections.ArrayList
 
 private const val userArgEmail = "Email"
 private const val userArgToken = "token"
@@ -77,29 +79,38 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
                 return false
             }
 
+            @SuppressLint("NotifyDataSetChanged")
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
-                    .create(ApiClient::class.java).deleteContact(contactId = contactsList[viewHolder.adapterPosition].contactId, Bearer = "Bearer $userToken")
-                    .enqueue(object : Callback<ResponseContent>{
-                        @SuppressLint("NotifyDataSetChanged")
-                        override fun onResponse(
-                            call: Call<ResponseContent>,
-                            response: Response<ResponseContent>
-                        ) {
-                            when(response.code()){
-                                200 -> {
-                                    Toast.makeText(context,contactsList[viewHolder.adapterPosition].firstName + ", " + response.body()!!.message, Toast.LENGTH_SHORT).show()
-                                    contactsList.removeAt(viewHolder.adapterPosition)
-                                    contactsAdapter.notifyDataSetChanged()
-                                }else -> {
+                AlertDialog.Builder(requireContext()).setTitle("ARE YOU SURE?").setMessage("You can not undo this action. Are you sure to continue?")
+                    .setNegativeButton("Cancel"){
+                        _,_ -> contactsAdapter.notifyDataSetChanged()
+                    }.setPositiveButton("YES"){
+                        _,_ ->
+                        Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
+                        .create(ApiClient::class.java).deleteContact(contactId = contactsList[viewHolder.adapterPosition].contactId, Bearer = "Bearer $userToken")
+                        .enqueue(object : Callback<ResponseContent>{
+                            @SuppressLint("NotifyDataSetChanged")
+                            override fun onResponse(
+                                call: Call<ResponseContent>,
+                                response: Response<ResponseContent>
+                            ) {
+                                when(response.code()){
+                                    200 -> {
+                                        Toast.makeText(context,contactsList[viewHolder.adapterPosition].firstName + ", " + response.body()!!.message, Toast.LENGTH_SHORT).show()
+                                        contactsList.removeAt(viewHolder.adapterPosition)
+                                        contactsAdapter.notifyDataSetChanged()
+                                    }else -> {
                                     Toast.makeText(context,response.body()!!.message, Toast.LENGTH_LONG).show()
+                                    contactsAdapter.notifyDataSetChanged()
+                                    }
                                 }
                             }
-                        }
-                        override fun onFailure(call: Call<ResponseContent>, t: Throwable) {
-                            Toast.makeText(context,"onFailure", Toast.LENGTH_LONG).show()
-                        }
-                    })
+                            override fun onFailure(call: Call<ResponseContent>, t: Throwable) {
+                                Toast.makeText(context,"onFailure", Toast.LENGTH_LONG).show()
+                                contactsAdapter.notifyDataSetChanged()
+                            }
+                        })
+                    }.create().show()
             }
         }
 
