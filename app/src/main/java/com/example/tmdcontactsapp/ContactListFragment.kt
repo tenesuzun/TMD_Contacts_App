@@ -18,6 +18,7 @@ import com.example.tmdcontactsapp.adapters.ContactListAdapter
 import com.example.tmdcontactsapp.models.Contact
 import com.example.tmdcontactsapp.models.LoggedUserResponse
 import com.example.tmdcontactsapp.models.ResponseContent
+import com.example.tmdcontactsapp.models.User
 import com.example.tmdcontactsapp.networks.ApiClient
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.*
@@ -120,11 +121,11 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
             .build()
 
         val api = retrofit.create(ApiClient::class.java)
-        api.getUserByEmail(email = userEmail!!, Bearer = "Bearer $userToken").enqueue(object: Callback<LoggedUserResponse>{
-            override fun onResponse(call: Call<LoggedUserResponse>, response: Response<LoggedUserResponse>) {
+        api.getUserByEmail(email = userEmail!!, Bearer = "Bearer $userToken").enqueue(object: Callback<User>{
+            override fun onResponse(call: Call<User>, response: Response<User>) {
                 when(response.code()){
                     200 -> {
-                        api.getUserContacts(userId = response.body()!!.id, Bearer = "Bearer $userToken").enqueue(object : Callback<MutableList<Contact>?>{
+                        api.getUserContacts(userId = response.body()!!.Id!!, Bearer = "Bearer $userToken").enqueue(object : Callback<MutableList<Contact>?>{
                             override fun onResponse(call: Call<MutableList<Contact>?>, response: Response<MutableList<Contact>?>){
                                 when(response.code()){
                                     200 ->{
@@ -153,7 +154,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
                     }
                 }
             }
-            override fun onFailure(call: Call<LoggedUserResponse>, t: Throwable) {
+            override fun onFailure(call: Call<User>, t: Throwable) {
                 Toast.makeText(context,"Either cellular or server is down",Toast.LENGTH_SHORT).show()
             }
         })

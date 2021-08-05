@@ -14,7 +14,7 @@ interface ApiClient {
     @Headers("accept: */*")
     fun getUserByEmail(
         @Header("Authorization") Bearer: String,
-        @Query("email")email: String): Call<LoggedUserResponse>
+        @Query("email")email: String): Call<User>
 
     //endregion
 
@@ -73,6 +73,15 @@ interface ApiClient {
     @POST("Auths/ResetPassword")
     @Headers("accept: */*", "Content-Type: application/json-patch+json")
     fun resetPassword(@Body email_password: UserRequest): Call<ResponseBody>
+
+    //endregion
+
+    //region User Methods
+
+    @POST("Users/Update")
+    @Headers("accept: */*", "Content-Type: application/json-patch+json")
+    fun updateUser(@Header("Authorization") Bearer: String,
+                   @Body updatedUser: User): Call<ResponseContent>
 
     //endregion
 

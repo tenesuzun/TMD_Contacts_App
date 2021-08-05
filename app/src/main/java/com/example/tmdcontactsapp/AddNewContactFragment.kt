@@ -27,6 +27,7 @@ import androidx.core.content.ContextCompat
 import com.example.tmdcontactsapp.models.ContactRequest
 import com.example.tmdcontactsapp.models.LoggedUserResponse
 import com.example.tmdcontactsapp.models.ResponseContent
+import com.example.tmdcontactsapp.models.User
 import com.example.tmdcontactsapp.networks.ApiClient
 import com.google.android.material.snackbar.Snackbar
 import okhttp3.ResponseBody
@@ -120,8 +121,8 @@ class AddNewContactFragment : Fragment() {
                         .build()
 
                     retrofit.create(ApiClient::class.java).getUserByEmail(email = userEmail!!, Bearer = "Bearer $userToken").enqueue(object:
-                        Callback<LoggedUserResponse> {
-                        override fun onResponse(call: Call<LoggedUserResponse>, response: Response<LoggedUserResponse>){
+                        Callback<User> {
+                        override fun onResponse(call: Call<User>, response: Response<User>){
                             retrofit.create(ApiClient::class.java).addNewContact(Bearer = "Bearer $userToken",
                                 ContactRequest(
                                     firstName = contactFirstName.text.toString(),
@@ -136,7 +137,7 @@ class AddNewContactFragment : Fragment() {
                                     birthday = contactBirthday.text.toString(),
                                     notes = contactNotes.text.toString(),
                                     contactPicture = encoded,
-                                    userId = response.body()!!.id,
+                                    userId = response.body()!!.Id!!,
                                     contactId = 0)
                             ).enqueue(object: Callback<ResponseContent> {
                                 override fun onResponse(call: Call<ResponseContent>, response: Response<ResponseContent>) {
@@ -155,7 +156,7 @@ class AddNewContactFragment : Fragment() {
                                 }
                             })
                         }
-                        override fun onFailure(call: Call<LoggedUserResponse>, t: Throwable) {
+                        override fun onFailure(call: Call<User>, t: Throwable) {
                             Toast.makeText(context,"onFailure", Toast.LENGTH_LONG).show()
                         }
                     })
