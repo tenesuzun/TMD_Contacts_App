@@ -107,15 +107,15 @@
             android:inputType="textPassword" />
 
         <EditText
-            android:enabled="false"
             android:id="@+id/userProfileEmailAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/roundbox_border"
             android:ems="10"
+            android:enabled="false"
             android:hint="@string/registryEmailAddress"
             android:importantForAutofill="no"
             android:inputType="textEmailAddress"
