@@ -1,5 +1,6 @@
 package com.example.tmdcontactsapp
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -102,5 +104,15 @@ class UserProfileFragment : Fragment() {
         })
 
         return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        requireView().findViewById<Button>(R.id.userProfileLogout).setOnClickListener{
+            requireActivity().supportFragmentManager.beginTransaction().remove(this)
+            requireActivity().finish()
+            startActivity(Intent(requireContext(), MainActivity::class.java))
+        }
     }
 }
