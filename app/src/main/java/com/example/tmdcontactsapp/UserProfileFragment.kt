@@ -14,7 +14,11 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.tmdcontactsapp.models.LoggedUserResponse
 import com.example.tmdcontactsapp.networks.ApiClient
-import retrofit2.*
+import kotlinx.android.synthetic.main.fragment_user_profile.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 private const val userArgEmail = "Email"
@@ -44,7 +48,7 @@ class UserProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view =  inflater.inflate(R.layout.fragment_user_profile, container, false)
+        val view = inflater.inflate(R.layout.fragment_user_profile, container, false)
 
         //region View initializers
         val profileFirstName: TextView = view.findViewById(R.id.userProfileFirstName)
@@ -69,7 +73,8 @@ class UserProfileFragment : Fragment() {
             .build()
 
         val api = retrofit.create(ApiClient::class.java)
-        api.getUserByEmail(email = userEmail!!, Bearer = "Bearer $userToken").enqueue(object: Callback<LoggedUserResponse>{
+        api.getUserByEmail(email = userEmail!!, Bearer = "Bearer $userToken").enqueue(object:
+            Callback<LoggedUserResponse> {
             override fun onResponse(call: Call<LoggedUserResponse>, response: Response<LoggedUserResponse>){
                 when(response.code()){
                     200 ->{
@@ -89,13 +94,15 @@ class UserProfileFragment : Fragment() {
                             profilePicture.setImageResource(R.drawable.ic_round_account_box_24)
                         }else{
                             val imageBytes = Base64.decode(tempString,0)
-                            profilePicture.setImageBitmap(BitmapFactory.decodeByteArray(
-                                imageBytes,
-                                0,
-                                imageBytes.size
-                            ))
+                            profilePicture.setImageBitmap(
+                                BitmapFactory.decodeByteArray(
+                                    imageBytes,
+                                    0,
+                                    imageBytes.size
+                                ))
                         }
-                    }else -> {Toast.makeText(context,"Internal Server error", Toast.LENGTH_SHORT).show()}
+                    }else -> {
+                    Toast.makeText(context,"Internal Server error", Toast.LENGTH_SHORT).show()}
                 }
             }
             override fun onFailure(call: Call<LoggedUserResponse>, t: Throwable) {
@@ -114,5 +121,59 @@ class UserProfileFragment : Fragment() {
             requireActivity().finish()
             startActivity(Intent(requireContext(), MainActivity::class.java))
         }
+
+        userProfileEditBtn.setOnClickListener{
+            editButtonClicked()
+        }
+
+        userProfileUpdate.setOnClickListener{
+            updateButtonClicked()
+        }
+
+        userProfileCancelBtn.setOnClickListener{
+            makeViewsUnable()
+        }
+    }
+
+    private fun updateButtonClicked(){
+        //
+    }
+
+    private fun makeViewsUnable(){
+        userProfileLogout.visibility = View.VISIBLE
+        userProfileEditBtn.visibility = View.VISIBLE
+        userProfileUpdate.visibility = View.GONE
+        userProfileCancelBtn.visibility = View.GONE
+
+        userProfileFirstName.isEnabled = false
+        userProfileSurname.isEnabled = false
+        userProfileEmailAddress.isEnabled = false
+        userProfilePhoneNumber.isEnabled = false
+        userProfileWorkPhone.isEnabled = false
+        userProfileHomePhone.isEnabled = false
+        userProfileAddress.isEnabled = false
+        userProfileCompany.isEnabled = false
+        userProfileWorkTitle.isEnabled = false
+        userProfileBirthday.isEnabled = false
+        userProfileNotes.isEnabled = false
+    }
+
+    private fun editButtonClicked() {
+        userProfileLogout.visibility = View.GONE
+        userProfileEditBtn.visibility = View.GONE
+        userProfileUpdate.visibility = View.VISIBLE
+        userProfileCancelBtn.visibility = View.VISIBLE
+
+        userProfileFirstName.isEnabled = true
+        userProfileSurname.isEnabled = true
+        userProfileEmailAddress.isEnabled = true
+        userProfilePhoneNumber.isEnabled = true
+        userProfileWorkPhone.isEnabled = true
+        userProfileHomePhone.isEnabled = true
+        userProfileAddress.isEnabled = true
+        userProfileCompany.isEnabled = true
+        userProfileWorkTitle.isEnabled = true
+        userProfileBirthday.isEnabled = true
+        userProfileNotes.isEnabled = true
     }
 }

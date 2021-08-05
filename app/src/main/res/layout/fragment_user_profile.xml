@@ -3,6 +3,7 @@
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fillViewport="true">
@@ -22,25 +23,30 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_round_account_box_24" />
 
-        <TextView
+        <EditText
+            android:enabled="false"
             android:id="@+id/userProfileFirstName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/roundbox_border"
             android:ems="10"
             android:hint="@string/registryFirstName"
             android:importantForAutofill="no"
-            android:textSize="20sp"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
             android:padding="5dp"
+            android:textSize="20sp"
             app:drawableEndCompat="@drawable/ic_baseline_person_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/userProfilePP"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck" />
 
-        <TextView
+        <EditText
+            android:enabled="false"
             android:id="@+id/userProfileSurname"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -50,14 +56,18 @@
             android:background="@drawable/roundbox_border"
             android:hint="@string/registrySurname"
             android:importantForAutofill="no"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
             android:padding="5dp"
             android:textSize="20sp"
             app:drawableEndCompat="@drawable/ic_baseline_group_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/userProfilePP"
-            app:layout_constraintTop_toBottomOf="@+id/userProfileFirstName" />
+            app:layout_constraintTop_toBottomOf="@+id/userProfileFirstName"
+            tools:ignore="TextContrastCheck" />
 
-        <TextView
+        <EditText
+            android:enabled="false"
             android:id="@+id/userProfilePassword"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -73,9 +83,11 @@
             app:drawableEndCompat="@drawable/ic_baseline_lock_24"
             app:layout_constraintEnd_toStartOf="@+id/userProfilePasswordAgain"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userProfileEmailAddress" />
+            app:layout_constraintTop_toBottomOf="@+id/userProfileEmailAddress"
+            android:inputType="textPassword" />
 
-        <TextView
+        <EditText
+            android:enabled="false"
             android:id="@+id/userProfilePasswordAgain"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -91,9 +103,11 @@
             app:drawableEndCompat="@drawable/ic_baseline_lock_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/userProfilePassword"
-            app:layout_constraintTop_toBottomOf="@+id/userProfileEmailAddress" />
+            app:layout_constraintTop_toBottomOf="@+id/userProfileEmailAddress"
+            android:inputType="textPassword" />
 
-        <TextView
+        <EditText
+            android:enabled="false"
             android:id="@+id/userProfileEmailAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -104,14 +118,18 @@
             android:ems="10"
             android:hint="@string/registryEmailAddress"
             android:importantForAutofill="no"
-            android:textSize="20sp"
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp"
             android:padding="5dp"
+            android:textSize="20sp"
             app:drawableEndCompat="@drawable/ic_baseline_email_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userProfilePP" />
+            app:layout_constraintTop_toBottomOf="@+id/userProfilePP"
+            tools:ignore="TextContrastCheck" />
 
-        <TextView
+        <EditText
+            android:enabled="false"
             android:id="@+id/userProfilePhoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -122,14 +140,18 @@
             android:ems="10"
             android:hint="@string/registryPhoneNumber"
             android:importantForAutofill="no"
+            android:inputType="phone"
+            android:minHeight="48dp"
             android:padding="5dp"
             android:textSize="20sp"
             app:drawableEndCompat="@drawable/ic_baseline_phone_iphone_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userProfilePassword" />
+            app:layout_constraintTop_toBottomOf="@+id/userProfilePassword"
+            tools:ignore="TextContrastCheck" />
 
-        <TextView
+        <EditText
+            android:enabled="false"
             android:id="@+id/userProfileWorkPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -140,119 +162,146 @@
             android:ems="10"
             android:hint="@string/registryWorkPhone"
             android:importantForAutofill="no"
+            android:inputType="phone"
+            android:minHeight="48dp"
             android:padding="5dp"
             android:textSize="20sp"
             app:drawableEndCompat="@drawable/ic_baseline_local_phone_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userProfilePhoneNumber" />
+            app:layout_constraintTop_toBottomOf="@+id/userProfilePhoneNumber"
+            tools:ignore="TextContrastCheck" />
 
-        <TextView
+        <EditText
+            android:enabled="false"
             android:id="@+id/userProfileHomePhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:padding="5dp"
             android:background="@drawable/roundbox_border"
             android:ems="10"
             android:hint="@string/registryHomePhone"
             android:importantForAutofill="no"
+            android:inputType="phone"
+            android:minHeight="48dp"
+            android:padding="5dp"
             android:textSize="20sp"
             app:drawableEndCompat="@drawable/ic_baseline_local_phone_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userProfileWorkPhone" />
+            app:layout_constraintTop_toBottomOf="@+id/userProfileWorkPhone"
+            tools:ignore="TextContrastCheck" />
 
-        <TextView
+        <EditText
+            android:enabled="false"
             android:id="@+id/userProfileAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:padding="5dp"
             android:background="@drawable/roundbox_border"
             android:ems="10"
             android:hint="@string/registryAddress"
             android:importantForAutofill="no"
+            android:inputType="textPostalAddress"
+            android:minHeight="48dp"
+            android:padding="5dp"
             android:textSize="20sp"
             app:drawableEndCompat="@drawable/ic_baseline_home_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userProfileHomePhone" />
+            app:layout_constraintTop_toBottomOf="@+id/userProfileHomePhone"
+            tools:ignore="TextContrastCheck" />
 
-        <TextView
+        <EditText
+            android:enabled="false"
             android:id="@+id/userProfileCompany"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:padding="5dp"
             android:background="@drawable/roundbox_border"
+            android:ems="10"
             android:hint="@string/registryCompany"
             android:importantForAutofill="no"
+            android:inputType="text"
+            android:minHeight="48dp"
+            android:padding="5dp"
             android:textSize="20sp"
             app:drawableEndCompat="@drawable/ic_baseline_work_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userProfileAddress" />
+            app:layout_constraintTop_toBottomOf="@+id/userProfileAddress"
+            tools:ignore="TextContrastCheck" />
 
-        <TextView
+        <EditText
+            android:enabled="false"
             android:id="@+id/userProfileWorkTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:padding="5dp"
             android:background="@drawable/roundbox_border"
+            android:ems="10"
             android:hint="@string/registryWorkTitle"
             android:importantForAutofill="no"
+            android:inputType="text"
+            android:minHeight="48dp"
+            android:padding="5dp"
             android:textSize="20sp"
             app:drawableEndCompat="@drawable/ic_baseline_recent_actors_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userProfileCompany" />
+            app:layout_constraintTop_toBottomOf="@+id/userProfileCompany"
+            tools:ignore="TextContrastCheck" />
 
-        <TextView
+        <EditText
+            android:enabled="false"
             android:id="@+id/userProfileBirthday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:padding="5dp"
-            android:background="@drawable/roundbox_border"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
+            android:background="@drawable/roundbox_border"
             android:hint="@string/registryBirthday"
             android:importantForAutofill="no"
+            android:inputType="date"
+            android:minHeight="48dp"
+            android:padding="5dp"
             android:textSize="20sp"
             app:drawableEndCompat="@drawable/ic_baseline_cake_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userProfileWorkTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/userProfileWorkTitle"
+            tools:ignore="TextContrastCheck" />
 
-        <TextView
+        <EditText
+            android:enabled="false"
             android:id="@+id/userProfileNotes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:padding="5dp"
             android:background="@drawable/roundbox_border"
             android:gravity="start|top"
             android:hint="@string/registryNotes"
             android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:minHeight="48dp"
+            android:padding="5dp"
             android:textSize="20sp"
             app:drawableEndCompat="@drawable/ic_baseline_notes_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userProfileBirthday" />
+            app:layout_constraintTop_toBottomOf="@+id/userProfileBirthday"
+            tools:ignore="TextContrastCheck" />
 
         <Button
             android:id="@+id/userProfileUpdate"
@@ -261,10 +310,11 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:drawableEnd="@drawable/ic_baseline_edit_24_white"
+            android:drawableEnd="@drawable/ic_baseline_how_to_reg_24"
             android:padding="8dp"
             android:text="@string/updateButton"
             android:textSize="18sp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/userProfileNotes" />
@@ -283,7 +333,40 @@
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/userProfileUpdate" />
+            app:layout_constraintTop_toBottomOf="@id/userProfileEditBtn" />
+
+        <Button
+            android:id="@+id/userProfileCancelBtn"
+            style="@style/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:drawableEnd="@drawable/ic_baseline_cancel_24"
+            android:padding="8dp"
+            android:text="@android:string/cancel"
+            android:textSize="18sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/userProfileUpdate"
+            />
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/userProfileEditBtn"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:drawableEnd="@drawable/ic_baseline_edit_24_white"
+            android:padding="8dp"
+            android:text="@string/editLabel"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/userProfileNotes"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
 
