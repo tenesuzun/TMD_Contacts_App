@@ -12,7 +12,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.example.tmdcontactsapp.models.LoggedUserResponse
 import com.example.tmdcontactsapp.models.ResponseContent
 import com.example.tmdcontactsapp.models.User
 import com.example.tmdcontactsapp.networks.ApiClient
@@ -43,18 +42,7 @@ class UserProfileFragment : Fragment() {
     private lateinit var profileBirthday: TextView
     private lateinit var profileNotes: TextView
     private lateinit var profilePicture: ImageView
-    private lateinit var tempFirstName : String
-    private lateinit var tempSurname : String
-    private lateinit var tempEmail : String
-    private lateinit var tempPhoneNumber : String
-    private lateinit var tempHomeNumber : String
-    private lateinit var tempWorkNumber : String
-    private lateinit var tempAddress : String
-    private lateinit var tempCompany : String
-    private lateinit var tempTitle : String
-    private lateinit var tempBirthday : String
-    private lateinit var tempNotes : String
-    private lateinit var tempString: String
+    private lateinit var tempUser: User
     //endregion
 
     fun newInstance(bundle: Bundle): UserProfileFragment {
@@ -104,41 +92,8 @@ class UserProfileFragment : Fragment() {
             override fun onResponse(call: Call<User>, response: Response<User>){
                 when(response.code()){
                     200 ->{
-                        cancelUpdate2(response.body()!!)
-                        tempFirstName = response.body()!!.Name
-                        tempSurname = response.body()!!.Surname
-                        tempEmail = response.body()!!.Email
-                        tempPhoneNumber = response.body()!!.Tel
-                        tempHomeNumber = response.body()!!.TelBusiness
-                        tempWorkNumber = response.body()!!.TelHome
-                        tempAddress = response.body()!!.Address
-                        tempCompany = response.body()!!.Company
-                        tempTitle = response.body()!!.Title
-                        tempBirthday = response.body()!!.BirthDate
-                        tempNotes = response.body()!!.Note
-                        tempString = response.body()!!.Photo.toString()
-                        if(tempString == ""){
-                            profilePicture.setImageResource(R.drawable.ic_round_account_box_24)
-                        }else{
-                            val imageBytes = Base64.decode(tempString,0)
-                            profilePicture.setImageBitmap(
-                                BitmapFactory.decodeByteArray(
-                                    imageBytes,
-                                    0,
-                                    imageBytes.size
-                                ))
-                        }
-                        profileFirstName.text = tempFirstName
-                        profileSurname.text = tempSurname
-                        profileEmail.text = tempEmail
-                        profilePhoneNumber.text = tempPhoneNumber
-                        profileWorkNumber.text = tempWorkNumber
-                        profileHomeNumber.text = tempHomeNumber
-                        profileAddress.text = tempAddress
-                        profileCompany.text = tempCompany
-                        profileTitle.text = tempTitle
-                        profileBirthday.text = tempBirthday
-                        profileNotes.text = tempNotes
+                        tempUser = response.body()!!
+                        setModelToViews(tempUser)
                     }else -> {
                     Toast.makeText(context,"Internal Server error", Toast.LENGTH_SHORT).show()}
                 }
@@ -154,13 +109,12 @@ class UserProfileFragment : Fragment() {
         super.onStart()
 
         requireView().findViewById<Button>(R.id.userProfileLogout).setOnClickListener{
-            requireActivity().supportFragmentManager.beginTransaction().remove(this)
             requireActivity().finish()
             startActivity(Intent(requireContext(), MainActivity::class.java))
         }
 
         userProfileEditBtn.setOnClickListener{
-            editButtonClicked(true)
+            changeViewState(true)
         }
 
         userProfileUpdate.setOnClickListener{
@@ -168,90 +122,51 @@ class UserProfileFragment : Fragment() {
         }
 
         userProfileCancelBtn.setOnClickListener{
-            cancelUpdate()
+            setModelToViews(tempUser)
         }
     }
-    lateinit var tempUser: User
-    private fun updateButtonClicked(){
-        Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
-            .create(ApiClient::class.java).getUserByEmail(
-                Bearer = "Bearer $userToken",
-                email = userEmail.toString()
-            ).enqueue(object : Callback<User>{
-                override fun onResponse(call: Call<User>, response: Response<User>) {
-                   tempUser= User(
-                        Id = response.body()!!.Id,
-                        Email = userProfileEmailAddress.text.toString(),
-                        Name = userProfileFirstName.text.toString(),
-                        Surname = userProfileSurname.text.toString(),
-                        Tel = userProfilePhoneNumber.text.toString(),
-                        TelBusiness = userProfileWorkPhone.text.toString(),
-                        TelHome = userProfileHomePhone.text.toString(),
-                        Address = userProfileAddress.text.toString(),
-                        Company = userProfileCompany.text.toString(),
-                        Title = userProfileWorkTitle.text.toString(),
-                        BirthDate = userProfileBirthday.text.toString(),
-                        Note = userProfileNotes.text.toString()
-                    )
-                    Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
-                        .create(ApiClient::class.java).updateUser(
-                            Bearer = "Bearer $userToken",
-                            tempUser
-                        ).enqueue(object: Callback<ResponseContent>{
-                            override fun onResponse(
-                                call: Call<ResponseContent>,
-                                response: Response<ResponseContent>
-                            ) {
-                                when(response.code()){
-                                    200 -> {
-                                        Toast.makeText(requireContext(),response.body()!!.message,Toast.LENGTH_LONG).show()
-                                        cancelUpdate2(tempUser)
-                                    }else -> {
-                                    Toast.makeText(requireContext(), response.body()!!.message, Toast.LENGTH_LONG).show()
-                                }
-                                }
-                            }
-                            override fun onFailure(call: Call<ResponseContent>, t: Throwable) {
-                                Toast.makeText(requireContext(),"onFailure", Toast.LENGTH_LONG).show()
-                            }
-                        })
-                }
 
-                override fun onFailure(call: Call<User>, t: Throwable) {
-                    Toast.makeText(requireContext(),"onFailure in getting Id", Toast.LENGTH_LONG).show()
+    private fun updateButtonClicked(){
+       tempUser= User(
+            Id = tempUser.Id,
+            Email = userProfileEmailAddress.text.toString(),
+            Name = userProfileFirstName.text.toString(),
+            Surname = userProfileSurname.text.toString(),
+            Tel = userProfilePhoneNumber.text.toString(),
+            TelBusiness = userProfileWorkPhone.text.toString(),
+            TelHome = userProfileHomePhone.text.toString(),
+            Address = userProfileAddress.text.toString(),
+            Company = userProfileCompany.text.toString(),
+            Title = userProfileWorkTitle.text.toString(),
+            BirthDate = userProfileBirthday.text.toString(),
+            Note = userProfileNotes.text.toString()
+        )
+        Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
+            .create(ApiClient::class.java).updateUser(
+                Bearer = "Bearer $userToken",
+                tempUser
+            ).enqueue(object: Callback<ResponseContent>{
+                override fun onResponse(
+                    call: Call<ResponseContent>,
+                    response: Response<ResponseContent>
+                ) {
+                    when(response.code()){
+                        200 -> {
+                            Toast.makeText(requireContext(),response.body()!!.message,Toast.LENGTH_LONG).show()
+                            setModelToViews(tempUser)
+                        }else -> {
+                        Toast.makeText(requireContext(), response.body()!!.message, Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+                override fun onFailure(call: Call<ResponseContent>, t: Throwable) {
+                    Toast.makeText(requireContext(),"onFailure", Toast.LENGTH_LONG).show()
                 }
             })
     }
 
-    private fun cancelUpdate(){
-        editButtonClicked(false)
-
-        userProfileFirstName.setText(tempFirstName)
-        userProfileSurname.setText(tempSurname)
-        userProfileEmailAddress.setText(tempEmail)
-        userProfilePhoneNumber.setText(tempPhoneNumber)
-        userProfileWorkPhone.setText(tempWorkNumber)
-        userProfileHomePhone.setText(tempHomeNumber)
-        userProfileAddress.setText(tempAddress)
-        userProfileCompany.setText(tempCompany)
-        userProfileWorkTitle.setText(tempTitle)
-        userProfileBirthday.setText(tempBirthday)
-        userProfileNotes.setText(tempNotes)
-        if(tempString == ""){
-            profilePicture.setImageResource(R.drawable.ic_round_account_box_24)
-        }else{
-            val imageBytes = Base64.decode(tempString,0)
-            profilePicture.setImageBitmap(
-                BitmapFactory.decodeByteArray(
-                    imageBytes,
-                    0,
-                    imageBytes.size
-                ))
-        }
-    }
-
-    private fun cancelUpdate2(user: User){
-        editButtonClicked(false)
+    private fun setModelToViews(user: User){
+        changeViewState(false)
 
         userProfileFirstName.setText(user.Name)
         userProfileSurname.setText(user.Surname)
@@ -264,10 +179,10 @@ class UserProfileFragment : Fragment() {
         userProfileWorkTitle.setText(user.Title)
         userProfileBirthday.setText(user.BirthDate)
         userProfileNotes.setText(user.Note)
-        if(tempString == ""){
+        if(user.Photo.toString() == ""){
             profilePicture.setImageResource(R.drawable.ic_round_account_box_24)
         }else{
-            val imageBytes = Base64.decode(tempString,0)
+            val imageBytes = Base64.decode(user.Photo.toString(),0)
             profilePicture.setImageBitmap(
                 BitmapFactory.decodeByteArray(
                     imageBytes,
@@ -277,7 +192,7 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    private fun editButtonClicked(tempBool: Boolean) {
+    private fun changeViewState(tempBool: Boolean) {
         if(tempBool){
             userProfileLogout.visibility = View.GONE
             userProfileEditBtn.visibility = View.GONE

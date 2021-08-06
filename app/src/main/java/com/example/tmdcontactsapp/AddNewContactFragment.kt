@@ -25,12 +25,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.tmdcontactsapp.models.ContactRequest
-import com.example.tmdcontactsapp.models.LoggedUserResponse
 import com.example.tmdcontactsapp.models.ResponseContent
 import com.example.tmdcontactsapp.models.User
 import com.example.tmdcontactsapp.networks.ApiClient
 import com.google.android.material.snackbar.Snackbar
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

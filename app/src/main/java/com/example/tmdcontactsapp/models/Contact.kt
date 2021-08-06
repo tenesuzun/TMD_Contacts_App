@@ -5,35 +5,35 @@ import com.google.gson.annotations.SerializedName
 data class Contact(
     /** This class is used to get Contacts list for logged in user */
     //region Attributes
-    @SerializedName("id")
+    @SerializedName("id", alternate = ["Id"])
     var contactId: Int,
-    @SerializedName("photo")
+    @SerializedName("photo", alternate = ["Photo"])
     var contactPicture: String,
-    @SerializedName("name")
+    @SerializedName("name", alternate = ["Name"])
     var firstName: String,
-    @SerializedName("surname")
+    @SerializedName("surname", alternate = ["Surname"])
     var surname: String,
-    @SerializedName("email")
+    @SerializedName("email", alternate = ["Email"])
     var emailAddress: String,
-    @SerializedName("tel")
+    @SerializedName("tel", alternate = ["Tel"])
     var phoneNumber: String,
-    @SerializedName("telBusiness")
+    @SerializedName("telBusiness", alternate = ["TelBusiness"])
     var workNumber: String,
-    @SerializedName("telHome")
+    @SerializedName("telHome", alternate = ["TelHome"])
     var homePhone: String,
-    @SerializedName("address")
+    @SerializedName("address", alternate = ["Address"])
     var address: String,
-    @SerializedName("company")
+    @SerializedName("company", alternate = ["Company"])
     var company: String,
-    @SerializedName("title")
+    @SerializedName("title", alternate = ["Title"])
     var title: String,
-    @SerializedName("birthDate")
+    @SerializedName("birthDate", alternate = ["Birthdate"])
     var birthday: String,
-    @SerializedName("note")
+    @SerializedName("note", alternate = ["Note"])
     var notes: String,
-    @SerializedName("group")
+    @SerializedName("group", alternate = ["Group"])
     var groups: String,
-    @SerializedName("userId")
+    @SerializedName("userId", alternate = ["UserId"])
     var userId: Int
     //endregion
 )
