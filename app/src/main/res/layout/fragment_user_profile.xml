@@ -13,6 +13,7 @@
         android:layout_height="match_parent">
 
         <ImageView
+            android:clickable="false"
             android:id="@+id/userProfilePP"
             android:layout_width="152dp"
             android:layout_height="103dp"

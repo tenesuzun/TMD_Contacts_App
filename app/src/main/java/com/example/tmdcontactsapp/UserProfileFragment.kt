@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import com.example.tmdcontactsapp.handlers.MediaPermissionHandler
 import com.example.tmdcontactsapp.models.ResponseContent
 import com.example.tmdcontactsapp.models.User
 import com.example.tmdcontactsapp.networks.ApiClient
@@ -43,6 +44,7 @@ class UserProfileFragment : Fragment() {
     private lateinit var profileNotes: TextView
     private lateinit var profilePicture: ImageView
     private lateinit var tempUser: User
+    private val mediaHandler = MediaPermissionHandler
     //endregion
 
     fun newInstance(bundle: Bundle): UserProfileFragment {
@@ -108,6 +110,12 @@ class UserProfileFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        mediaHandler.registerLauncher(profilePicture,requireView())
+
+        profilePicture.setOnClickListener{
+            mediaHandler.openGallery(requireView(),profilePicture)
+        }
+
         requireView().findViewById<Button>(R.id.userProfileLogout).setOnClickListener{
             requireActivity().finish()
             startActivity(Intent(requireContext(), MainActivity::class.java))
@@ -127,6 +135,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun updateButtonClicked(){
+
        tempUser= User(
             Id = tempUser.Id,
             Email = userProfileEmailAddress.text.toString(),
@@ -139,7 +148,8 @@ class UserProfileFragment : Fragment() {
             Company = userProfileCompany.text.toString(),
             Title = userProfileWorkTitle.text.toString(),
             BirthDate = userProfileBirthday.text.toString(),
-            Note = userProfileNotes.text.toString()
+            Note = userProfileNotes.text.toString(),
+            Photo = mediaHandler.bitmapToBase64(mediaHandler.selectedBitmap)
         )
         Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
             .create(ApiClient::class.java).updateUser(
@@ -179,7 +189,7 @@ class UserProfileFragment : Fragment() {
         userProfileWorkTitle.setText(user.Title)
         userProfileBirthday.setText(user.BirthDate)
         userProfileNotes.setText(user.Note)
-        if(user.Photo.toString() == ""){
+        /*if(user.Photo.toString() == ""){
             profilePicture.setImageResource(R.drawable.ic_round_account_box_24)
         }else{
             val imageBytes = Base64.decode(user.Photo.toString(),0)
@@ -189,7 +199,8 @@ class UserProfileFragment : Fragment() {
                     0,
                     imageBytes.size
                 ))
-        }
+        }*/
+        mediaHandler.setImageFromBase64(profilePicture,user.Photo.toString())
     }
 
     private fun changeViewState(tempBool: Boolean) {
@@ -217,5 +228,6 @@ class UserProfileFragment : Fragment() {
         userProfileWorkTitle.isEnabled = tempBool
         userProfileBirthday.isEnabled = tempBool
         userProfileNotes.isEnabled = tempBool
+        userProfilePP.isClickable = tempBool
     }
 }
