@@ -10,7 +10,6 @@ import androidx.fragment.app.DialogFragment
 import com.example.tmdcontactsapp.models.GroupResponse
 import com.example.tmdcontactsapp.models.ResponseContent
 import com.example.tmdcontactsapp.networks.ApiClient
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -47,7 +46,7 @@ class GroupAddDialogFragment(private val tempTitle: String, private val tempHint
                     when(response.code()){
                         200 -> {
                             dismiss()
-                        }else -> {
+                        } else -> {
                             dismiss()
                         }
                     }

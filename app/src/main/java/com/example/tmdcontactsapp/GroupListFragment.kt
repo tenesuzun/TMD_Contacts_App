@@ -52,6 +52,7 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -171,6 +172,8 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
                     it1.supportFragmentManager, "GroupAddDialogFragment"
                 )
             }
+            groupsAdapter.notifyDataSetChanged()
+            requireActivity().supportFragmentManager.popBackStack("groupsPage", 0)
         }
 
         return view
