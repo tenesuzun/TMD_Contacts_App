@@ -194,8 +194,6 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         }
         val intent = Intent(context, UpdatingContactActivity::class.java)
 
-        //region Intent extras that is transferred to Detailed Contact Page
-
         intent.putExtra("token", userToken)
         intent.putExtra("userId", clickedItem.userId)
         intent.putExtra("contactId", clickedItem.contactId)
@@ -211,8 +209,6 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         intent.putExtra("contactBirthday", clickedItem.birthday)
         intent.putExtra("contactNote", clickedItem.notes)
         intent.putExtra("contactGroups", clickedItem.groups)
-
-        //endregion
 
         startActivity(intent)
 

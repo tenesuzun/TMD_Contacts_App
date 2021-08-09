@@ -82,8 +82,14 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val swipedItem: GroupResponse = if(filteredList.isEmpty()){
+                    filteredList[viewHolder.adapterPosition]
+                }else{
+                    groupsList[viewHolder.adapterPosition]
+                }
+
                 Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
-                    .create(ApiClient::class.java).deleteGroup(groupId = groupsList[viewHolder.adapterPosition].groupId, Bearer = "Bearer $userToken")
+                    .create(ApiClient::class.java).deleteGroup(groupId = swipedItem.groupId, Bearer = "Bearer $userToken")
                     .enqueue(object: Callback<ResponseContent>{
                         @SuppressLint("NotifyDataSetChanged")
                         override fun onResponse(
@@ -93,7 +99,12 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
                             when(response.code()){
                                 200 -> {
                                     Toast.makeText(context,response.body()!!.message, Toast.LENGTH_SHORT).show()
-                                    groupsList.removeAt(viewHolder.adapterPosition)
+                                    if(swipedItem in filteredList){
+                                        filteredList.removeAt(viewHolder.adapterPosition)
+                                    }
+                                    else{
+                                        groupsList.removeAt(viewHolder.adapterPosition)
+                                    }
                                     groupsAdapter.notifyDataSetChanged()
                                 }else -> {
                                     Toast.makeText(context,response.body()!!.message, Toast.LENGTH_SHORT).show()
@@ -165,6 +176,7 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
         return view
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun filter(text: String){
         filteredList.clear()
         for(item: GroupResponse in groupsList){
@@ -172,7 +184,11 @@ class GroupListFragment : Fragment(), GroupListAdapter.OnItemClickListener {
                 filteredList.add(item)
             }
         }
-        groupsAdapter.filterList(filteredList)
+        if(filteredList.isEmpty()){
+            groupsAdapter.notifyDataSetChanged()
+        }else{
+            groupsAdapter.filterList(filteredList)
+        }
     }
 
     override fun onItemClick(position: Int) {

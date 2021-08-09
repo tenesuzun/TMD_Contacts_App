@@ -47,11 +47,17 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val swipedItem: Contact = if(filteredList.isEmpty()){
+                    filteredList[viewHolder.adapterPosition]
+                }else{
+                    contactsList[viewHolder.adapterPosition]
+                }
+
                 Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/")
                     .addConverterFactory(GsonConverterFactory.create()).build()
                     .create(ApiClient::class.java).deleteContactFromGroup(Bearer = "Bearer $token", GroupsContacts(
                         groupId = groupId,
-                        contactId = contactsList[viewHolder.adapterPosition].contactId))
+                        contactId = swipedItem.contactId))
                     .enqueue(object: Callback<ResponseContent>{
                         @SuppressLint("NotifyDataSetChanged")
                         override fun onResponse(
@@ -61,7 +67,11 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
                             when(response.code()){
                                 200 -> {
                                     Toast.makeText(applicationContext, response.body()!!.message, Toast.LENGTH_SHORT).show()
-                                    contactsList.removeAt(viewHolder.adapterPosition)
+                                    if(swipedItem in filteredList){
+                                        filteredList.removeAt(viewHolder.adapterPosition)
+                                    }else{
+                                        contactsList.removeAt(viewHolder.adapterPosition)
+                                    }
                                     contactsAdapter.notifyDataSetChanged()
                                 }else -> {
                                     Toast.makeText(applicationContext, response.body()!!.message, Toast.LENGTH_SHORT).show()
@@ -131,6 +141,7 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun filter(text: String){
         filteredList.clear()
         for(item: Contact in contactsList){
@@ -138,7 +149,11 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
                 filteredList.add(item)
             }
         }
-        contactsAdapter.filterList(filteredList)
+        if(filteredList.isEmpty()){
+            contactsAdapter.notifyDataSetChanged()
+        }else{
+            contactsAdapter.filterList(filteredList)
+        }
     }
 
     override fun onItemClick(position: Int) {
