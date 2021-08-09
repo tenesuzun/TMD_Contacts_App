@@ -81,13 +81,19 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
 
             @SuppressLint("NotifyDataSetChanged")
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val swipedItem: Contact = if(filteredList.isNotEmpty()){
+                    filteredList[viewHolder.adapterPosition]
+                } else{
+                    contactsList[viewHolder.adapterPosition]
+                }
+
                 AlertDialog.Builder(requireContext()).setTitle("ARE YOU SURE?").setMessage("You can not undo this action. Are you sure to continue?")
                     .setNegativeButton("Cancel"){
                         _,_ -> contactsAdapter.notifyDataSetChanged()
                     }.setPositiveButton("YES"){
                         _,_ ->
                         Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
-                        .create(ApiClient::class.java).deleteContact(contactId = contactsList[viewHolder.adapterPosition].contactId, Bearer = "Bearer $userToken")
+                        .create(ApiClient::class.java).deleteContact(contactId = swipedItem.contactId, Bearer = "Bearer $userToken")
                         .enqueue(object : Callback<ResponseContent>{
                             @SuppressLint("NotifyDataSetChanged")
                             override fun onResponse(
@@ -96,10 +102,14 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
                             ) {
                                 when(response.code()){
                                     200 -> {
-                                        Toast.makeText(context,contactsList[viewHolder.adapterPosition].firstName + ", " + response.body()!!.message, Toast.LENGTH_SHORT).show()
-                                        contactsList.removeAt(viewHolder.adapterPosition)
+                                        Toast.makeText(context,swipedItem.firstName + ", " + response.body()!!.message, Toast.LENGTH_SHORT).show()
+                                        if(swipedItem in filteredList){
+                                            filteredList.removeAt(viewHolder.adapterPosition)
+                                        }else{
+                                            contactsList.removeAt(viewHolder.adapterPosition)
+                                        }
                                         contactsAdapter.notifyDataSetChanged()
-                                    }else -> {
+                                    } else -> {
                                     Toast.makeText(context,response.body()!!.message, Toast.LENGTH_LONG).show()
                                     contactsAdapter.notifyDataSetChanged()
                                     }
@@ -161,6 +171,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         return view
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun filter(text: String){
         filteredList.clear()
         for(item: Contact in contactsList){
@@ -168,7 +179,11 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
                 filteredList.add(item)
             }
         }
-        contactsAdapter.filterList(filteredList)
+        if(filteredList.isEmpty()){
+            contactsAdapter.notifyDataSetChanged()
+        }else{
+            contactsAdapter.filterList(filteredList)
+        }
     }
 
     override fun onItemClick(position: Int) {
@@ -184,7 +199,6 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         intent.putExtra("token", userToken)
         intent.putExtra("userId", clickedItem.userId)
         intent.putExtra("contactId", clickedItem.contactId)
-//        intent.putExtra("contactPhoto", clickedItem.contactPicture)
         intent.putExtra("contactFirstName", clickedItem.firstName)
         intent.putExtra("contactSurname", clickedItem.surname)
         intent.putExtra("contactEmail", clickedItem.emailAddress)
