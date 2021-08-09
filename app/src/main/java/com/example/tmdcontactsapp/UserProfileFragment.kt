@@ -1,9 +1,14 @@
 package com.example.tmdcontactsapp
 
+import android.Manifest
+import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.BitmapFactory
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.os.Build
 import android.os.Bundle
-import android.util.Base64
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,16 +17,22 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.tmdcontactsapp.handlers.MediaPermissionHandler
 import com.example.tmdcontactsapp.models.ResponseContent
 import com.example.tmdcontactsapp.models.User
 import com.example.tmdcontactsapp.networks.ApiClient
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_user_profile.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Exception
 
 private const val userArgEmail = "Email"
 private const val userArgToken = "token"
@@ -45,6 +56,9 @@ class UserProfileFragment : Fragment() {
     private lateinit var profilePicture: ImageView
     private lateinit var tempUser: User
     private val mediaHandler = MediaPermissionHandler
+    private lateinit var permissionLauncher: ActivityResultLauncher<String>
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+    private var selectedBitmap: Bitmap? = null
     //endregion
 
     fun newInstance(bundle: Bundle): UserProfileFragment {
@@ -104,16 +118,17 @@ class UserProfileFragment : Fragment() {
                 Toast.makeText(context,"Unexpected Problem", Toast.LENGTH_LONG).show()
             }
         })
+
+        registerLauncher()
+
         return view
     }
 
     override fun onStart() {
         super.onStart()
 
-        mediaHandler.registerLauncher(profilePicture,requireView())
-
         profilePicture.setOnClickListener{
-            mediaHandler.openGallery(requireView(),profilePicture)
+            openGallery(requireView())
         }
 
         requireView().findViewById<Button>(R.id.userProfileLogout).setOnClickListener{
@@ -149,7 +164,7 @@ class UserProfileFragment : Fragment() {
             Title = userProfileWorkTitle.text.toString(),
             BirthDate = userProfileBirthday.text.toString(),
             Note = userProfileNotes.text.toString(),
-            Photo = mediaHandler.bitmapToBase64(mediaHandler.selectedBitmap)
+            Photo = mediaHandler.bitmapToBase64(selectedBitmap!!)
         )
         Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
             .create(ApiClient::class.java).updateUser(
@@ -189,17 +204,6 @@ class UserProfileFragment : Fragment() {
         userProfileWorkTitle.setText(user.Title)
         userProfileBirthday.setText(user.BirthDate)
         userProfileNotes.setText(user.Note)
-        /*if(user.Photo.toString() == ""){
-            profilePicture.setImageResource(R.drawable.ic_round_account_box_24)
-        }else{
-            val imageBytes = Base64.decode(user.Photo.toString(),0)
-            profilePicture.setImageBitmap(
-                BitmapFactory.decodeByteArray(
-                    imageBytes,
-                    0,
-                    imageBytes.size
-                ))
-        }*/
         mediaHandler.setImageFromBase64(profilePicture,user.Photo.toString())
     }
 
@@ -229,5 +233,70 @@ class UserProfileFragment : Fragment() {
         userProfileBirthday.isEnabled = tempBool
         userProfileNotes.isEnabled = tempBool
         userProfilePP.isClickable = tempBool
+    }
+
+    private fun openGallery(view: View){
+        AlertDialog.Builder(requireContext()).setTitle("Delete or Add?").setMessage("What do you want to do with the picture?").setNegativeButton("Delete"
+        ) { _, _ -> profilePicture.setImageResource(R.drawable.ic_round_account_box_24) }
+            .setPositiveButton("Add") { _, _ ->
+                if (ContextCompat.checkSelfPermission(
+                        requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Please select an image to upload",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                } else {
+                    Snackbar.make(
+                        view,
+                        "Permission needed to select profile picture from gallery",
+                        Snackbar.LENGTH_INDEFINITE
+                    ).setAction(
+                        "Give Permission"
+                    ) {
+                        permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    }.show()
+                }
+            }.create().show()
+    }
+
+    private fun registerLauncher(){
+        activityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == AppCompatActivity.RESULT_OK) {
+                    val intentFromResult = result.data
+                    if (intentFromResult != null) {
+                        val imageData = intentFromResult.data
+                        try {
+                            if (Build.VERSION.SDK_INT >= 28) {
+                                val source = ImageDecoder.createSource(requireActivity().contentResolver, imageData!!)
+                                selectedBitmap = ImageDecoder.decodeBitmap(source)
+                                profilePicture.setImageBitmap(selectedBitmap)
+                            } else {
+                                selectedBitmap =
+                                    MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, imageData)
+                                profilePicture.setImageBitmap(selectedBitmap)
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+            }
+        permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){
+                result ->
+            if(result){
+                activityResultLauncher.launch(
+                    Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                )
+            }else{
+                Toast.makeText(requireContext(),"Permission needed to upload Image!", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 }
