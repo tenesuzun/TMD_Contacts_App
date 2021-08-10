@@ -3,13 +3,16 @@ package com.example.tmdcontactsapp
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +23,7 @@ import com.example.tmdcontactsapp.models.ResponseContent
 import com.example.tmdcontactsapp.models.User
 import com.example.tmdcontactsapp.networks.ApiClient
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.android.synthetic.main.contact_list_item_row.*
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
@@ -187,11 +191,27 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
     }
 
     override fun onItemClick(position: Int) {
+        d("CLICKED ITEM",position.toString())
+
         val clickedItem: Contact = if(filteredList.isNotEmpty()){
             filteredList[position]
         } else{
             contactsList[position]
         }
+
+        contactsListDetailsBtn.setOnClickListener{
+            detailsClicked(clickedItem)
+        }
+
+        contactsListCallBtn.setOnClickListener{
+            callClicked(clickedItem)
+        }
+
+        d("clicked", clickedItem.toString())
+    }
+
+    private fun detailsClicked(clickedItem: Contact){
+        d("CLICKED ITEM", clickedItem.toString())
         val intent = Intent(context, UpdatingContactActivity::class.java)
 
         intent.putExtra("token", userToken)
@@ -211,6 +231,9 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         intent.putExtra("contactGroups", clickedItem.groups)
 
         startActivity(intent)
+    }
 
+    private fun callClicked(clickedItem: Contact){
+        startActivity(Intent(Intent.ACTION_CALL, Uri.parse("tel:" + clickedItem.phoneNumber)))
     }
 }

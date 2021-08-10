@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/singleContactListItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/roundbox_border"
-    android:padding="5dp"
+    android:padding="10dp"
     android:layout_margin="5dp">
 
     <ImageView
@@ -15,7 +16,8 @@
         android:contentDescription="@string/loginAppLogoDescription"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_person_24" />
+        app:srcCompat="@drawable/ic_baseline_person_24"
+        tools:ignore="ImageContrastCheck" />
 
     <TextView
         android:id="@+id/contactFullName"
@@ -25,10 +27,52 @@
         android:fontFamily="sans-serif-condensed"
         android:gravity="center_vertical"
         android:textSize="20sp"
-        app:drawableEndCompat="@drawable/ic_baseline_more_horiz_24"
+        app:drawableEndCompat="@drawable/ic_arrow_down_24"
         app:layout_constraintBottom_toBottomOf="@+id/contactPP"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/contactPP"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/contactsListOptionsMenu"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:outlineProvider="paddedBounds"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contactFullName"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/contactsListCallBtn"
+        style="@style/materialButtonOutlinedStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:drawableEnd="@drawable/ic_baseline_local_phone_24"
+        android:text="@string/callText"
+        android:textAlignment="viewStart"
+        android:textColor="#00838F"
+        app:layout_constraintBottom_toBottomOf="@id/contactsListOptionsMenu"
+        app:layout_constraintEnd_toStartOf="@id/contactsListDetailsBtn"
+        app:layout_constraintStart_toStartOf="@id/contactsListOptionsMenu"
+        app:layout_constraintTop_toTopOf="@id/contactsListOptionsMenu"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/contactsListDetailsBtn"
+        style="@style/materialButtonOutlinedStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:drawableEnd="@drawable/ic_baseline_notes_24"
+        android:text="@string/detailsText"
+        android:textAlignment="viewStart"
+        android:textColor="#00838F"
+        app:layout_constraintBottom_toBottomOf="@id/contactsListOptionsMenu"
+        app:layout_constraintEnd_toEndOf="@id/contactsListOptionsMenu"
+        app:layout_constraintStart_toEndOf="@id/contactsListCallBtn"
+        app:layout_constraintTop_toTopOf="@id/contactsListOptionsMenu"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

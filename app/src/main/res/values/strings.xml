@@ -43,4 +43,6 @@
     <string name="resetPasswordBtn">Reset Password</string>
     <string name="resetPasswordCodeHint">Enter The 4 Digit Code</string>
     <string name="editLabel">EDIT</string>
+    <string name="callText">Call</string>
+    <string name="detailsText">Detaıls</string>
 </resources>
