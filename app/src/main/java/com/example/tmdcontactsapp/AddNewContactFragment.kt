@@ -2,7 +2,6 @@ package com.example.tmdcontactsapp
 
 import android.Manifest
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -18,7 +17,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-//import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -171,19 +169,31 @@ class AddNewContactFragment : Fragment() {
     }
 
     private fun openGallery(view: View) {
-        AlertDialog.Builder(requireContext()).setTitle("Delete or Add?").setMessage("What do you want to do with the picture?").setNegativeButton("Delete", DialogInterface.OnClickListener
-        { _, _ -> contactPP.setImageResource(R.drawable.ic_round_account_box_24) }).setPositiveButton("Add", DialogInterface.OnClickListener{ _, _ -> if (ContextCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED
-        ){
-            Toast.makeText(requireContext(), "Please select an image to upload", Toast.LENGTH_LONG).show()
-            permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-        } else {
-            Snackbar.make(view,"Permission needed to select profile picture from gallery", Snackbar.LENGTH_INDEFINITE).setAction("Give Permission"
-            ) {
-                permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            }.show()
-        } }).create().show()
+        AlertDialog.Builder(requireContext()).setTitle("Delete or Add?").setMessage("What do you want to do with the picture?").setNegativeButton("Delete"
+        ) { _, _ -> contactPP.setImageResource(R.drawable.ic_round_account_box_24) }
+            .setPositiveButton("Add") { _, _ ->
+                if (ContextCompat.checkSelfPermission(
+                        requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Please select an image to upload",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                } else {
+                    Snackbar.make(
+                        view,
+                        "Permission needed to select profile picture from gallery",
+                        Snackbar.LENGTH_INDEFINITE
+                    ).setAction(
+                        "Give Permission"
+                    ) {
+                        permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    }.show()
+                }
+            }.create().show()
     }
 
     private fun registerLauncher() {
