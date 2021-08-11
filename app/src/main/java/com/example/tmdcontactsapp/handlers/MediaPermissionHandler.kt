@@ -10,8 +10,8 @@ import java.io.ByteArrayOutputStream
 
 object MediaPermissionHandler: AppCompatActivity() {
 
-    fun setImageFromBase64(tempImageView: ImageView, tempBase64String: String) {
-        if (tempBase64String == "") {
+    fun setImageFromBase64(tempImageView: ImageView, tempBase64String: String?) {
+        if (tempBase64String.isNullOrEmpty() || tempBase64String.isNullOrBlank()) {
             tempImageView.setImageResource(R.drawable.ic_round_account_box_24)
         } else {
             val imageBytes = Base64.decode(tempBase64String, 0)
