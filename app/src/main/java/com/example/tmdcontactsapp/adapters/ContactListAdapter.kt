@@ -1,10 +1,10 @@
 package com.example.tmdcontactsapp.adapters
 
 import android.annotation.SuppressLint
+import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdcontactsapp.R
 import com.example.tmdcontactsapp.handlers.MediaPermissionHandler
@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.contact_list_item_row.view.*
 class ContactListAdapter(private val listener: OnItemClickListener, private var contactsList: List<Contact>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var selectedPosition: Int = -1
+    private var isViewExpandable: Boolean = true
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ContactListViewHolder(
@@ -25,17 +26,49 @@ class ContactListAdapter(private val listener: OnItemClickListener, private var 
         when(holder){
             is ContactListViewHolder ->{
                 if(selectedPosition==position){
-                    holder.itemView.contactsListOptionsMenu.visibility = View.VISIBLE
-                    holder.itemView.contactsListCallBtn.visibility = View.VISIBLE
-                    holder.itemView.contactsListDetailsBtn.visibility = View.VISIBLE
-                    holder.itemView.contactFullName.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.ic_arrow_up_24,0)
+                    d("Position", position.toString())
+                    d("Selected",selectedPosition.toString())
+                    d("Expand", isViewExpandable.toString())
+                    if(isViewExpandable){
+                        d("Position", position.toString())
+                        d("Selected",selectedPosition.toString())
+                        d("Expand", isViewExpandable.toString())
+                        holder.itemView.contactsListOptionsMenu.visibility = View.VISIBLE
+                        holder.itemView.contactsListCallBtn.visibility = View.VISIBLE
+                        holder.itemView.contactsListDetailsBtn.visibility = View.VISIBLE
+                        holder.itemView.contactFullName.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.ic_arrow_up_24,0)
+                        isViewExpandable = false
+                    }else{
+                        d("Position", position.toString())
+                        d("Selected",selectedPosition.toString())
+                        d("Expand", isViewExpandable.toString())
+                        holder.itemView.contactsListOptionsMenu.visibility = View.GONE
+                        holder.itemView.contactsListCallBtn.visibility = View.GONE
+                        holder.itemView.contactsListDetailsBtn.visibility = View.GONE
+                        holder.itemView.contactFullName.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.ic_arrow_down_24,0)
+                        isViewExpandable = true
+                    }
                 }else {
-                    holder.itemView.contactsListOptionsMenu.visibility = View.GONE
-                    holder.itemView.contactsListCallBtn.visibility = View.GONE
-                    holder.itemView.contactsListDetailsBtn.visibility = View.GONE
-                    holder.itemView.contactFullName.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.ic_arrow_down_24,0)
+                    if(isViewExpandable){
+                        d("Position", position.toString())
+                        d("Selected",selectedPosition.toString())
+                        d("Expand", isViewExpandable.toString())
+                        holder.itemView.contactsListOptionsMenu.visibility = View.VISIBLE
+                        holder.itemView.contactsListCallBtn.visibility = View.VISIBLE
+                        holder.itemView.contactsListDetailsBtn.visibility = View.VISIBLE
+                        holder.itemView.contactFullName.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.ic_arrow_up_24,0)
+                        isViewExpandable = false
+                    }else{
+                        d("Position", position.toString())
+                        d("Selected",selectedPosition.toString())
+                        d("Expand", isViewExpandable.toString())
+                        holder.itemView.contactsListOptionsMenu.visibility = View.GONE
+                        holder.itemView.contactsListCallBtn.visibility = View.GONE
+                        holder.itemView.contactsListDetailsBtn.visibility = View.GONE
+                        holder.itemView.contactFullName.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.ic_arrow_down_24,0)
+                    }
                 }
-            holder.bind(contactsList[position])
+                holder.bind(contactsList[position])
             }
         }
     }
@@ -56,10 +89,13 @@ class ContactListAdapter(private val listener: OnItemClickListener, private var 
            itemView.setOnClickListener(this)
        }
 
+       @SuppressLint("NotifyDataSetChanged")
        override fun onClick(v: View?) {
            val position: Int = adapterPosition
            selectedPosition = position
-           notifyItemChanged(position)
+           notifyDataSetChanged()
+           d("Position", position.toString())
+           d("Expand", isViewExpandable.toString())
            if(position != RecyclerView.NO_POSITION){
            listener.onItemClick(position)
            }

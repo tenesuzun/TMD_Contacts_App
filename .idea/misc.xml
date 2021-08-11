@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/enes.uzun/AndroidStudioProjects/TMDContactsApp/app/src/main/res/drawable/roundbox_border.xml" value="0.23541666666666666" />
         <entry key="..\:/Users/enes.uzun/AndroidStudioProjects/TMDContactsApp/app/src/main/res/layout/activity_add_contact_to_group.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/enes.uzun/AndroidStudioProjects/TMDContactsApp/app/src/main/res/layout/activity_forgotten_password.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/enes.uzun/AndroidStudioProjects/TMDContactsApp/app/src/main/res/layout/activity_updating_contact.xml" value="0.33" />
