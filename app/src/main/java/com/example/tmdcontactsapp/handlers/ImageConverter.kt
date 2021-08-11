@@ -8,7 +8,7 @@ import com.example.tmdcontactsapp.R
 import androidx.appcompat.app.AppCompatActivity
 import java.io.ByteArrayOutputStream
 
-object MediaPermissionHandler: AppCompatActivity() {
+object ImageConverter: AppCompatActivity() {
 
     fun setImageFromBase64(tempImageView: ImageView, tempBase64String: String?) {
         if (tempBase64String.isNullOrEmpty() || tempBase64String.isNullOrBlank()) {

@@ -21,7 +21,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.tmdcontactsapp.handlers.MediaPermissionHandler
+import com.example.tmdcontactsapp.handlers.ImageConverter
 import com.example.tmdcontactsapp.models.ResponseContent
 import com.example.tmdcontactsapp.models.User
 import com.example.tmdcontactsapp.networks.ApiClient
@@ -55,7 +55,7 @@ class UserProfileFragment : Fragment() {
     private lateinit var profileNotes: TextView
     private lateinit var profilePicture: ImageView
     private lateinit var tempUser: User
-    private val mediaHandler = MediaPermissionHandler
+    private val mediaHandler = ImageConverter
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private var selectedBitmap: Bitmap? = null
