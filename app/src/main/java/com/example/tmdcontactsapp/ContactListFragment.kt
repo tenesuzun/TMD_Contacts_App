@@ -199,8 +199,6 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
             contactsList[position]
         }
 
-
-
         contactsListDetailsBtn.setOnClickListener{
             detailsClicked(clickedItem)
         }
