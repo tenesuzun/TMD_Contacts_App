@@ -71,7 +71,8 @@ class ContactListAdapter(private val listener: OnItemClickListener, private var 
        override fun onClick(v: View?) {
            val position: Int = adapterPosition
            selectedPosition = position
-           notifyItemChanged(selectedPosition)
+//           notifyItemChanged(selectedPosition)
+           notifyDataSetChanged()
            d("PositionONCLICK", position.toString())
            if(position != RecyclerView.NO_POSITION){
            listener.onItemClick(position)
