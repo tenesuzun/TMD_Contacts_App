@@ -5,7 +5,6 @@ import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdcontactsapp.R
 import com.example.tmdcontactsapp.handlers.ImageConverter
@@ -27,17 +26,10 @@ class ContactListAdapter(private val listener: OnItemClickListener, private var 
         when(holder){
             is ContactListViewHolder ->{
                 if(selectedPosition==position){
-                    if(holder.itemView.contactsListOptionsMenu.isVisible){
-                        holder.itemView.contactsListOptionsMenu.visibility = View.GONE
-                        holder.itemView.contactsListCallBtn.visibility = View.GONE
-                        holder.itemView.contactsListDetailsBtn.visibility = View.GONE
-                        holder.itemView.contactFullName.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.ic_arrow_down_24,0)
-                    } else{
-                        holder.itemView.contactsListOptionsMenu.visibility = View.VISIBLE
-                        holder.itemView.contactsListCallBtn.visibility = View.VISIBLE
-                        holder.itemView.contactsListDetailsBtn.visibility = View.VISIBLE
-                        holder.itemView.contactFullName.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.ic_arrow_up_24,0)
-                    }
+                    holder.itemView.contactsListOptionsMenu.visibility = View.VISIBLE
+                    holder.itemView.contactsListCallBtn.visibility = View.VISIBLE
+                    holder.itemView.contactsListDetailsBtn.visibility = View.VISIBLE
+                    holder.itemView.contactFullName.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.ic_arrow_up_24,0)
                 } else {
                     holder.itemView.contactsListOptionsMenu.visibility = View.GONE
                     holder.itemView.contactsListCallBtn.visibility = View.GONE
@@ -70,9 +62,13 @@ class ContactListAdapter(private val listener: OnItemClickListener, private var 
        @SuppressLint("NotifyDataSetChanged")
        override fun onClick(v: View?) {
            val position: Int = adapterPosition
-           selectedPosition = position
-//           notifyItemChanged(selectedPosition)
+           selectedPosition = if(position == selectedPosition){
+               -1
+           }else {
+               position
+           }
            notifyDataSetChanged()
+//           notifyItemChanged(position) smooth transition however some aspects does not work correctly
            d("PositionONCLICK", position.toString())
            if(position != RecyclerView.NO_POSITION){
            listener.onItemClick(position)
