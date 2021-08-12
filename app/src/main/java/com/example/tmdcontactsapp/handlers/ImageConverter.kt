@@ -5,10 +5,9 @@ import android.graphics.BitmapFactory
 import android.util.Base64
 import android.widget.ImageView
 import com.example.tmdcontactsapp.R
-import androidx.appcompat.app.AppCompatActivity
 import java.io.ByteArrayOutputStream
 
-object ImageConverter: AppCompatActivity() {
+object ImageConverter {
 
     fun setImageFromBase64(tempImageView: ImageView, tempBase64String: String?) {
         if (tempBase64String.isNullOrEmpty() || tempBase64String.isNullOrBlank()) {
