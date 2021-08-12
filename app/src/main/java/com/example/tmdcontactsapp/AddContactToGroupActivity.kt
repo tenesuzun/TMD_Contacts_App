@@ -113,4 +113,12 @@ class AddContactToGroupActivity : AppCompatActivity(), ContactListAdapter.OnItem
                 }
             })
     }
+
+    override fun onDetailsClick(position: Int) {
+//        TODO("Not yet implemented")
+    }
+
+    override fun onCallClick(position: Int) {
+//        TODO("Not yet implemented")
+    }
 }

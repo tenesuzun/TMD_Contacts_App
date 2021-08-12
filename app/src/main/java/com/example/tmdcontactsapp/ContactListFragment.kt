@@ -38,6 +38,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
     private lateinit var contactsAdapter: ContactListAdapter
     private lateinit var contactsList: MutableList<Contact>
     private var filteredList: ArrayList<Contact> = ArrayList()
+    private lateinit var clickedItem: Contact
 
     fun newInstance(bundle: Bundle): ContactListFragment {
         val fragment = ContactListFragment()
@@ -193,24 +194,16 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
     override fun onItemClick(position: Int) {
         d("CLICKED ITEM",position.toString())
 
-        val clickedItem: Contact = if(filteredList.isNotEmpty()){
+        clickedItem = if(filteredList.isNotEmpty()){
             filteredList[position]
         } else{
             contactsList[position]
         }
 
-        contactsListDetailsBtn.setOnClickListener{
-            detailsClicked(clickedItem)
-        }
-
-        contactsListCallBtn.setOnClickListener{
-            callClicked(clickedItem)
-        }
-
         d("clicked", clickedItem.toString())
     }
 
-    private fun detailsClicked(clickedItem: Contact){
+    override fun onDetailsClick(position: Int) {
         d("CLICKED ITEM", clickedItem.toString())
         val intent = Intent(context, UpdatingContactActivity::class.java)
 
@@ -233,7 +226,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         startActivity(intent)
     }
 
-    private fun callClicked(clickedItem: Contact){
+    override fun onCallClick(position: Int) {
         startActivity(Intent(Intent.ACTION_CALL, Uri.parse("tel:" + clickedItem.phoneNumber)))
     }
 }

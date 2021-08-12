@@ -30,6 +30,12 @@ class ContactListAdapter(private val listener: OnItemClickListener, private var 
                     holder.itemView.contactsListCallBtn.visibility = View.VISIBLE
                     holder.itemView.contactsListDetailsBtn.visibility = View.VISIBLE
                     holder.itemView.contactFullName.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.ic_arrow_up_24,0)
+                    holder.itemView.contactsListCallBtn.setOnClickListener{
+                        listener.onCallClick(selectedPosition)
+                    }
+                    holder.itemView.contactsListDetailsBtn.setOnClickListener{
+                        listener.onDetailsClick(selectedPosition)
+                    }
                 } else {
                     holder.itemView.contactsListOptionsMenu.visibility = View.GONE
                     holder.itemView.contactsListCallBtn.visibility = View.GONE
@@ -84,6 +90,10 @@ class ContactListAdapter(private val listener: OnItemClickListener, private var 
 
     interface OnItemClickListener{
        fun onItemClick(position: Int)
+
+       fun onDetailsClick(position: Int)
+
+       fun onCallClick(position: Int)
     }
 
 
