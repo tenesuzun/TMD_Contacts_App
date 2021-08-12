@@ -164,8 +164,11 @@ class UserProfileFragment : Fragment() {
             Title = userProfileWorkTitle.text.toString(),
             BirthDate = userProfileBirthday.text.toString(),
             Note = userProfileNotes.text.toString(),
-            Photo = mediaHandler.bitmapToBase64(selectedBitmap!!)
-        )
+            Photo = if(selectedBitmap == null){
+                        null
+                    }else{
+                        mediaHandler.bitmapToBase64(selectedBitmap!!)
+                    })
         Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
             .create(ApiClient::class.java).updateUser(
                 Bearer = "Bearer $userToken",
