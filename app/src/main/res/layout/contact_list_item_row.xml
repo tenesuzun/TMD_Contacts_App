@@ -41,14 +41,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/contactFullName"
-        android:visibility="gone"/>
+        />
+
+    <TextView
+        android:id="@+id/contactsListPhoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:textColor="@android:color/tertiary_text_light"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/contactsListOptionsMenu"
+        />
 
     <Button
         android:id="@+id/contactsListCallBtn"
         style="@style/materialButtonOutlinedStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="3dp"
+        android:layout_marginHorizontal="3dp"
+        android:layout_marginTop="15dp"
         android:drawableEnd="@drawable/ic_baseline_local_phone_24"
         android:text="@string/callText"
         android:textAlignment="viewStart"
@@ -56,15 +69,16 @@
         app:layout_constraintBottom_toBottomOf="@id/contactsListOptionsMenu"
         app:layout_constraintEnd_toStartOf="@id/contactsListDetailsBtn"
         app:layout_constraintStart_toStartOf="@id/contactsListOptionsMenu"
-        app:layout_constraintTop_toTopOf="@id/contactsListOptionsMenu"
-        android:visibility="gone"/>
+        app:layout_constraintTop_toBottomOf="@id/contactsListPhoneNumber"
+        />
 
     <Button
         android:id="@+id/contactsListDetailsBtn"
         style="@style/materialButtonOutlinedStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="3dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginTop="15dp"
         android:drawableEnd="@drawable/ic_baseline_notes_24"
         android:text="@string/detailsText"
         android:textAlignment="viewStart"
@@ -72,7 +86,7 @@
         app:layout_constraintBottom_toBottomOf="@id/contactsListOptionsMenu"
         app:layout_constraintEnd_toEndOf="@id/contactsListOptionsMenu"
         app:layout_constraintStart_toEndOf="@id/contactsListCallBtn"
-        app:layout_constraintTop_toTopOf="@id/contactsListOptionsMenu"
-        android:visibility="gone"/>
+        app:layout_constraintTop_toBottomOf="@id/contactsListPhoneNumber"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

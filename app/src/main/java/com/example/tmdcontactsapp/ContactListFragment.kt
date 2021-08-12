@@ -239,11 +239,5 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
             ActivityCompat.requestPermissions(requireActivity(), arrayOf("Manifest.permission.CALL_PHONE"),9)
             startActivity(intent)
         }
-
-        /*if(Build.VERSION.SDK_INT > 23){
-            startActivity(intent)
-        } else {
-
-        }*/
     }
 }

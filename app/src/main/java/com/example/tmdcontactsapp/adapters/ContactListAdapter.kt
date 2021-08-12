@@ -29,6 +29,7 @@ class ContactListAdapter(private val listener: OnItemClickListener, private var 
                     holder.itemView.contactsListOptionsMenu.visibility = View.VISIBLE
                     holder.itemView.contactsListCallBtn.visibility = View.VISIBLE
                     holder.itemView.contactsListDetailsBtn.visibility = View.VISIBLE
+                    holder.itemView.contactsListPhoneNumber.visibility = View.VISIBLE
                     holder.itemView.contactFullName.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.ic_arrow_up_24,0)
                     holder.itemView.contactsListCallBtn.setOnClickListener{
                         listener.onCallClick(selectedPosition)
@@ -37,6 +38,7 @@ class ContactListAdapter(private val listener: OnItemClickListener, private var 
                         listener.onDetailsClick(selectedPosition)
                     }
                 } else {
+                    holder.itemView.contactsListPhoneNumber.visibility = View.GONE
                     holder.itemView.contactsListOptionsMenu.visibility = View.GONE
                     holder.itemView.contactsListCallBtn.visibility = View.GONE
                     holder.itemView.contactsListDetailsBtn.visibility = View.GONE
@@ -83,6 +85,7 @@ class ContactListAdapter(private val listener: OnItemClickListener, private var 
 
        @SuppressLint("SetTextI18n")
        fun bind(contact: Contact){
+           itemView.contactsListPhoneNumber.text = contact.phoneNumber
            itemView.contactFullName.text = contact.firstName + " " + contact.surname
            ImageConverter.setImageFromBase64(itemView.contactPP, contact.contactPicture)
        }
