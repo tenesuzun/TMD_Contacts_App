@@ -8,6 +8,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import com.example.tmdcontactsapp.databinding.ActivityMainBinding
 import com.example.tmdcontactsapp.models.TokenResponse
 import com.example.tmdcontactsapp.models.UserRequest
 import com.example.tmdcontactsapp.networks.ApiClient
@@ -20,12 +22,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
     private lateinit var emailField: EditText
     private lateinit var passwordField: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+//        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        //TODO("change find view by id's to binding object")
 
         val signUpBtn = findViewById<Button>(R.id.loginSignUpButton)
         signUpBtn.setOnClickListener{
