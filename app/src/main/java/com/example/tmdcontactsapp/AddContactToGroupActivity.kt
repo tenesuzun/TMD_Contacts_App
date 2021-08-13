@@ -1,14 +1,15 @@
 package com.example.tmdcontactsapp
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.tmdcontactsapp.adapters.ContactListAdapter
+import com.example.tmdcontactsapp.databinding.ActivityAddContactToGroupBinding
 import com.example.tmdcontactsapp.models.Contact
 import com.example.tmdcontactsapp.models.GroupsContacts
 import com.example.tmdcontactsapp.models.ResponseContent
@@ -25,10 +26,11 @@ class AddContactToGroupActivity : AppCompatActivity(), ContactListAdapter.OnItem
     private lateinit var contactsAdapter: ContactListAdapter
     private var filteredList: ArrayList<Contact> = ArrayList()
     private lateinit var token: String
+    private lateinit var binding: ActivityAddContactToGroupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_contact_to_group)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_add_contact_to_group)
 
         token = intent.getStringExtra("token").toString()
 
@@ -37,8 +39,7 @@ class AddContactToGroupActivity : AppCompatActivity(), ContactListAdapter.OnItem
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(ApiClient::class.java)
 
-        val searchBar = findViewById<TextInputEditText>(R.id.addContactToGroupSearchBarField)
-        searchBar.addTextChangedListener(object: TextWatcher{
+        binding.addContactToGroupSearchBarField.addTextChangedListener(object: TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 //
             }
@@ -61,8 +62,7 @@ class AddContactToGroupActivity : AppCompatActivity(), ContactListAdapter.OnItem
                     200->{
                         contactsList = response.body()!!
                         contactsAdapter = ContactListAdapter(this@AddContactToGroupActivity, contactsList)
-                        val recycler = findViewById<RecyclerView>(R.id.addContactToGroupRecycler)
-                        recycler?.apply{
+                        binding.addContactToGroupRecycler.apply{
                             setHasFixedSize(true)
                             layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
                             adapter = contactsAdapter

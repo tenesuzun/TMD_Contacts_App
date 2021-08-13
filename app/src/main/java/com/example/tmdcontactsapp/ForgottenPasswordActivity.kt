@@ -59,6 +59,4 @@ class ForgottenPasswordActivity : AppCompatActivity() {
                 })
         }
     }
-
-    fun resetPassword(view: View) {}
 }
