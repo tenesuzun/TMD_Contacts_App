@@ -12,13 +12,13 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
+import com.example.tmdcontactsapp.databinding.ActivityUpdatingContactBinding
 import com.example.tmdcontactsapp.models.Contact
 import com.example.tmdcontactsapp.models.ContactRequest
 import com.example.tmdcontactsapp.models.ResponseContent
@@ -35,50 +35,20 @@ import java.lang.Exception
 class UpdatingContactActivity : AppCompatActivity() {
 
     //region Declarations
-    private lateinit var contactFirstName: EditText
-    private lateinit var contactSurname: EditText
-    private lateinit var contactPhone: EditText
-    private lateinit var contactWorkPhone: EditText
-    private lateinit var contactPP: ImageView
-    private lateinit var contactEmail: EditText
-    private lateinit var contactHomePhone: EditText
-    private lateinit var contactAddress: EditText
-    private lateinit var contactCompany: EditText
-    private lateinit var contactWorkTitle: EditText
-    private lateinit var contactBirthday: EditText
-    private lateinit var contactNotes: EditText
-    private lateinit var contactGroup: EditText
     private lateinit var token: String
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private var selectedBitmap: Bitmap? = null
     private var contactId: Int = 0
+    private lateinit var binding: ActivityUpdatingContactBinding
     //endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_updating_contact)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_updating_contact)
 
         token = intent.getStringExtra("token").toString()
         contactId = intent.getIntExtra("contactId",-1)
-
-        //region View mapping
-
-        contactFirstName = findViewById(R.id.updatingFirstName)
-        contactSurname = findViewById(R.id.updatingSurname)
-        contactPhone = findViewById(R.id.updatingPhone)
-        contactWorkPhone = findViewById(R.id.updatingWorkPhone)
-        contactPP = findViewById(R.id.updatingContactPP)
-        contactEmail = findViewById(R.id.updatingEmail)
-        contactHomePhone = findViewById(R.id.updatingHomePhone)
-        contactAddress = findViewById(R.id.updatingAddress)
-        contactCompany = findViewById(R.id.updatingCompany)
-        contactWorkTitle = findViewById(R.id.updatingWorkTitle)
-        contactBirthday = findViewById(R.id.updatingBirthday)
-        contactNotes = findViewById(R.id.updatingNotes)
-        contactGroup = findViewById(R.id.updateContactGroup)
-
-        //endregion
 
         //region GET Contact Information to request Photo
         Retrofit.Builder()
@@ -94,10 +64,10 @@ class UpdatingContactActivity : AppCompatActivity() {
                     when(response.code()){
                         200 -> {
                             if(response.body()?.contactPicture.isNullOrBlank() || response.body()?.contactPicture.isNullOrEmpty()){
-                                contactPP.setImageResource(R.drawable.ic_round_account_box_24)
+                                binding.updatingContactPP.setImageResource(R.drawable.ic_round_account_box_24)
                             }else{
                                 val imageBytes = Base64.decode(response.body()!!.contactPicture, 0)
-                                contactPP.setImageBitmap(
+                                binding.updatingContactPP.setImageBitmap(
                                     BitmapFactory.decodeByteArray(
                                         imageBytes,
                                         0,
@@ -116,35 +86,24 @@ class UpdatingContactActivity : AppCompatActivity() {
 
         //endregion
 
-        contactPP.setOnClickListener{
+        binding.updatingContactPP.setOnClickListener{
             openGallery(view = View(this))
         }
 
         registerLauncher()
 
-        contactFirstName.setText(intent.getStringExtra("contactFirstName"))
-        contactSurname.setText(intent.getStringExtra("contactSurname"))
-        contactPhone.setText(intent.getStringExtra("contactPhoneNumber"))
-        contactWorkPhone.setText(intent.getStringExtra("contactWorkNumber"))
-        contactEmail.setText(intent.getStringExtra("contactEmail"))
-        contactHomePhone.setText(intent.getStringExtra("contactHomeNumber"))
-        contactAddress.setText(intent.getStringExtra("contactAddress"))
-        contactCompany.setText(intent.getStringExtra("contactCompany"))
-        contactWorkTitle.setText(intent.getStringExtra("contactTitle"))
-        contactBirthday.setText(intent.getStringExtra("contactBirthday"))
-        contactNotes.setText(intent.getStringExtra("contactNote"))
-        contactGroup.setText(intent.getStringExtra("contactGroups"))
-        /*if(intent.getStringExtra("contactPhoto") == ""){
-            contactPP.setImageResource(R.drawable.ic_round_account_box_24)
-        }
-        else{
-            val imageBytes = Base64.decode(intent.getStringExtra("contactPhoto"), 0)
-            contactPP.setImageBitmap(BitmapFactory.decodeByteArray(
-                imageBytes,
-                0,
-                imageBytes.size
-            ))
-        }*/
+        binding.updatingFirstName.setText(intent.getStringExtra("contactFirstName"))
+        binding.updatingSurname.setText(intent.getStringExtra("contactSurname"))
+        binding.updatingPhone.setText(intent.getStringExtra("contactPhoneNumber"))
+        binding.updatingWorkPhone.setText(intent.getStringExtra("contactWorkNumber"))
+        binding.updatingEmail.setText(intent.getStringExtra("contactEmail"))
+        binding.updatingHomePhone.setText(intent.getStringExtra("contactHomeNumber"))
+        binding.updatingAddress.setText(intent.getStringExtra("contactAddress"))
+        binding.updatingCompany.setText(intent.getStringExtra("contactCompany"))
+        binding.updatingWorkTitle.setText(intent.getStringExtra("contactTitle"))
+        binding.updatingBirthday.setText(intent.getStringExtra("contactBirthday"))
+        binding.updatingNotes.setText(intent.getStringExtra("contactNote"))
+        binding.updateContactGroup.setText(intent.getStringExtra("contactGroups"))
     }
 
     fun updateContact(view: View) {
@@ -153,11 +112,11 @@ class UpdatingContactActivity : AppCompatActivity() {
         val byteArray: ByteArray = byteArrayOutputStream.toByteArray()
         val encoded: String = Base64.encodeToString(byteArray, Base64.DEFAULT)
 
-        if (contactFirstName.text.isEmpty() || contactFirstName.text.isBlank()) {
+        if (binding.updatingFirstName.text.isEmpty() || binding.updatingFirstName.text.isBlank()) {
             Toast.makeText(applicationContext, "Please enter first name", Toast.LENGTH_LONG).show()
-        } else if (contactSurname.text.isEmpty() || contactSurname.text.isBlank()) {
+        } else if (binding.updatingSurname.text.isEmpty() || binding.updatingSurname.text.isBlank()) {
             Toast.makeText(applicationContext, "Please enter surname", Toast.LENGTH_LONG).show()
-        } else if (contactPhone.text.isEmpty() || contactPhone.text.isBlank()) {
+        } else if (binding.updatingPhone.text.isEmpty() || binding.updatingPhone.text.isBlank()) {
             Toast.makeText(applicationContext, "Please enter phone number", Toast.LENGTH_LONG).show()
         } else {
             val retrofit = Retrofit.Builder()
@@ -168,17 +127,17 @@ class UpdatingContactActivity : AppCompatActivity() {
             retrofit.create(ApiClient::class.java).updateContact(Bearer = "Bearer $token",ContactRequest(
                 contactId = intent.getIntExtra("contactId",-1),
                 userId = intent.getIntExtra("userId", -1),
-                firstName = contactFirstName.text.toString(),
-                surname = contactSurname.text.toString(),
-                emailAddress = contactEmail.text.toString(),
-                phoneNumber = contactPhone.text.toString(),
-                workNumber = contactWorkPhone.text.toString(),
-                homePhone = contactHomePhone.text.toString(),
-                address = contactAddress.text.toString(),
-                company = contactCompany.text.toString(),
-                title = contactWorkTitle.text.toString(),
-                birthday = contactBirthday.text.toString(),
-                notes = contactNotes.text.toString(),
+                firstName = binding.updatingFirstName.text.toString(),
+                surname = binding.updatingSurname.text.toString(),
+                emailAddress = binding.updatingEmail.text.toString(),
+                phoneNumber = binding.updatingPhone.text.toString(),
+                workNumber = binding.updatingWorkPhone.text.toString(),
+                homePhone = binding.updatingHomePhone.text.toString(),
+                address = binding.updatingAddress.text.toString(),
+                company = binding.updatingCompany.text.toString(),
+                title = binding.updatingWorkTitle.text.toString(),
+                birthday = binding.updatingBirthday.text.toString(),
+                notes = binding.updatingNotes.text.toString(),
                 contactPicture = encoded)).enqueue(object: Callback<ResponseContent>{
                 override fun onResponse(call: Call<ResponseContent>, response: Response<ResponseContent>) {
                     when(response.code()){
@@ -202,7 +161,7 @@ class UpdatingContactActivity : AppCompatActivity() {
         AlertDialog.Builder(this).setTitle("Delete or Add?")
             .setMessage("What do you want to do with the picture?")
             .setNegativeButton("Delete"){
-                _, _ -> contactPP.setImageResource(R.drawable.ic_round_account_box_24)
+                _, _ -> binding.updatingContactPP.setImageResource(R.drawable.ic_round_account_box_24)
             }.setPositiveButton("Add"){
                 _, _ ->
                 if (ContextCompat.checkSelfPermission(
@@ -231,11 +190,11 @@ class UpdatingContactActivity : AppCompatActivity() {
                             if (Build.VERSION.SDK_INT >= 28) {
                                 val source = ImageDecoder.createSource(contentResolver, imageData!!)
                                 selectedBitmap = ImageDecoder.decodeBitmap(source)
-                                contactPP.setImageBitmap(selectedBitmap)
+                                binding.updatingContactPP.setImageBitmap(selectedBitmap)
                             } else {
                                 selectedBitmap =
                                     MediaStore.Images.Media.getBitmap(contentResolver, imageData)
-                                contactPP.setImageBitmap(selectedBitmap)
+                                binding.updatingContactPP.setImageBitmap(selectedBitmap)
                             }
                         } catch (e: Exception) {
                             e.printStackTrace()
