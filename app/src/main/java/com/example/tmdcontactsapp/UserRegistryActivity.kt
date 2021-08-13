@@ -12,12 +12,12 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
+import com.example.tmdcontactsapp.databinding.ActivityUserRegistryBinding
 import com.example.tmdcontactsapp.models.TokenResponse
 import com.example.tmdcontactsapp.models.User
 import com.example.tmdcontactsapp.networks.ApiClient
@@ -33,65 +33,36 @@ import java.lang.Exception
 class UserRegistryActivity : AppCompatActivity() {
 
     //region Lateinit declarations
-    private lateinit var userPP: ImageView
-    private lateinit var userFirstName: EditText
-    private lateinit var userSurname: EditText
-    private lateinit var userPassword: EditText
-    private lateinit var userEmail: EditText
-    private lateinit var userPasswordAgain: EditText
-    private lateinit var userPhone: EditText
-    private lateinit var userWorkPhone: EditText
-    private lateinit var userHomePhone: EditText
-    private lateinit var userAddress: EditText
-    private lateinit var userCompany: EditText
-    private lateinit var userWorkTitle: EditText
-    private lateinit var userBirthday: EditText
-    private lateinit var userNotes: EditText
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private var selectedBitmap: Bitmap? = null
+    private lateinit var binding: ActivityUserRegistryBinding
     //endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user_registry)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_user_registry)
 
-        //region View initializers
-        userPP = findViewById(R.id.userRegistryPP)
-        userFirstName = findViewById(R.id.registryFirstName)
-        userSurname = findViewById(R.id.registrySurname)
-        userPhone = findViewById(R.id.registryPhoneNumber)
-        userEmail = findViewById(R.id.registryEmailAddress)
-        userPassword = findViewById(R.id.registryPassword)
-        userPasswordAgain = findViewById(R.id.registryPasswordAgain)
-        userWorkPhone = findViewById(R.id.registryWorkPhone)
-        userHomePhone = findViewById(R.id.registryHomePhone)
-        userAddress = findViewById(R.id.registryAddress)
-        userCompany = findViewById(R.id.registryCompany)
-        userWorkTitle = findViewById(R.id.registryWorkTitle)
-        userBirthday = findViewById(R.id.registryBirthday)
-        userNotes = findViewById(R.id.registryNotes)
-        //endregion
         registerLauncher()
     }
 
     fun signUp(view: View) {
-        if (userFirstName.text.isEmpty() || userFirstName.text.isBlank()) {
+        if (binding.registryFirstName.text.isEmpty() || binding.registryFirstName.text.isBlank()) {
             Toast.makeText(applicationContext, "Please enter first name", Toast.LENGTH_LONG).show()
-        } else if (userSurname.text.isEmpty() || userSurname.text.isBlank()) {
+        } else if (binding.registrySurname.text.isEmpty() || binding.registrySurname.text.isBlank()) {
             Toast.makeText(applicationContext, "Please enter surname", Toast.LENGTH_LONG).show()
-        } else if (userPhone.text.isEmpty() || userPhone.text.isBlank()) {
+        } else if (binding.registryPhoneNumber.text.isEmpty() || binding.registryPhoneNumber.text.isBlank()) {
             Toast.makeText(applicationContext, "Please enter a phone number", Toast.LENGTH_LONG)
                 .show()
-        } else if (userEmail.text.isEmpty() || userPhone.text.isBlank()) {
+        } else if (binding.registryEmailAddress.text.isEmpty() || binding.registryPhoneNumber.text.isBlank()) {
             Toast.makeText(applicationContext, "Please enter an email address", Toast.LENGTH_LONG)
                 .show()
-        } else if (userPassword.text.isEmpty() || userPassword.text.isBlank()) {
+        } else if (binding.registryPassword.text.isEmpty() || binding.registryPassword.text.isBlank()) {
             Toast.makeText(applicationContext, "Please enter a password", Toast.LENGTH_LONG).show()
-        } else if (userPasswordAgain.text.isEmpty() || userPasswordAgain.text.isBlank()) {
+        } else if (binding.registryPasswordAgain.text.isEmpty() || binding.registryPasswordAgain.text.isBlank()) {
             Toast.makeText(applicationContext, "Please enter the password again", Toast.LENGTH_LONG)
                 .show()
-        } else if (userPassword.text.toString() != userPasswordAgain.text.toString()) {
+        } else if (binding.registryPassword.text.toString() != binding.registryPasswordAgain.text.toString()) {
             Toast.makeText(applicationContext, "Passwords does not match", Toast.LENGTH_LONG).show()
         } else {
             register()
@@ -114,18 +85,18 @@ class UserRegistryActivity : AppCompatActivity() {
         api.userRegistry(
             User(
                 Photo = encoded,
-                Email = userEmail.text.toString(),
-                Password = userPassword.text.toString(),
-                Name = userFirstName.text.toString(),
-                Surname = userSurname.text.toString(),
-                Tel = userPhone.text.toString(),
-                TelBusiness = userWorkPhone.text.toString(),
-                TelHome = userHomePhone.text.toString(),
-                Address = userAddress.text.toString(),
-                Company = userCompany.text.toString(),
-                Title = userWorkTitle.text.toString(),
-                BirthDate = userBirthday.text.toString(),
-                Note = userNotes.text.toString()
+                Email = binding.registryEmailAddress.text.toString(),
+                Password = binding.registryPassword.text.toString(),
+                Name = binding.registryFirstName.text.toString(),
+                Surname = binding.registrySurname.text.toString(),
+                Tel = binding.registryPhoneNumber.text.toString(),
+                TelBusiness = binding.registryWorkPhone.text.toString(),
+                TelHome = binding.registryHomePhone.text.toString(),
+                Address = binding.registryAddress.text.toString(),
+                Company = binding.registryCompany.text.toString(),
+                Title = binding.registryWorkTitle.text.toString(),
+                BirthDate = binding.registryBirthday.text.toString(),
+                Note = binding.registryNotes.text.toString()
             )
         ).enqueue(object : Callback<TokenResponse> {
             override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
@@ -165,7 +136,7 @@ class UserRegistryActivity : AppCompatActivity() {
         AlertDialog.Builder(this).setTitle("Delete or Add?")
             .setMessage("What do you want to do with the picture?")
             .setNegativeButton("Delete")
-            { _, _ -> userPP.setImageResource(R.drawable.ic_round_account_box_24)
+            { _, _ -> binding.userRegistryPP.setImageResource(R.drawable.ic_round_account_box_24)
             }.setPositiveButton("Add")
             { _, _ ->
                 if (ContextCompat.checkSelfPermission(
@@ -199,11 +170,11 @@ class UserRegistryActivity : AppCompatActivity() {
                             if (Build.VERSION.SDK_INT >= 28) {
                                 val source = ImageDecoder.createSource(contentResolver, imageData!!)
                                 selectedBitmap = ImageDecoder.decodeBitmap(source)
-                                userPP.setImageBitmap(selectedBitmap)
+                                binding.userRegistryPP.setImageBitmap(selectedBitmap)
                             } else {
                                 selectedBitmap =
                                     MediaStore.Images.Media.getBitmap(contentResolver, imageData)
-                                userPP.setImageBitmap(selectedBitmap)
+                                binding.userRegistryPP.setImageBitmap(selectedBitmap)
                             }
                         } catch (e: Exception) {
                             e.printStackTrace()
