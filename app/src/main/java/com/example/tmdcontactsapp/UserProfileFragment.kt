@@ -59,6 +59,7 @@ class UserProfileFragment : Fragment() {
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private var selectedBitmap: Bitmap? = null
+    private var isImageDeleted: Boolean = false
     //endregion
 
     fun newInstance(bundle: Bundle): UserProfileFragment {
@@ -164,11 +165,8 @@ class UserProfileFragment : Fragment() {
             Title = userProfileWorkTitle.text.toString(),
             BirthDate = userProfileBirthday.text.toString(),
             Note = userProfileNotes.text.toString(),
-            Photo = if(selectedBitmap == null){
-                        null
-                    }else{
-                        mediaHandler.bitmapToBase64(selectedBitmap!!)
-                    })
+            Photo = mediaHandler.bitmapToBase64(selectedBitmap,isImageDeleted)
+       )
         Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
             .create(ApiClient::class.java).updateUser(
                 Bearer = "Bearer $userToken",
@@ -240,7 +238,10 @@ class UserProfileFragment : Fragment() {
 
     private fun openGallery(view: View){
         AlertDialog.Builder(requireContext()).setTitle("Delete or Add?").setMessage("What do you want to do with the picture?").setNegativeButton("Delete"
-        ) { _, _ -> profilePicture.setImageResource(R.drawable.ic_round_account_box_24) }
+        ) { _, _ ->
+            profilePicture.setImageResource(R.drawable.ic_round_account_box_24)
+            isImageDeleted = true
+            }
             .setPositiveButton("Add") { _, _ ->
                 if (ContextCompat.checkSelfPermission(
                         requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE
