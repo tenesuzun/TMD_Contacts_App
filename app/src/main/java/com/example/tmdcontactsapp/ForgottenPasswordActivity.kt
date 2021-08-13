@@ -5,8 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import com.example.tmdcontactsapp.databinding.ActivityForgottenPasswordBinding
 import com.example.tmdcontactsapp.networks.ApiClient
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -17,25 +18,24 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ForgottenPasswordActivity : AppCompatActivity() {
 
-    private lateinit var userEmail: EditText
+    private lateinit var binding: ActivityForgottenPasswordBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_forgotten_password)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_forgotten_password)
 
         val loginBtn = findViewById<Button>(R.id.forgottenLoginBtn)
         loginBtn.setOnClickListener{
             finish()
         }
-        userEmail = findViewById(R.id.forgottenEmailField)
     }
 
     fun sendLink(view: View){
-        if(userEmail.text.isEmpty() || userEmail.text.isBlank()){
+        if(binding.forgottenEmailField.text!!.isEmpty() || binding.forgottenEmailField.text!!.isBlank()){
             Toast.makeText(applicationContext,"Please enter an email address", Toast.LENGTH_LONG).show()
         }else{
             Retrofit.Builder().baseUrl("http://tmdcontacts-api.dev.tmd/api/").addConverterFactory(GsonConverterFactory.create()).build()
-                .create(ApiClient::class.java).forgotPassword(email = userEmail.text.toString()).enqueue(object: Callback<ResponseBody>{
+                .create(ApiClient::class.java).forgotPassword(email = binding.forgottenEmailField.text.toString()).enqueue(object: Callback<ResponseBody>{
                     override fun onResponse(
                         call: Call<ResponseBody>,
                         response: Response<ResponseBody>
@@ -44,7 +44,8 @@ class ForgottenPasswordActivity : AppCompatActivity() {
                             200 -> {
                                 startActivity(Intent(this@ForgottenPasswordActivity, ResetPasswordActivity::class.java)
                                     .putExtra("code", response.body()!!.string())
-                                    .putExtra("email", userEmail.text.toString()))
+                                    .putExtra("email", binding.forgottenEmailField.text.toString()))
+                                Toast.makeText(applicationContext,response.body()!!.string(),Toast.LENGTH_LONG).show()
                                 finish()
                             }
                             400 -> {

@@ -4,9 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.example.tmdcontactsapp.databinding.ActivityMainBinding
@@ -23,34 +20,26 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var emailField: EditText
-    private lateinit var passwordField: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_main)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        //TODO("change find view by id's to binding object")
-
-        val signUpBtn = findViewById<Button>(R.id.loginSignUpButton)
-        signUpBtn.setOnClickListener{
+        binding.loginSignUpButton.setOnClickListener{
             val intent = Intent(this, UserRegistryActivity::class.java)
             startActivity(intent)
         }
 
-        val forgotPasswordBtn = findViewById<TextView>(R.id.loginForgotPassword)
-        forgotPasswordBtn.setOnClickListener{
+        binding.loginForgotPassword.setOnClickListener{
             val intent = Intent(this, ForgottenPasswordActivity::class.java)
             startActivity(intent)
         }
-        emailField = findViewById(R.id.loginEmailField)
-        passwordField = findViewById(R.id.loginPasswordField)
     }
 
     fun login(view: View){
-        val loginEmail = emailField.text.toString()
-        val loginPassword = passwordField.text.toString()
+        val loginEmail = binding.loginEmailField.text.toString()
+        val loginPassword = binding.loginPasswordField.text.toString()
         if(loginEmail.isBlank() || loginEmail.isEmpty().apply { }){
             Toast.makeText(applicationContext,"Please enter your e-mail",Toast.LENGTH_LONG).show()
         }
