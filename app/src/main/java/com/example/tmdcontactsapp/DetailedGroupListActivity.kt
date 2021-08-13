@@ -7,10 +7,12 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.tmdcontactsapp.adapters.ContactListAdapter
+import com.example.tmdcontactsapp.databinding.ActivityDetailedGroupListBinding
 import com.example.tmdcontactsapp.models.Contact
 import com.example.tmdcontactsapp.models.GroupsContacts
 import com.example.tmdcontactsapp.models.ResponseContent
@@ -30,10 +32,11 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
     private var filteredList: ArrayList<Contact> = ArrayList()
     private var groupId: Int=0
     private lateinit var token: String
+    private lateinit var binding: ActivityDetailedGroupListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_detailed_group_list)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_detailed_group_list)
         groupId = intent.getIntExtra("groupId", -1)
         token = intent.getStringExtra("token").toString()
 
@@ -96,12 +99,11 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
                     200 -> {
                         contactsList = response.body()!!
                         contactsAdapter = ContactListAdapter(this@DetailedGroupListActivity, contactsList)
-                        val recycler = findViewById<RecyclerView>(R.id.groupContactsListRecycler)
-                        recycler?.apply {
+                        binding.groupContactsListRecycler.apply {
                             setHasFixedSize(true)
                             layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
                             adapter = contactsAdapter
-                            ItemTouchHelper(swipe).attachToRecyclerView(recycler)
+                            ItemTouchHelper(swipe).attachToRecyclerView(binding.groupContactsListRecycler)
                         }
                     } 400 -> {
                         Toast.makeText(applicationContext, "There is not any contact in this group", Toast.LENGTH_LONG).show()
@@ -118,8 +120,7 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
 
     override fun onStart() {
         super.onStart()
-        val searchBar = findViewById<TextInputEditText>(R.id.groupContactsSearchBarTextField)
-        searchBar.addTextChangedListener(object: TextWatcher{
+        binding.groupContactsSearchBarTextField.addTextChangedListener(object: TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // No need to Implement
             }
@@ -132,7 +133,7 @@ class DetailedGroupListActivity : AppCompatActivity(), ContactListAdapter.OnItem
                 filter(s.toString())
             }
         })
-        findViewById<FloatingActionButton>(R.id.addContactToGroupFAB).setOnClickListener{
+        binding.addContactToGroupFAB.setOnClickListener{
             startActivity(Intent(this, AddContactToGroupActivity::class.java)
                 .putExtra("groupId",groupId)
                 .putExtra("token", token)
