@@ -3,19 +3,19 @@ package com.example.tmdcontactsapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.example.tmdcontactsapp.databinding.ActivityMainBinding
+import com.example.tmdcontactsapp.handlers.RetrofitHandler
 import com.example.tmdcontactsapp.models.TokenResponse
+import com.example.tmdcontactsapp.models.User
 import com.example.tmdcontactsapp.models.UserRequest
-import com.example.tmdcontactsapp.networks.ApiClient
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -52,15 +52,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun authenticate(m_Email: String, m_Password: String){
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://tmdcontacts-api.dev.tmd/api/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
 
-        val api = retrofit.create(ApiClient::class.java)
-        Toast.makeText(applicationContext,"Logging in...",Toast.LENGTH_SHORT).show()
-        api.userLogin(UserRequest(m_Email,m_Password)).enqueue(object: Callback<TokenResponse>{
-            override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>){
+        RetrofitHandler.retrofit.userLogin(UserRequest(m_Email,m_Password)).enqueue(object: Callback<TokenResponse>{
+            override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                 when(response.code()){
                     200 -> {
                         val bundle = Bundle().apply { putString("Email",m_Email)
@@ -85,5 +79,26 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         })
+        /*RetrofitHandler.retrofit.getUserByEmail(intent.getBundleExtra("bundle")?.getString("token").toString(),
+            intent.getBundleExtra("bundle")?.getString("Email").toString()).enqueue(
+            object : Callback<User>{
+                override fun onResponse(call: Call<User>, response: Response<User>) {
+                    when(response.code()){
+                        200 -> {
+                            loggedInUser = response.body()!!
+                        } else -> {
+                        Log.d(
+                            "CL_Activity",
+                            response.message() + response.code() + response.body() + response
+                        )
+                    }
+                    }
+                }
+
+                override fun onFailure(call: Call<User>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+            }
+        )*/
     }
 }

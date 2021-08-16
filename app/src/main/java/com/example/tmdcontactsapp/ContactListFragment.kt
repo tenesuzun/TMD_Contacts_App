@@ -33,10 +33,12 @@ import kotlin.collections.ArrayList
 
 private const val userArgEmail = "Email"
 private const val userArgToken = "token"
+private const val userArgId = "userId"
 
 class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
     private var userEmail: String? = null
     private var userToken: String? = null
+    private var userId: Int = 0
     private lateinit var contactsAdapter: ContactListAdapter
     private lateinit var contactsList: MutableList<Contact>
     private var filteredList: ArrayList<Contact> = ArrayList()
@@ -54,6 +56,7 @@ class ContactListFragment : Fragment(), ContactListAdapter.OnItemClickListener{
         bundle.let {
             userEmail = it.getString(userArgEmail)
             userToken = it.getString(userArgToken)
+            userId = it.getInt(userArgId)
         }
     }
 

@@ -39,6 +39,7 @@ class ContactsListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contacts_list)
+
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelected)
         val bundle = intent.extras
         replaceFragment(ContactListFragment().newInstance(bundle!!),"contactsPage")
