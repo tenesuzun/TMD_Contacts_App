@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 
 class SplashScreen : AppCompatActivity() {
@@ -19,5 +21,10 @@ class SplashScreen : AppCompatActivity() {
             startActivity(intent)
             finish()
         }, 3000)
+
+        findViewById<ConstraintLayout>(R.id.splashScreen).setOnClickListener{
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
     }
 }
