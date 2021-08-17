@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import androidx.core.os.HandlerCompat
 import com.example.tmdcontactsapp.databinding.ActivitySplashScreenBinding
 
 class SplashScreen : AppCompatActivity() {
@@ -17,16 +18,21 @@ class SplashScreen : AppCompatActivity() {
         val slideAnimation = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.side_slide)
         binding.loadingLogo.startAnimation(slideAnimation)
 
-        Handler().postDelayed({
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        }, 3000)
+        val handler = Handler()
 
-        binding.splashScreen.setOnClickListener{
+        val runnable = Runnable {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
+
+        handler.postDelayed(runnable, 3000)
+
+        binding.splashScreen.setOnClickListener{
+            handler.removeCallbacks(runnable)
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+
         setContentView(binding.root)
     }
 }
